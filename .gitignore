@@ -1,3 +1,6 @@
 *.Rdata
 *.pdf
 *.eps
+*.txt
+*.csv
+*.xlsx
