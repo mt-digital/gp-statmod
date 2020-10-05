@@ -18,10 +18,12 @@ schkade2010 <- function(nParticipants=63,  # 34 women
                         minInGroup=5, maxInGroup=7, 
                         nBins=10, 
                         nQuestions=3,  # gbl warming, affirm action, civil unions
-                        preLibSd=2 * 2.3,  # Multiply by 2 since given in terms
-                        postLibSd=2 * 1.0, # of standard deviation in 
-                        preConsSd=2 * 2.8, # Schkade, et al.
-                        postConsSd=2 * 0.9
+                        preLibSd=2.3^2,  # Multiply by 2 since given in terms
+                        postLibSd=1.0^2, # of standard deviation in 
+                        preConsSd=2.8^2, # Schkade, et al.
+                        postConsSd=0.75^2,
+                        plot=FALSE,
+                        saveFig=FALSE
 )
 {
     # Create groups according to paper. See p. 229 for start
@@ -79,6 +81,41 @@ schkade2010 <- function(nParticipants=63,  # 34 women
 
     libFitted <- frequentistModel(libData)
     consFitted <- frequentistModel(consData)
+
+    if (plot)
+    {
+        for (party in c("Liberal", "Conservative"))
+        {
+            # Each result is a list with the simulated "input data" and
+            # frequentist model fit results. 
+            if (party == "Liberal")
+            {
+                plotFreq(libData, libFitted, nBins)
+                latentMean = libMean
+                initialLatentSd = preLibSd
+                finalLatentSd = postLibSd
+            }
+            else
+            {
+                plotFreq(consData, consFitted, nBins)
+                latentMean = consMean
+                initialLatentSd = preConsSd
+                finalLatentSd = postConsSd
+            }
+            
+            if (saveFig)
+            {
+                fileName <- glue(
+                    '~/workspace/Presentations/gp-statmod/Figures/nBins={nBins}',
+                    '_party={party}',
+                    '_lm1={latentMean}_lm2={latentMean}',
+                    '_sd1={initialLatentSd}',
+                    '_sd2={finalLatentSd}')
+                
+                saveGraph(fileName)
+            }
+        }
+    }
 
     return (c(libData=libData, consData=consData, 
              libFitted=libFitted, consFitted=consFitted))

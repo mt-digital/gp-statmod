@@ -50,13 +50,13 @@ plotFreq <- function(inputDf, fittedFreq, nBins)
     effSz <- fittedFreq$effSz
     if (tInfo$p.value >= 0.001) {
       mtext(text=bquote( "d = "* .(round(effSz, 2)) 
-                               *", t = "* .(round(tInfo$statistic, 2)) 
+                               # *", t = "* .(round(tInfo$statistic, 2)) 
                                *", p = "* .(round(tInfo$p.value, 3))) , 
              at=c(0.5), cex=1.5, side=3, outer=TRUE, 
              adj=c(0.5,0.5), padj=c(-0.5,-0.5))
     } else {
       mtext(text=bquote( "d = "* .(round(effSz, 2)) 
-                               *", t = "* .(round(tInfo$statistic, 2)) 
+                               # *", t = "* .(round(tInfo$statistic, 2)) 
                                *", p < 0.001" ), 
              at=c(0.5), cex=1.5, side=3, outer=TRUE, 
              adj=c(0.5,0.5), padj=c(-0.5,-0.5))
