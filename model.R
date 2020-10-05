@@ -31,7 +31,7 @@ source("DBDA2E-utilities.R")
 #     latentMeans (float, float): latent means of group 1 and group 2
 #     latentSds (float, float): latent std devs of group 1 and group 2
 # 
-twoGroupComparison = function(N, firstBinValue, nBins, 
+twoGroupComparison <- function(N, firstBinValue, nBins, 
                               latentMeans=c(5, 5), latentSds=c(4, 1),
                               rngSeed=FALSE)
 {
@@ -39,26 +39,26 @@ twoGroupComparison = function(N, firstBinValue, nBins,
     {
         set.seed(rngSeed)
     }
-    observation1 = simulatedObservation(N, firstBinValue, nBins, 
+    observation1 <- simulatedObservation(N, firstBinValue, nBins, 
                                         latentMeans[1], latentSds[1])
 
-    observation2 = simulatedObservation(N, firstBinValue, nBins,
+    observation2 <- simulatedObservation(N, firstBinValue, nBins,
                                         latentMeans[2], latentSds[2])
 
     ## 
     # Run metric and ordinal JAGS analysis on simulations. 
-    inputData = makeModelInput(observation1, observation2)
-    jagsData = assembleJAGSData(inputData, nBins)
+    inputData <- makeModelInput(observation1, observation2)
+    jagsData <- assembleJAGSData(inputData, nBins)
 
     # Metric model fitting with t-test and frequentist hypothesis testing.
-    fittedFrequentistModel = frequentistModel(inputData)
+    fittedFrequentistModel <- frequentistModel(inputData)
     # Metric model fitting with JAGS and Bayesian significance measures.
-    fittedMetricModel = metricModel(jagsData$metDataList)
+    fittedMetricModel <- metricModel(jagsData$metDataList)
     # Ordinal model fitting with JAGS and Bayesian significance measures.
-    # fittedOrdinalModel = ordinalModel(jagsData$ordDataList)
+    # fittedOrdinalModel <- ordinalModel(jagsData$ordDataList)
 
     # plotComparison(inputData, fittedFrequentistModel,
-    #                fittedMetricModel, fittedOrdinalModel)
+                   # fittedMetricModel, fittedOrdinalModel)
 
     return (list(inputData=inputData,
                  fittedFreq=fittedFrequentistModel,
@@ -72,7 +72,7 @@ twoGroupComparison = function(N, firstBinValue, nBins,
 # on simulated data. Adapted from code generating Figure 2 in 
 # L&K (2018).
 # 
-plotComparison = function(inputData, modelResults) 
+plotComparison <- function(inputData, modelResults) 
 {
     source('plot.R')
     plotFreq(modelResults$fittedFreq)
@@ -85,13 +85,13 @@ plotComparison = function(inputData, modelResults)
 ##
 # Runs the metric frequentist (t-test) model on input dataframe.
 #
-frequentistModel = function(data) 
+frequentistModel <- function(data) 
 {
-    preDiscussion = data$resp[data$cond == 1]
-    postDiscussion = data$resp[data$cond == 2]
+    preDiscussion <- data$resp[data$cond == 1]
+    postDiscussion <- data$resp[data$cond == 2]
 
-    tInfo = t.test(preDiscussion, postDiscussion)
-    effSz = effectSize(preDiscussion, postDiscussion)
+    tInfo <- t.test(preDiscussion, postDiscussion)
+    effSz <- effectSize(preDiscussion, postDiscussion)
 
     return (list(tInfo=tInfo, effSz=effSz))
 }
@@ -99,13 +99,13 @@ frequentistModel = function(data)
 ##
 # Cohen's d.
 #
-effectSize = function(x, y)
+effectSize <- function(x, y)
 {
-    sdN = function(x) { sqrt(mean((x - mean(x))^2)) }
+    sdN <- function(x) { sqrt(mean((x - mean(x))^2)) }
 
     # See p. 331 in L&K (2018).
-    numer = (mean(x) - mean(y)) 
-    denom = sqrt((sdN(x)^2 + sdN(y)^2)) / 2.0
+    numer <- (mean(y) - mean(x)) 
+    denom <- sqrt((sdN(x)^2 + sdN(y)^2) / 2.0) 
 
     return (numer / denom)
 }
@@ -113,7 +113,7 @@ effectSize = function(x, y)
 ##
 # Runs the metric JAGS model (defined within) on input dataframe.
 #
-metricModel = function(metDataList) 
+metricModel <- function(metDataList) 
 {
     # Define JAGS model. Here g is not "group" but instead "condition", as in
     # pre- and post-discussion opinion for the single group. Then pre- and
@@ -124,7 +124,7 @@ metricModel = function(metDataList)
     # used because of the convention in Bayesian analysis to have the second
     # normal distribution parameter be precision, the reciprocal of variance,
     # instead of variance itself.
-    metModelString = "
+    metModelString <- "
         model {
           for ( i in 1:Ntotal ) {
             meanY[i] ~ dnorm( mu[g[i]] , 1/sigma[g[i]]^2  )
@@ -139,11 +139,11 @@ metricModel = function(metDataList)
     writeLines( metModelString , con="OrdAsOrdAndMet-MetModel.txt" )
 
     # RUN THE CHAINS FOR METRIC MODEL
-    parameters = c( "mu" , "sigma" )
-    numSavedSteps = 20000 # 20000 
-    thinSteps = 5 # 5 
-    adaptSteps = 500               # Number of steps to "tune" the samplers
-    burnInSteps = 1000
+    parameters <- c( "mu" , "sigma" )
+    numSavedSteps <- 20000 # 20000 
+    thinSteps <- 5 # 5 
+    adaptSteps <- 500               # Number of steps to "tune" the samplers
+    burnInSteps <- 1000
     # saveName=fileNameRoot 
     runjagsMethod=runjagsMethodDefault # from DBDA2E-utilities
     nChains=nChainsDefault # from DBDA2E-utilities
@@ -167,9 +167,9 @@ metricModel = function(metDataList)
 ##
 # Runs the ordinal JAGS model (defined within) on input dataframe.
 #
-ordinalModel = function(ordDataList) {
+ordinalModel <- function(ordDataList) {
 
-    ordModelString = "
+    ordModelString <- "
         model {
             for ( i in 1:Ntotal ) {
               y[i] ~ dcat( pr[i,1:nYlevels[q[i]]] )
@@ -209,11 +209,11 @@ ordinalModel = function(ordDataList) {
     # Let JAGS do it...
     #-----------------------------------------------------------------------------
     # RUN THE CHAINS FOR ORDERED-PROBIT MODEL.
-    parameters = c( "mu" , "sigma" , "thresh" )
-    numSavedSteps = 20000 # 20000 
-    thinSteps = 5 # 5 
-    adaptSteps = 500               # Number of steps to "tune" the samplers
-    burnInSteps = 1000
+    parameters <- c( "mu" , "sigma" , "thresh" )
+    numSavedSteps <- 20000 # 20000 
+    thinSteps <- 5 # 5 
+    adaptSteps <- 500               # Number of steps to "tune" the samplers
+    burnInSteps <- 1000
     # saveName=fileNameRoot 
     runjagsMethod=runjagsMethodDefault # from DBDA2E-utilities
     nChains=nChainsDefault # from DBDA2E-utilities
@@ -240,16 +240,16 @@ ordinalModel = function(ordDataList) {
 # This function combines two simulated observations into a properly formatted
 # dataframe.
 #
-makeModelInput = function(observationData1, observationData2) 
+makeModelInput <- function(observationData1, observationData2) 
 {
     # Create columns for input dataframe as vectors. XXX Not sure which of 
     # these are actually required, just copying L&K for now.
     resp = item = subID = cond = 
         rep(0, prod(dim(observationData1)) + prod(dim(observationData2)))
-    dfIdx = 1
+    dfIdx <- 1
 
     # Infer number of participants, XXX currently "subjects" which will change.
-    N = length(observationData1)
+    N <- length(observationData1)
     if (N != length(observationData2)) 
     { 
         stop("pre- and post-discussion observations not same length")
@@ -259,24 +259,24 @@ makeModelInput = function(observationData1, observationData2)
     #   - item always 1 because for now just using one-question survey.
     #   - subID is the same in both for loops
     #   - cond indicates whether pre-discussion (1) or post-discussion (2)
-    dfIdx = 1
+    dfIdx <- 1
     for (sIdx in 1:N)
     {
-       resp[dfIdx] = observationData1[sIdx]
-       item[dfIdx] = 1
-       subID[dfIdx] = sIdx
-       cond[dfIdx] = 1
+       resp[dfIdx] <- observationData1[sIdx]
+       item[dfIdx] <- 1
+       subID[dfIdx] <- sIdx
+       cond[dfIdx] <- 1
 
-       dfIdx = dfIdx + 1
+       dfIdx <- dfIdx + 1
     }
     for (sIdx in 1:N)
     {
-       resp[dfIdx] = observationData2[sIdx]
-       item[dfIdx] = 1
-       subID[dfIdx] = sIdx
-       cond[dfIdx] = 2
+       resp[dfIdx] <- observationData2[sIdx]
+       item[dfIdx] <- 1
+       subID[dfIdx] <- sIdx
+       cond[dfIdx] <- 2
 
-       dfIdx = dfIdx + 1
+       dfIdx <- dfIdx + 1
     }
 
     return (data.frame(resp=resp, item=item, subID=subID, cond=cond))
@@ -287,58 +287,58 @@ makeModelInput = function(observationData1, observationData2)
 # JAGS apparently requires data be "assembled" a certain way according to the
 # L&K code at l:669 in their OrdinalScaleGroupJags.R. 
 #
-assembleJAGSData = function(df, nBins)
+assembleJAGSData <- function(df, nBins)
 {
     # XXX Most of the following is yanked from L&K, of questionable necessity.
 
     # Rename and reclass y values for convenience:
-    y = as.numeric(df[, "resp"])
+    y <- as.numeric(df[, "resp"])
     # Do some checking that data make sense:
     if ( any( y!=round(y) ) ) { stop("All y values must be integers (whole numbers).") }
     if ( any( y < 1 ) ) { stop("All y values must be 1 or larger.") }
 
-    totalNObs = length(y)
+    totalNObs <- length(y)
 
-    qName = "item"
-    sName = "subID"
-    gName = "cond"
+    qName <- "item"
+    sName <- "subID"
+    gName <- "cond"
 
     # Question, subject, and group data vectors.
-    q = as.numeric(as.factor(df[,qName]))
-    s = as.numeric(as.factor(df[,sName])) # not used
-    g = as.numeric(as.factor(df[,gName]))
-    qLevels = levels(as.factor(df[,qName]))
-    sLevels = levels(as.factor(df[,sName])) # not used
-    gLevels = levels(as.factor(df[,gName]))
-    nQ = max(q)
-    nS = max(s) # not used
-    nG = max(g)
+    q <- as.numeric(as.factor(df[,qName]))
+    s <- as.numeric(as.factor(df[,sName])) # not used
+    g <- as.numeric(as.factor(df[,gName]))
+    qLevels <- levels(as.factor(df[,qName]))
+    sLevels <- levels(as.factor(df[,sName])) # not used
+    gLevels <- levels(as.factor(df[,gName]))
+    nQ <- max(q)
+    nS <- max(s) # not used
+    nG <- max(g)
 
     # Initialize all thresholds to be NA, which means they will be fit unless
     # specified.
-    # thresh = rep(NA, nBins)
-    thresh = matrix(NA, nrow=nQ, ncol=nBins - 1) # default to NA
+    # thresh <- rep(NA, nBins)
+    thresh <- matrix(NA, nrow=nQ, ncol=nBins - 1) # default to NA
 
     # Fix low and high thresholds. 
-    thresh[1] = 1 + 0.5
-    thresh[nBins - 1] = nBins - 0.5
+    thresh[1] <- 1 + 0.5
+    thresh[nBins - 1] <- nBins - 0.5
 
     # Differs from L&K script because we have only one question, no need to
     # average over questions.
-    metDataList = list(
+    metDataList <- list(
         y=y, g=g, nYlevels=nBins,
         nG=nG, Ntotal=totalNObs
     )
 
     # Identical to L&K except list value variable names are my own.
-    ordDataList = list(
+    ordDataList <- list(
         y=y, q=q, g=g, thresh=thresh, nYlevels=nBins,
         nQ=nQ, nG=nG, Ntotal=totalNObs
     )
 
     return (list(
-        metDataList = metDataList,
-        ordDataList = ordDataList
+        metDataList=metDataList,
+        ordDataList=ordDataList
     ))
 }
 
@@ -359,26 +359,26 @@ assembleJAGSData = function(df, nBins)
 #      latentMean (float): opinion on the continuous, latent psychological scale
 #      latentStd (float): standard deviation of opinion, latent psychological scale
 #      
-simulatedObservation = function(N, firstBinValue, nBins, latentMean, latentStd)
+simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentStd)
 {
     # Draw latent opinion data for each participant; parameters are set
     # to empirical, as opposed to population, values.
-    latentData = mvrnorm(N, latentMean, latentStd, empirical=TRUE)
+    latentData <- mvrnorm(N, latentMean, latentStd, empirical=TRUE)
 
     # Create the bins and thresholds to be used to bin latentData.
-    bins = seq(from=firstBinValue, length.out=nBins)
-    thresholds = bins[1:length(bins)-1] + 0.5 
+    bins <- seq(from=firstBinValue, length.out=nBins)
+    thresholds <- bins[1:length(bins)-1] + 0.5 
 
     # Bin latent data transforming to ordinal scale.
-    ordinalData = 0 * latentData
+    ordinalData <- 0 * latentData
     for (sIdx in 1:length(ordinalData)) 
     {
         # Identify bin index from multiple comparisons of latent data with
         # threshold values.
-        binIdx = max(which(latentData[sIdx] > c(-Inf, thresholds)))
+        binIdx <- max(which(latentData[sIdx] > c(-Inf, thresholds)))
 
         # Assign this subject's ordinal data to be the binned value.
-        ordinalData[sIdx] = bins[binIdx]
+        ordinalData[sIdx] <- bins[binIdx]
     }
     
     return (ordinalData)
