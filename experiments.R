@@ -63,6 +63,8 @@ schkade2010 <- function(nParticipants=63,  # 34 women
     # Start for now with just civil unions since this is the most
     # polarized issue.
     libMean <- libMeans[['Civil unions']]
+
+    # See 
     libPreData <- simulatedObservation(nLiberals, 1, nBins, 
                                        libMean, preLibSd)
     libPostData <- simulatedObservation(nLiberals, 1, nBins, 

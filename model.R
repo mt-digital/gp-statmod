@@ -48,12 +48,12 @@ twoGroupComparison <- function(N, firstBinValue, nBins,
     ## 
     # Run metric and ordinal JAGS analysis on simulations. 
     inputData <- makeModelInput(observation1, observation2)
-    jagsData <- assembleJAGSData(inputData, nBins)
+    # jagsData <- assembleJAGSData(inputData, nBins)
 
     # Metric model fitting with t-test and frequentist hypothesis testing.
     fittedFrequentistModel <- frequentistModel(inputData)
     # Metric model fitting with JAGS and Bayesian significance measures.
-    fittedMetricModel <- metricModel(jagsData$metDataList)
+    # fittedMetricModel <- metricModel(jagsData$metDataList)
     # Ordinal model fitting with JAGS and Bayesian significance measures.
     # fittedOrdinalModel <- ordinalModel(jagsData$ordDataList)
 
@@ -61,8 +61,8 @@ twoGroupComparison <- function(N, firstBinValue, nBins,
                    # fittedMetricModel, fittedOrdinalModel)
 
     return (list(inputData=inputData,
-                 fittedFreq=fittedFrequentistModel,
-                 fittedMetric=fittedMetricModel))
+                 fittedFreq=fittedFrequentistModel))
+                 # fittedMetric=fittedMetricModel))
                  # fittedOrd=fittedOrdinalModel))
 }
 
@@ -85,12 +85,13 @@ plotComparison <- function(inputData, modelResults)
 ##
 # Runs the metric frequentist (t-test) model on input dataframe.
 #
-frequentistModel <- function(data) 
+frequentistModel <- function(data, alternative="two.sided", paired = TRUE) 
 {
     preDiscussion <- data$resp[data$cond == 1]
     postDiscussion <- data$resp[data$cond == 2]
 
-    tInfo <- t.test(preDiscussion, postDiscussion)
+    tInfo <- t.test(postDiscussion, preDiscussion,
+                    paired = paired, alternative = alternative)
     effSz <- effectSize(preDiscussion, postDiscussion)
 
     return (list(tInfo=tInfo, effSz=effSz))
