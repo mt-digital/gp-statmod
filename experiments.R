@@ -204,3 +204,74 @@ compareChangedMean <- function(nBins=10, initialLatentMeans=c(2.5, 3.5, 4.5),
     
     return (results)
 }
+
+
+##
+# Initial sketch of data to be used to demonstrate the range of latent
+# variances that can give rise to reported opinion shifts.
+#
+oneConditionExperiment <- 
+    function(
+        expectedPreObsMean, expectedPostObsMean, latentMean, 
+        # preDelibSDs = c(2.5, 3.0, 3.5, 4.0, 4.5), 
+        preDelibSDs = c(3.0, 3.5, 4.0, 4.5, 5.0), 
+        postDelibSDs = c(1.0, 1.5, 2.0, 2.5, 3.0),
+        nTrials = 10, 
+        N = 30,
+        tol = 0.05,
+        firstBinValue = 1,
+        nBins = 10
+    )
+{
+    # Convenience function for generating simulated data for this 
+    # experiment.
+    getSimData <- function(latentSD)
+    {
+        return (simulatedObservation(N, firstBinValue, nBins, latentMean, latentSD))
+    }
+
+    # Initialize results dataframe. No need to keep individual trials, only
+    # need the success rate for a given parameter combination.
+    result <- data.frame(matrix(ncol=4, 
+                                nrow=length(preDelibSDs) * length(postDelibSDs)
+                         ))
+
+    colnames(result) <- c(
+        'latentMean', 'preDelibSD', 'postDelibSD', 'successRate'
+    )
+    # Use this to index (preSD, postSD) pairs and add results to DF.
+    paramSetIdx = 1
+    for (preSD in preDelibSDs)
+    {
+        for (postSD in postDelibSDs)
+        {
+            trialResults <- c()
+            for (trialIdx in seq(1, nTrials))
+            {
+                simObsPre <- getSimData(preSD)
+                simObsPost <- getSimData(postSD)
+                if (approxEqual(expectedPreObsMean, mean(simObsPre), tol = tol) &&
+                    approxEqual(expectedPostObsMean, mean(simObsPost), tol = tol))
+                {
+                    success = 1
+                }
+                else
+                {
+                    success = 0
+                }
+                trialResults <- append(trialResults, success)
+            }
+            
+            result[paramSetIdx, ] = c(latentMean, preSD, postSD, mean(trialResults))
+            paramSetIdx = paramSetIdx + 1
+        }
+    }
+
+    return (result)
+}
+
+
+approxEqual <- function(val1, val2, tol = 0.05)
+{
+    return (abs(val1 - val2) <= tol)
+}
