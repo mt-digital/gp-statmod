@@ -189,4 +189,3 @@ allFalsePositiveConditions <- function(nTrials = 10, tol = 0.05)
 }
 
 
-
