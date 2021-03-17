@@ -40,15 +40,13 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
     
     its <- 0
     change <- 0.0
-    for (i in 1:maxIts)
-    {
-        its <- i
 
+    while(its < maxIts)
+    {
         xnext <- rnorm(1, xcurr, stepSize * sqrt(0.5 * ycurr))
         ynext <- f(xnext)
 
         change <- ynext - ycurr
-        # print(change)
         if (abs(change) < tol)
         {
             return (c(xcurr, ycurr, its));

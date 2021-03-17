@@ -9,39 +9,95 @@
 
 library(shiny)
 
+source('util.R')
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Group polarization counterexample generator."),
+
+    h1(getQueryString()[["caseStudy"]]),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+                     # h1("yo"),
+            htmlOutput("text"),
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+            # Initialize parameter controls defaulted to a Schkade result.
+             numericInput("latentMean",
+                        "Hypothesized latent mean:",
+                        min = -1,
+                        max = 12,
+                        step = 0.1,
+                        value = 5.5),
+            numericInput("observedPreDelibMean",
+                        "Reported, target pre-deliberation mean",
+                        min = 1,
+                        max = 10,
+                        step = 0.1,
+                        value = 9.2),
+            numericInput("observedPostDelibMean",
+                        "Reported, target post-deliberation mean",
+                        min = 1,
+                        max = 10,
+                        step = 0.1,
+                        value = 9.4),
+            numericInput("minBinValue", "Minimum opinion bin value", 1, step = 1),
+            numericInput("maxBinValue", "Maximum opinion bin value", 10, step = 1),
+           htmlOutput("caseStudy"),
+           # printOutput(
+           plotOutput("preBarplot"),
+           plotOutput("postBarplot")
         )
     )
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    # Sets up case study if there is one.
+    caseStudy <- 
+        reactive({
+            # Check if there is a caseStudy query parameter, designed to be
+            # passed when user clicks on nav element in sidebar.
+            if (!is.null(getQueryString()$caseStudy))
+            {
+                caseStudy <- getQueryString()$caseStudy
+                setCaseStudyValues(caseStudy, session)
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+                return (caseStudy)
+            }
+            else
+            {
+                # Defaulting to Schkade result for now.
+                return ("Schkade, et al., (2010) - Liberals on Affirmative Action")
+            }
+        })
+
+    output$caseStudy <- renderText({caseStudy()})
+
+    # output$standardDeviationReport <- renderText
+
+    output$preBarplot <- renderPlot({
+        largeNBarplot(input, "pre")
+    })
+
+    output$post <- renderPlot({
+        largeNBarplot(input, "post")
+    })
+
+    observe({
+        val <- input$minBinValue
+        updateSliderInput(session, "latentMean", min = val)
+    })
+
+    observe({
+        val <- input$maxBinValue
+        updateSliderInput(session, "latentMean", max = val)
     })
 }
 
