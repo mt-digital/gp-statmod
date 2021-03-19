@@ -12,8 +12,7 @@ source('model.R')
 
 
 solveForLatentSD <- function(kVec, latentMean, observedMean, guess, 
-                             step = 0.01, maxIts = 10000, tol = 1e-6,
-                             verbose = FALSE)
+                             step = 0.01, maxIts = 10000, tol = 1e-6)
 {
     sqErr <- function(latentSD)
     {
@@ -25,12 +24,7 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
         return ((observedMean - simulatedObservedMean)^2);
     }
 
-    ret <- hillclimbing(sqErr, guess, step, maxIts, tol)
-
-    if (verbose)
-        return (ret)
-    else
-        return (ret[1])
+    return (hillclimbing(sqErr, guess, step, maxIts, tol))
 }
 
 
@@ -45,17 +39,33 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
     ycurr <- f(x)
     
     its <- 0
+    totalIts <- 0
     change <- 0.0
 
     while(its < maxIts)
     {
-        xnext <- rnorm(1, xcurr, stepSize * sqrt(0.5 * ycurr))
+        its <- its + 1
+        totalIts <- its
+
+        xnext <- rnorm(1, xcurr, stepSize)
         ynext <- f(xnext)
 
         change <- ynext - ycurr
+        # print("Current x and y:")
+        # print(xcurr)
+        # print(ycurr)
+
+        # print("Next x and y:")
+        # print(xnext)
+        # print(ynext)
+
+        # print("Change:")
+        # print(change)
+
+        # print("")
         if (abs(change) < tol)
         {
-            return (c(xcurr, ycurr, its));
+            return (c(xcurr, ycurr, totalIts));
         }
         
         # A negative change means ynext is less that ycurr, and closer/better
@@ -67,5 +77,5 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
         }
     }
 
-    return (c(xcurr, ycurr, its));
+    return (c(xcurr, ycurr, totalIts));
 }
