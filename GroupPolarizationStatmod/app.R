@@ -8,8 +8,10 @@
 #
 
 library(shiny)
+library(ggplotify)
 
 source('util.R')
+source('model.R')
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -48,10 +50,23 @@ ui <- fluidPage(
                         value = 9.4),
             numericInput("minBinValue", "Minimum opinion bin value", 1, step = 1),
             numericInput("maxBinValue", "Maximum opinion bin value", 10, step = 1),
-           htmlOutput("caseStudy"),
-           # printOutput(
-           plotOutput("preBarplot"),
-           plotOutput("postBarplot")
+            htmlOutput("caseStudy"),
+            br(),
+            h4("Large-N model exact calculations"),
+            fluidRow(
+                column(6,
+                    tags$ul(tags$li("Latent Mean: XX"), tags$li("YOOOO"))
+                ),
+                column(6,
+                    h5("pre:"),
+                    plotOutput("preBarplot"),
+                    h5("post:"),
+                    plotOutput("postBarplot")
+                )
+             ),
+            br(),
+            h5("Confirmatory simulations for empirical N"),
+           # TODO: polts n stuff
         )
     )
 )
@@ -80,14 +95,26 @@ server <- function(input, output, session) {
 
     output$caseStudy <- renderText({caseStudy()})
 
-    # output$standardDeviationReport <- renderText
+    kVec <- reactive({input$minBinValue:input$maxBinValue})
 
-    output$preBarplot <- renderPlot({
-        largeNBarplot(input, "pre")
+    # Use a guess of 1.5 for latentSD.
+    latentPreSD <- reactive({
+        solveForLatentSD(kVec(), input$latentMean, input$observedPreDelibMean, 1.5)
+    })
+    latentPostSD <- reactive({
+        solveForLatentSD(kVec(), input$latentMean, input$observedPostDelibMean, 1.5)
     })
 
-    output$post <- renderPlot({
-        largeNBarplot(input, "post")
+    probVec <- reactive({makeProbVec(kVec(), input$latentMean, latentPreSD())})
+    output$preBarplot <- renderPlot({
+        barplot(probVec())
+    })
+
+    probVecPost <- reactive({
+        makeProbVec(kVec(), input$latentMean, latentPostSD())
+    })
+    output$postBarplot <- renderPlot({
+        barplot(probVecPost())
     })
 
     observe({

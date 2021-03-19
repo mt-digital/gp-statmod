@@ -27,6 +27,10 @@
 # CaseStudyData <- getCaseStudyData();
 
 library(shiny)
+library(grid)
+library(gridExtra)
+library(lattice)
+library(ggplot2)
 
 source("model.R")
 source("numerical.R")
@@ -66,24 +70,31 @@ getCaseStudyValues <- function(caseStudyName)
 #     input (Shiny input)
 #     time (string): Either "pre" or "post" for pre- or post-deliberation.
 #
-largeNBarplot <- function(input, time)
+largeNBarplots <- function(input, time)
 {
     kVec <- input$minBinValue:input$maxBinValue
     
-    if (time == "pre")
-        observedMean <- input$observedPreDelibMean
-    else
-        observedMean <- input$observedPostDelibMean
+    observedPreMean <- input$observedPreDelibMean
+    observedPostMean <- input$observedPostDelibMean
 
     # Use a guess of 1.5 for latentSD.
-    latentSD = solveForLatentSD(kVec, input$latentMean, observedMean, 1.5)
+    latentPreSD = solveForLatentSD(kVec, input$latentMean, observedPreMean, 1.5)
+    latentPostSD = solveForLatentSD(kVec, input$latentMean, observedPostMean, 1.5)
 
-    barplot(makeProbVec(kVec, input$latentMean, latentSD), 
-            # names.arg = kVec, 
-            # ylab = "Frequency of response",
-            main = paste(
-                "Calculated ", time, "-discussion SD = ", latentSD, sep=""
-            )
-    )
+    preBarplot <- barplot(makeProbVec(kVec, input$latentMean, latentSD), 
+                # names.arg = kVec, 
+                # ylab = "Frequency of response",
+                main = paste(
+                    "Calculated ", time, "-discussion SD = ", latentPreSD, sep=""
+                ))
+
+    postBarplot <- barplot(makeProbVec(kVec, input$latentMean, latentPostSD), 
+                # names.arg = kVec, 
+                # ylab = "Frequency of response",
+                main = paste(
+                    "Calculated ", time, "-discussion SD = ", latentSD, sep=""
+                ))
+
+    grid.arrange(grobs=c(preBarplot, postBarplot), ncol = 2) 
 }
 

@@ -12,7 +12,8 @@ source('model.R')
 
 
 solveForLatentSD <- function(kVec, latentMean, observedMean, guess, 
-                             step = 0.01, maxIts = 10000, tol = 1e-6)
+                             step = 0.01, maxIts = 10000, tol = 1e-6,
+                             verbose = FALSE)
 {
     sqErr <- function(latentSD)
     {
@@ -24,7 +25,12 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
         return ((observedMean - simulatedObservedMean)^2);
     }
 
-    return (hillclimbing(sqErr, guess, step, maxIts, tol));
+    ret <- hillclimbing(sqErr, guess, step, maxIts, tol)
+
+    if (verbose)
+        return (ret)
+    else
+        return (ret[1])
 }
 
 
