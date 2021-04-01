@@ -1,5 +1,3 @@
-
-
 ##
 # Large-N exact calculations.
 ##
@@ -34,6 +32,7 @@ binProb <- function(k, L, K, latentMean, latentSD)
         theta_k <- thetaVec[binIdx]
     }
     ret <- pnorm((theta_k - latentMean) / latentSD) - pnorm((theta_km1 - latentMean) / latentSD)
+
     return (
         pnorm((theta_k - latentMean) / latentSD) - 
         pnorm((theta_km1 - latentMean) / latentSD)
@@ -47,10 +46,19 @@ makeProbVec <- function(kVec, latentMean, latentSD)
     K <- length(kVec)
 
     probVec <- numeric(K)
-    # for (k in kVec)
+    # print("in makeProbVec")
+    # print(K)
+    # print(probVec)
+
+    # print(kVec)
+    # print(L)
+
     for (ii in 1:K)
     {
         res <- binProb(kVec[ii], L, K, latentMean, latentSD)
+        # print(ii)
+        # print(res)
+        # print(probVec[ii])
         probVec[ii] <- binProb(kVec[ii], L, K, latentMean, latentSD)
     }
 

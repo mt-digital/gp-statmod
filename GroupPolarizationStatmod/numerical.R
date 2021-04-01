@@ -14,6 +14,7 @@ source('model.R')
 solveForLatentSD <- function(kVec, latentMean, observedMean, guess, 
                              step = 0.01, maxIts = 10000, tol = 1e-6)
 {
+    # print(kVec)
     sqErr <- function(latentSD)
     {
         simulatedObservedMean <- meanObs(
@@ -51,18 +52,7 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
         ynext <- f(xnext)
 
         change <- ynext - ycurr
-        # print("Current x and y:")
-        # print(xcurr)
-        # print(ycurr)
 
-        # print("Next x and y:")
-        # print(xnext)
-        # print(ynext)
-
-        # print("Change:")
-        # print(change)
-
-        # print("")
         if (abs(change) < tol)
         {
             return (c(xcurr, ycurr, totalIts));

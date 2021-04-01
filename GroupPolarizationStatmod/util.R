@@ -35,7 +35,7 @@ library(ggplot2)
 source("model.R")
 source("numerical.R")
 
-CaseStudyData <- read.csv('caseStudies.csv', row.names='CaseStudyName')
+CaseStudyData <- read.csv('caseStudies.csv', row.names='CaseStudyTag')
 
 
 ##

@@ -6,9 +6,6 @@
 # require(glue)
 require(MASS)
 
-# source('plot.R')
-# source('model.R')
-
 
 simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentStd)
 {
@@ -43,6 +40,7 @@ simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentStd)
     
     return (ordinalData)
 }
+
 
 ##
 # figureDir is where to save figures, if the argument is given.
@@ -146,201 +144,130 @@ approxEqual <- function(val1, val2, tol = 0.05)
 }
 
 
-# ##
-# # Experiment modeling experimental procedure used by 
-# # Schkade, Sunstein, and Hastie (2010)
-# # "When deliberation produces extremism".
-# #
-# schkade2010 <- function(nParticipants=63,  # 34 women
-#                         nConservativeGroups=5, nDemocratGroups=5,
-#                         minInGroup=5, maxInGroup=7, 
-#                         nBins=10, 
-#                         nQuestions=3,  # gbl warming, affirm action, civil unions
-#                         preLibSd=2.3^2,  # Multiply by 2 since given in terms
-#                         postLibSd=1.0^2, # of standard deviation in 
-#                         preConsSd=2.8^2, # Schkade, et al.
-#                         postConsSd=0.75^2,
-#                         plot=FALSE,
-#                         saveFig=FALSE
-# )
+# Calculate the ranges of latent means that successfully generate a false
+# detection of group polarization for several case studies.
+#
+# Arguments:
+#     caseStudyDataFile (string): location of case studies CSV
+#     step (numeric): Resolution of successful region over which solutions for
+#                     latent standard deviations could be found.
+latentMeanRanges <- function(caseStudyDataFile = "caseStudies.csv",
+                             step = 0.1, guess = 1.0)
+{
+    csData <- read.csv(caseStudyDataFile)
+    names(csData) <- csData$CaseStudyTag
+
+    nCS <- nrow(csData)
+
+    # Record the latent means that successfully generated a false
+    # group polarization detection, plus the one that resulted in least error.
+    csData$minLatentMean <- numeric(nCS)
+    csData$maxLatentMean <- numeric(nCS)
+    csData$bestLatentMean <- numeric(nCS)
+
+    for (case in csData)
+    {
+        # If no solutions are found for a given case study 
+        # report the means as NULL.
+        if (is.null(knownSuccessMean))
+        {
+            case$minLatentMean <- NULL
+            case$maxLatentMean <- NULL
+            case$bestLatentMean <- NULL
+        }
+        else
+        {
+            resUp <- stepThroughSolutions(case, "up")
+            resDown <- stepThroughSolutions(case, "down")
+
+            latentMeans <- append(resUp[1], resDown[1])
+            case$minLatentMean <- min(latentMeans)
+            case$maxLatentMean <- max(latentMeans)
+
+            case$bestLatentMean = min(resUp[2], resDown[2])
+
+            case$bestSSE = min(resUp[3], resDown[3])
+        }
+
+        # Replace existing row with processed data.
+        csData[case$CaseStudyTag, ] <- case
+    }
+
+    # Save processed dataframe to disk.
+    write.csv(csData, "caseStudiesProcessed.csv")
+}
+
+
+##
+# Arguments:
+#     case (data.frame row): Single experimental condition case from case
+#                            studies.
+#
+# stepThroughSolutions <- function(case, stepDir = "up", step = step, guess = guess)
 # {
-#     # Create groups according to paper. See p. 229 for start
-#     # of "Procedures and Results of Study.
+#     latentMean <- case$KnownSuccessfulMean
+#     bestMean <- latentMean
 
-#     # Need to triple check that, indeed, the mean across all groups is
-#     # being used. Here I just choose one super-group (conservative/liberal)
-#     # to have 31 members and the other to have 32. 
-#     nLiberals <- 31
-#     nConservatives <- 32
-    
-#     # Participants gave their opinions on three political issues.
-#     questions <- c('Global warming', 'Affirmative action', 'Civil unions')
+#     kVec <- case$minBinValue:case$maxBinValue
 
-#     # Schkade, et al., claim to have found significant effects. We want to know
-#     # if these are potentially spurious, i.e., there is no significant effect
-#     # of deliberation. These means I assign below are close to the initial
-#     # pre-value given in Table 1.
-#     libMeans = c(
-#         'Global warming' = 9.2,
-#         'Affirmative action' = 5.8,
-#         'Civil unions' = 9.2
+#     # Solve for pre- and post-SDs using hillclimbing.
+#     latentPreSDResult <- solveForLatentSD(
+#         kVec, latentMean, cs$ObservedMeanPre, guess
 #     )
-#     consMeans = c(
-#         'Global warming' = 5.13,
-#         'Affirmative action' = 2.8,
-#         'Civil unions' = 2.4
+#     latentPostSDResult <- solveForLatentSD(
+#         kVec, latentMean, cs$ObservedMeanPost, guess
 #     )
-    
-#     # Schkade, et al., report variances in Figure 2. I selected two points from
-#     # the scatterplot in Fig 2 to get the pre- and post-discussion variances
-#     # for defaults for the liberals and conservatives. 
-#     # A future sensitivity check should examine different pre-and post-
-#     # discussion variances selected from that figure.
-#     #
-#     # With the method explained, generate simulated data.
-#     # Start for now with just civil unions since this is the most
-#     # polarized issue.
-#     libMean <- libMeans[['Civil unions']]
 
-#     # See 
-#     libPreData <- simulatedObservation(nLiberals, 1, nBins, 
-#                                        libMean, preLibSd)
-#     libPostData <- simulatedObservation(nLiberals, 1, nBins, 
-#                                         libMean, postLibSd)
-     
-#     consMean <- consMeans[['Civil unions']]
-#     consPreData <- simulatedObservation(nConservatives, 1, 10, 
-#                                         consMean, preConsSd)
-
-#     consPostData <- simulatedObservation(nConservatives, 1, 10, 
-#                                          consMean, postConsSd)
-
-#     # Run model on each simulated dataset. 
-#     libData <- makeModelInput(libPreData, libPostData)
-#     consData <- makeModelInput(consPreData, consPostData)
-
-#     libFitted <- frequentistModel(libData)
-#     consFitted <- frequentistModel(consData)
-
-#     if (plot)
+#     # Step latent mean up from known solution, tracking best solution.
+#     successful <- TRUE
+#     # Want to make sure the first SSE is less than the init val, so set to Inf.
+#     currentSSE <- Inf
+#     while (successful) 
 #     {
-#         for (party in c("Liberal", "Conservative"))
+#         # Append successful latent mean to list.
+#         successfulMeans <- append(successfulMeans, latentMean)
+
+#         # See if the SSE of this solution is 
+#         currentSSE <- SSE(latentPreSDResult, latentPostSDResult)
+#         if (currentSSE < bestSSE)
 #         {
-#             # Each result is a list with the simulated "input data" and
-#             # frequentist model fit results. 
-#             if (party == "Liberal")
-#             {
-#                 plotFreq(libData, libFitted, nBins)
-#                 latentMean = libMean
-#                 initialLatentSd = preLibSd
-#                 finalLatentSd = postLibSd
-#             }
-#             else
-#             {
-#                 plotFreq(consData, consFitted, nBins)
-#                 latentMean = consMean
-#                 initialLatentSd = preConsSd
-#                 finalLatentSd = postConsSd
-#             }
-            
-#             if (saveFig)
-#             {
-#                 fileName <- glue(
-#                     '~/workspace/Presentations/gp-statmod/Figures/nBins={nBins}',
-#                     '_party={party}',
-#                     '_lm1={latentMean}_lm2={latentMean}',
-#                     '_sd1={initialLatentSd}',
-#                     '_sd2={finalLatentSd}')
-                
-#                 saveGraph(fileName)
-#             }
+#             bestSSE <- currentSSE
+#             bestMean <- latentMean
 #         }
+
+#         # Increment latentMean for the next loop if it happens.
+#         if (stepDir == "up")
+#             latentMean <- latentMean + step
+#         else if (stepDir == "down")
+#             latentMean <- latentMean - step
+#         else
+#             stop("Provided stepDir must be 'up' or 'down'")
+
+#         # Solve for pre- and post-SDs using hillclimbing.
+#         latentPreSDResult <- solveForLatentSD(
+#             kVec, latentMean, cs$ObservedMeanPre, guess
+#         )
+#         latentPostSDResult <- solveForLatentSD(
+#             kVec, latentMean, cs$ObservedMeanPost, guess
+#         )
+        
+#         # See if results are within tol.
+#         successful <- hillclimbSuccess(latentPreSDResult, 
+#                                        latentPostSDResult)
 #     }
 
-#     return (c(libData=libData, consData=consData, 
-#              libFitted=libFitted, consFitted=consFitted))
+#     return (c(successfulMeans, bestMean, bestSSE))
 # }
 
 
-# # Use this function to better understand how false negatives occur.
-# compareNoMeanChange <- function(nBins=10, firstBinValue=1, 
-#                                 latentMeans=c(5.0, 7.0, 9.0),
-#                                 initialLatentSd=4.0, finalLatentSd=1.0, N=100,
-#                                 plot=TRUE, saveFig=FALSE)
-# {
-#     results <- c()
-#     for (latentMean in latentMeans)
-#     {
-#         result <- twoGroupComparison(N, firstBinValue, nBins, 
-#                                      latentMeans=c(latentMean, latentMean),
-#                                      latentSds=c(initialLatentSd, 
-#                                                  finalLatentSd),
-#         ) # rngSeed=42
-        
-#         results <- append(results, result)
-        
-#         if (plot)
-#         {
-#             # Each result is a list with the simulated "input data" and
-#             # frequentist model fit results. 
-#             plotFreq(result$inputData, result$fittedFreq, nBins)
-            
-#             if (saveFig)
-#             {
-#                 fileName <- glue('report/Figures/nBins={nBins}',
-#                                  '_lm1={latentMean}_lm2={latentMean}',
-#                                  '_sd1={initialLatentSd}',
-#                                  '_sd2={finalLatentSd}')
-                
-#                 saveGraph(fileName)
-#             }
-#         }
-#     }
-    
-#     return (results)
-# }
+function(latentPreSDResult, latentPostSDResult)
+{
+    return (latentPreSDResult[2] + latentPostSDResult[2])
+}
 
 
-# # Use this function to better understand how false negatives occur.
-# compareChangedMean <- function(nBins=10, initialLatentMeans=c(2.5, 3.5, 4.5),
-#                                meanChange=1.0, initialLatentSd=1.0, 
-#                                finalLatentSd=4.0, firstBinValue=1, N=100,
-#                                plot=TRUE, saveFig=FALSE)
-# {
-#     results <- c()
-#     for (latentMean in initialLatentMeans)
-#     {
-#         initialLatentMean <- latentMean
-#         finalLatentMean <- latentMean + meanChange
-#         result <- twoGroupComparison(N, firstBinValue, nBins, 
-#                                      latentMeans=c(initialLatentMean, 
-#                                                    finalLatentMean),
-#                                      latentSds=c(initialLatentSd, 
-#                                                  finalLatentSd),
-#                                      )
-        
-#         results <- append(results, result)
-        
-#         if (plot)
-#         {
-#             # Each result is a list with the simulated "input data" and
-#             # frequentist model fit results. 
-#             plotFreq(result$inputData, result$fittedFreq, nBins)
-            
-#             if (saveFig)
-#             {
-#                 fileName <- glue('report/Figures/nBins={nBins}',
-#                                  '_lm1={initialLatentMean}',
-#                                  '_lm2={finalLatentMean}',
-#                                  '_sd1={initialLatentSd}',
-#                                  '_sd2={finalLatentSd}')
-                
-#                 saveGraph(fileName)
-#             }
-#         }
-#     }
-    
-#     return (results)
-# }
-
-
+hillclimbSuccess <- function(latentPreSDResult, latentPostSDResult, tol = 1e-3) 
+{
+    # The second element in the hillclimb results is the squared error.
+    return (latentPreSDResult[2] < tol && latentPostSDResult[2] < tol)
+}
