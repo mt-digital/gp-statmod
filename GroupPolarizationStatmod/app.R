@@ -35,29 +35,7 @@ ui <- function(request) { fluidPage(
         mainPanel(
         # Initialize parameter controls defaulted to a Schkade result.
             fluidRow(
-                column(6, 
-                    numericInput("minBinValue", "Minimum opinion bin value", 
-                                 1, step = 1),
-                    numericInput("maxBinValue", "Maximum opinion bin value", 
-                                 10, step = 1),
-                    fluidRow(
-                        column(6,
-                            numericInput("step", "Hillclimb solver step size", 
-                                         0.01, step = 0.001)
-                        ),
-                        column(6,
-                            numericInput("successTol", "Hillclimb success threshold", 
-                                         1e-2)
-                        )
-                    )
-                ),
                 column(6,
-                    numericInput("latentMean",
-                               "Hypothesized latent mean:",
-                               # min = -1,
-                               # max = 12,
-                               step = 0.1,
-                               value = 5.5),
                     numericInput("observedPreDelibMean",
                                 "Reported, target pre-deliberation mean",
                                 # min = 1,
@@ -69,7 +47,29 @@ ui <- function(request) { fluidPage(
                                 # min = 1,
                                 # max = 10,
                                 step = 0.1,
-                                value = 9.4)
+                                value = 9.4),
+                    numericInput("latentMean",
+                               "Hypothesized latent mean:",
+                               # min = -1,
+                               # max = 12,
+                               step = 0.1,
+                               value = 5.5),
+                ),
+                column(6, 
+                    numericInput("minBinValue", "Minimum opinion bin value", 
+                                 1, step = 1),
+                    numericInput("maxBinValue", "Maximum opinion bin value", 
+                                 10, step = 1),
+                    fluidRow(
+                        column(6,
+                            numericInput("step", "Hillclimb solver step size", 
+                                         0.01, step = 0.05)
+                        ),
+                        column(6,
+                            numericInput("successTol", "Hillclimb success threshold", 
+                                         0.05, step = 0.005)
+                        )
+                    )
                 ),
             ),
             # htmlOutput("caseStudy"),

@@ -98,3 +98,21 @@ largeNBarplots <- function(input, time)
     grid.arrange(grobs=c(preBarplot, postBarplot), ncol = 2) 
 }
 
+
+##
+# Friedkin (1999) seems to convert decimal probabilities given in response
+# to CDQ questions on Sports, School, and Surgery (in three group-size
+# conditions) to percentage probabilities in Table 1 (p. 868). Friedkin says,
+# "The subjects' responses (opinions) were restricted to one of 20 probability
+# values: .05, .10, .15, ..., 1.00." Yet in Table 1, average choice shifts
+# are given that are much greater than 1, and initial and final mean opinions
+# have values between 0 and 100. I see no explanation of the difference.
+#
+# To use Friedkin's reported measurements I need to scale responses apparently
+# from the 5 to 100 percentage scale to a 1-to-20 ordinal scale. The results
+# from this calculation can be used in the web app for hypothesized latent
+# mean and observed pre- and post-deliberation means.
+convertFriedkinTo20Bin <- function(friedkinVal)
+{
+    return ( 20 * (friedkinVal / 100.0) )
+}
