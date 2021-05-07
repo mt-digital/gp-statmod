@@ -14,7 +14,8 @@ source('model.R')
 solveForLatentSD <- function(kVec, latentMean, observedMean, guess, 
                              step = 0.01, maxIts = 10000, tol = 1e-6)
 {
-    # print(kVec)
+    # Keep the squared error function to be minimized through hillclimbing
+    # separate from hillclimbing itself.
     sqErr <- function(latentSD)
     {
         simulatedObservedMean <- meanObs(

@@ -31,12 +31,8 @@ binProb <- function(k, L, K, latentMean, latentSD)
     {
         theta_k <- thetaVec[binIdx]
     }
-    ret <- pnorm((theta_k - latentMean) / latentSD) - pnorm((theta_km1 - latentMean) / latentSD)
-
-    return (
-        pnorm((theta_k - latentMean) / latentSD) - 
-        pnorm((theta_km1 - latentMean) / latentSD)
-    );
+    return (pnorm((theta_k - latentMean) / latentSD) - 
+            pnorm((theta_km1 - latentMean) / latentSD))
 }
 
 
