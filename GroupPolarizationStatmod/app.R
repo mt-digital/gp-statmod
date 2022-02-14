@@ -17,7 +17,7 @@ source("numerical.R")
 
 
 # Define UI for application that draws a histogram
-ui <- function(request) { fluidPage(
+view <- function(request) { fluidPage(
 
     titlePanel("Group polarization counterexample generator."),
 
@@ -85,7 +85,7 @@ ui <- function(request) { fluidPage(
 }
 
 # Define server logic required to draw a histogram
-server <- function(input, output, session) {
+controller <- function(input, output, session) {
 
     # Sets up case study if there is one.
     caseStudy <- 
@@ -195,4 +195,4 @@ server <- function(input, output, session) {
 }
 
 # Run the application 
-shinyApp(ui = ui, server = server, enableBookmarking = "url")
+shinyApp(ui = view, server = controller, enableBookmarking = "url")

@@ -35,19 +35,17 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
 #
 hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
 {
-    n <- length(x)
-
     xcurr <- x
     ycurr <- f(x)
     
     its <- 0
-    totalIts <- 0
+    # totalIts <- 0
     change <- 0.0
 
     while(its < maxIts)
     {
         its <- its + 1
-        totalIts <- its
+        # totalIts <- its
 
         xnext <- rnorm(1, xcurr, stepSize)
         ynext <- f(xnext)
@@ -56,7 +54,7 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
 
         if (abs(change) < tol)
         {
-            return (c(xcurr, ycurr, totalIts));
+            return (c(xcurr, ycurr, its));
         }
         
         # A negative change means ynext is less that ycurr, and closer/better
@@ -67,6 +65,5 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
             ycurr <- ynext
         }
     }
-
-    return (c(xcurr, ycurr, totalIts));
+    return (c(xcurr, ycurr, its));
 }
