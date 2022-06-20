@@ -15,7 +15,6 @@ library(shiny)
 source("model.R")
 source("numerical.R")
 
-
 # Define UI for application that draws a histogram
 view <- function(request) { fluidPage(
 
@@ -26,8 +25,8 @@ view <- function(request) { fluidPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-                     # h1("yo"),
-            htmlOutput("text"),
+                     h3("Select a Study to analyze"),
+                     htmlOutput("text"),
             width = 3
         ),
 
@@ -77,8 +76,7 @@ view <- function(request) { fluidPage(
             h4("Large-N model exact calculations"),
             plotOutput("largeNBarplot"),
             br(),
-            h4("Confirmatory simulations for empirical N"),
-           # TODO: polts n stuff
+           # TODO: SAVE button 
         )
     )
 )
