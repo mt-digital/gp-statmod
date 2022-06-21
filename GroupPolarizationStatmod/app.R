@@ -10,14 +10,30 @@
 library(ggplot2)
 library(ggplotify)
 library(reshape2)
+library(readxl)
 library(shiny)
 
 source("model.R")
 source("numerical.R")
 
+STUDIES <- read_excel("data/CaseStudiesMinimal.xlsx", "ArticleStudiesMinimal")
+FULL_TAGS <- sort(paste(STUDIES$Tag, STUDIES$StudyTag, sep=" - "))
+
 # Define UI for application that draws a histogram
 view <- function(request) { fluidPage(
 
+    tags$head(tags$style(HTML("
+        #save-btn-div {
+            text-align: center;
+        }
+        #saveBtn {
+            font-size: 25px;   
+            width: 50%;
+            color: white;
+            background-color: dodgerblue;
+        }
+    "))),
+  
     titlePanel("Group polarization counterexample generator."),
 
     h1(getQueryString()[["caseStudy"]]),
@@ -25,8 +41,9 @@ view <- function(request) { fluidPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-                     h3("Select a Study to analyze"),
-                     htmlOutput("text"),
+          selectInput("studyTag", "Choose a study within an article:",
+                      choices = FULL_TAGS),
+                     #htmlOutput("text"),
             width = 3
         ),
 
@@ -78,6 +95,11 @@ view <- function(request) { fluidPage(
             br(),
            # TODO: SAVE button 
         )
+    ),
+    # print(tags),
+    tags$head(tags$script(src = "message-handler.js")),
+    div(id = "save-btn-div", 
+        actionButton("saveBtn", "Save")
     )
 )
 }
@@ -187,6 +209,11 @@ controller <- function(input, output, session) {
     observe({
         reactiveValuesToList(input)
         session$doBookmark()
+    })
+    
+    observeEvent(input$saveBtn, {
+      session$sendCustomMessage(type = 'testmessageHandlerForJS',
+                                message = 'Thank you for clicking')
     })
 
     onBookmarked(function(url) { updateQueryString(url) })
