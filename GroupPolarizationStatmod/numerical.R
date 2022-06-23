@@ -45,7 +45,6 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
     while(its < maxIts)
     {
         its <- its + 1
-        # totalIts <- its
 
         xnext <- rnorm(1, xcurr, stepSize)
         ynext <- f(xnext)

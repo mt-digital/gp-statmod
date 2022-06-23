@@ -16,13 +16,17 @@ library(shiny)
 source("model.R")
 source("numerical.R")
 
-STUDIES <- read_excel("data/CaseStudiesMinimal.xlsx", "ArticleStudiesMinimal")
-FULL_TAGS <- sort(paste(STUDIES$Tag, STUDIES$StudyTag, sep=" - "))
+STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
+# STUDIES <- read_excel("data/CaseStudies_ProtoDB.xlsx", "ArticleStudiesMinimal")
+FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
 
 # Define UI for application that draws a histogram
-view <- function(request) { fluidPage(
+ui <- function(request) { fluidPage(
 
     tags$head(tags$style(HTML("
+        #plausible-div {
+            text-align: center;
+        }
         #save-btn-div {
             text-align: center;
         }
@@ -32,18 +36,18 @@ view <- function(request) { fluidPage(
             color: white;
             background-color: dodgerblue;
         }
+    
     "))),
   
     titlePanel("Group polarization counterexample generator."),
 
-    h1(getQueryString()[["caseStudy"]]),
+    h3(textOutput("treatmentTag")),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-          selectInput("studyTag", "Choose a study within an article:",
-                      choices = FULL_TAGS),
-                     #htmlOutput("text"),
+          selectInput("treatmentTag", "Choose a study within an article:",
+                      choices = FULL_TAGS, size=25, selectize = FALSE),
             width = 3
         ),
 
@@ -52,42 +56,45 @@ view <- function(request) { fluidPage(
         # Initialize parameter controls defaulted to a Schkade result.
             fluidRow(
                 column(6,
-                    numericInput("observedPreDelibMean",
+                    numericInput("ObservedMeanPre",
                                 "Reported, target pre-deliberation mean",
-                                # min = 1,
-                                # max = 10,
-                                step = 0.1,
+                                step = 0.01,
                                 value = 9.2),
-                    numericInput("observedPostDelibMean",
+                    numericInput("ObservedMeanPost",
                                 "Reported, target post-deliberation mean",
-                                # min = 1,
-                                # max = 10,
-                                step = 0.1,
+                                step = 0.01,
                                 value = 9.4),
-                    numericInput("latentMean",
+                    numericInput("LatentMean",
                                "Hypothesized latent mean:",
-                               # min = -1,
-                               # max = 12,
-                               step = 0.1,
+                               step = 0.01,
                                value = 5.5),
                 ),
                 column(6, 
-                    numericInput("minBinValue", "Minimum opinion bin value", 
+                    numericInput("MinBinValue", 
+                                 "Minimum opinion bin value", 
                                  1, step = 1),
-                    numericInput("maxBinValue", "Maximum opinion bin value", 
+                    numericInput("MaxBinValue", 
+                                 "Maximum opinion bin value", 
                                  10, step = 1),
                     fluidRow(
                         column(6,
-                            numericInput("step", "Hillclimb solver step size", 
-                                         0.01, step = 0.05)
+                            numericInput("step", 
+                                         "Hillclimb solver step size", 
+                                         0.01, step = 0.01)
                         ),
                         column(6,
-                            numericInput("successTol", "Hillclimb success threshold", 
+                            numericInput("successTol", 
+                                         "Hillclimb success threshold", 
                                          0.05, step = 0.005)
                         )
                     )
                 ),
+                # div(
+                #     id = "plausible-div",
+                #     checkboxInput("Plausible", "Plausibly false positive?", FALSE)
+                # ),
             ),
+
             # htmlOutput("caseStudy"),
             br(),
             h4("Large-N model exact calculations"),
@@ -104,44 +111,44 @@ view <- function(request) { fluidPage(
 )
 }
 
+
+########## SERVER ########## 
+
 # Define server logic required to draw a histogram
-controller <- function(input, output, session) {
+server <- function(input, output, session) {
 
-    # Sets up case study if there is one.
-    caseStudy <- 
-        reactive({
-            # Check if there is a caseStudy query parameter, designed to be
-            # passed when user clicks on nav element in sidebar.
-            if (!is.null(getQueryString()$caseStudy))
-            {
-                caseStudy <- getQueryString()$caseStudy
-                setCaseStudyValues(caseStudy, session)
+    STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
+    FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
 
-                return (caseStudy)
-            }
-            else
-            {
-                # Defaulting to Schkade result for now.
-                return ("Schkade, et al., (2010) - Liberals on Affirmative Action")
-            }
-        })
+    # output$caseStudy <- renderText({caseStudy()})
+    treatmentSplit <- reactive({strsplit(input$treatmentTag, " - ")})
 
-    output$caseStudy <- renderText({caseStudy()})
+    article <- reactive({treatmentSplit()[[1]][1]})
+    treatment <- reactive({treatmentSplit()[[1]][2]})
+    treatmentRow <- reactive({STUDIES[STUDIES$TreatmentTag == treatment(), ]})
+    
+    # print({treatmentRow()})
 
-    kVec <- reactive({input$minBinValue:input$maxBinValue})
+    kVec <- reactive({treatmentRow()$MinBinValue:treatmentRow()$MaxBinValue})
+    output$MinBinValue <- reactive({treatmentRow()$MinBinValue})
+    output$MaxBinValue <- reactive({treatmentRow()$MaxBinValue})
+    output$treatmentTag <- renderText({
+        paste("Currently analyzing treatment:", input$treatmentTag)
+    })
 
     # Use a guess of 1.5 for latentSD.
+    # solveForLatentSD returns three values: xcurr, ycurr, its
     latentPreSDResult <- reactive({
-        solveForLatentSD(kVec(), input$latentMean, input$observedPreDelibMean, 1.5,
+        solveForLatentSD(kVec(), input$LatentMean, input$ObservedMeanPre, 1.5,
                          step = input$step)
     })
     latentPostSDResult <- reactive({
-        solveForLatentSD(kVec(), input$latentMean, input$observedPostDelibMean, 1.5,
+        solveForLatentSD(kVec(), input$LatentMean, input$ObservedMeanPost, 1.5,
                          step = input$step)
     })
 
     probVecPre <- reactive({
-        makeProbVec(kVec(), input$latentMean, latentPreSDResult()[1])
+        makeProbVec(kVec(), input$LatentMean, latentPreSDResult()[1])
     })
 
     output$preBarplot <- renderPlot({
@@ -150,7 +157,7 @@ controller <- function(input, output, session) {
 
     probVecPost <- reactive({
         # 
-        makeProbVec(kVec(), input$latentMean, latentPostSDResult()[1])
+        makeProbVec(kVec(), input$LatentMean, latentPostSDResult()[1])
     })
     output$postBarplot <- renderPlot({
         barplot(probVecPost())
@@ -206,18 +213,67 @@ controller <- function(input, output, session) {
             ggtitle(plotTitle())
     })
 
-    observe({
-        reactiveValuesToList(input)
-        session$doBookmark()
+    # observe({
+    #     reactiveValuesToList(input)
+    #     session$doBookmark()
+    # })
+    observeEvent(input$treatmentTag, {
+        print(input$treatmentTag)
+        treatmentSplit <- strsplit(input$treatmentTag, " - ")
+        print(treatmentSplit)
+        article <- treatmentSplit[[1]][1]
+        treatment <- treatmentSplit[[1]][2]
+        print(article)
+        print(treatment)
+        # print(STUDIES[STUDIES$TreatmentTag == treatment, ])
+        treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
+        print(treatmentRow)
+        updateNumericInput(session, 
+                           "LatentMean", 
+                           value = treatmentRow$LatentMean)
+        updateNumericInput(session, 
+                           "ObservedMeanPre", 
+                           value = treatmentRow$ObservedMeanPre)
+        updateNumericInput(session, 
+                           "ObservedMeanPost", 
+                           value = treatmentRow$ObservedMeanPost)
+        updateNumericInput(session, 
+                           "MinBinValue", 
+                           value = treatmentRow$MinBinValue)
+        updateNumericInput(session, 
+                           "MaxBinValue", 
+                           value = treatmentRow$MaxBinValue)
+        updateNumericInput(session, 
+                           "step", 
+                           value = treatmentRow$HillclimbStepSize)
+        updateNumericInput(session, 
+                           "successTol", 
+                           value = treatmentRow$HillclimbSuccessThreshold)
+        updateCheckboxInput(session,
+                            "Plausible",
+                            value = treatmentRow$Plausible)
+        print("")
+        print("*YOO whatup*")
     })
     
     observeEvent(input$saveBtn, {
-      session$sendCustomMessage(type = 'testmessageHandlerForJS',
-                                message = 'Thank you for clicking')
+        treatmentSplit <- strsplit(input$treatmentTag, " - ")
+        print(treatmentSplit)
+        article <- treatmentSplit[[1]][1]
+        treatment <- treatmentSplit[[1]][2]
+        print(article)
+        print(treatment)
+        # print(STUDIES[STUDIES$TreatmentTag == treatment, ])
+        treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
+        treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
+        treatmentRow$ObservedMeanPre <- input$ObservedMeanPre
+        treatmentRow$ObservedMeanPost <- input$ObservedMeanPost
+        treatmentRow$LatentMean <- input$LatentMean
+        print(treatmentRow)
     })
 
     onBookmarked(function(url) { updateQueryString(url) })
 }
 
 # Run the application 
-shinyApp(ui = view, server = controller, enableBookmarking = "url")
+shinyApp(ui = ui, server = server, enableBookmarking = "url")
