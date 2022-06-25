@@ -1,12 +1,3 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(ggplot2)
 library(ggplotify)
 library(reshape2)
@@ -16,8 +7,11 @@ library(shiny)
 source("model.R")
 source("numerical.R")
 
-STUDIES_DB = "data/CaseStudies_ProtoDB-TEST.xlsx"
-STUDIES <- read_excel(STUDIES_DB, "ArticleStudiesMinimal")
+# STUDIES_DB = "data/CaseStudies_ProtoDB-TEST.xlsx"
+# STUDIES <- read_excel(STUDIES_DB, "ArticleStudiesMinimal")
+STUDIES_DB = "data/StudiesAnalysis-TEST.csv"
+STUDIES <- read.csv(STUDIES_DB)
+print(head(STUDIES))
 # STUDIES <- read_excel("data/CaseStudies_ProtoDB.xlsx", "ArticleStudiesMinimal")
 FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
 
@@ -30,6 +24,9 @@ ui <- function(request) { fluidPage(
         }
         #save-btn-div {
             text-align: center;
+        }
+        #Notes {
+            height: 125px;
         }
         #saveBtn {
             font-size: 25px;   
@@ -79,21 +76,22 @@ ui <- function(request) { fluidPage(
                                  10, step = 1),
                     fluidRow(
                         column(6,
-                            numericInput("step", 
+                            numericInput("HillclimbStepSize", 
                                          "Hillclimb solver step size", 
                                          0.01, step = 0.01)
                         ),
                         column(6,
-                            numericInput("successTol", 
+                            numericInput("HillclimbSuccessThreshold", 
                                          "Hillclimb success threshold", 
                                          0.05, step = 0.005)
                         )
-                    )
+                    ),
+                    checkboxInput("Plausible", "Plausibly false positive?", FALSE)
                 ),
-                # div(
-                #     id = "plausible-div",
-                #     checkboxInput("Plausible", "Plausibly false positive?", FALSE)
-                # ),
+                column(12,
+                    textAreaInput("Notes", "Notes", 
+                              value = "", width = "75%")
+                ),
             ),
 
             # htmlOutput("caseStudy"),
@@ -117,8 +115,12 @@ ui <- function(request) { fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
 
-    STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
-    FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
+    # STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
+    # FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
+    STUDIES_DB = "data/StudiesAnalysis-TEST.csv"
+    STUDIES <- read.csv(STUDIES_DB)
+
+    STUDIES$LatentMean <- as.numeric(STUDIES$LatentMean)
 
     # output$caseStudy <- renderText({caseStudy()})
     treatmentSplit <- reactive({strsplit(input$treatmentTag, " - ")})
@@ -138,11 +140,11 @@ server <- function(input, output, session) {
     # solveForLatentSD returns three values: xcurr, ycurr, its
     latentPreSDResult <- reactive({
         solveForLatentSD(kVec(), input$LatentMean, input$ObservedMeanPre, 1.5,
-                         step = input$step)
+                         step = input$HillclimbStepSize)
     })
     latentPostSDResult <- reactive({
         solveForLatentSD(kVec(), input$LatentMean, input$ObservedMeanPost, 1.5,
-                         step = input$step)
+                         step = input$HillclimbStepSize)
     })
 
     probVecPre <- reactive({
@@ -192,7 +194,7 @@ server <- function(input, output, session) {
         # then report this in the main figure.
         hillclimbSuccess <- (
             # The second element in the hillclimb results is the squared error.
-            latentPreSDResult()[2] < input$successTol && latentPostSDResult()[2] < input$successTol
+            latentPreSDResult()[2] < input$HillclimbSuccessThreshold && latentPostSDResult()[2] < input$HillclimbSuccessThreshold
         )
         if (!hillclimbSuccess)
         {
@@ -236,14 +238,17 @@ server <- function(input, output, session) {
                            "MaxBinValue", 
                            value = treatmentRow$MaxBinValue)
         updateNumericInput(session, 
-                           "step", 
+                           "HillclimbStepSize", 
                            value = treatmentRow$HillclimbStepSize)
         updateNumericInput(session, 
-                           "successTol", 
+                           "HillclimbSuccessThreshold", 
                            value = treatmentRow$HillclimbSuccessThreshold)
         updateCheckboxInput(session,
                             "Plausible",
                             value = treatmentRow$Plausible)
+        updateTextAreaInput(session,
+                        "Notes",
+                        value = treatmentRow$Notes)
     })
     
     observeEvent(input$saveBtn, {
@@ -261,13 +266,16 @@ server <- function(input, output, session) {
         treatmentRow$LatentSDPre <- latentPreSDResult()[1]
         treatmentRow$LatentSDPost <- latentPostSDResult()[1]
 
-        print(treatmentRow)
+        treatmentRow$HillclimbStepSize <- input$HillclimbStepSize
+        treatmentRow$HillclimbSuccessThreshold <- input$HillclimbSuccessThreshold
+        treatmentRow$Notes <- input$Notes
 
-        library(tidyverse)
-        # CONVERT COLUMNS TO DOUBLE (LATENT MEAN, OTHERS?)
+        print(treatmentRow)
 
         STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
         print(STUDIES[STUDIES$TreatmentTag == treatment, ])
+        print(STUDIES[STUDIES$TreatmentTag == treatment, ]$LatentMean)
+        write.csv(STUDIES, STUDIES_DB)
     })
 
     onBookmarked(function(url) { updateQueryString(url) })
