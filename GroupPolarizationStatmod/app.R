@@ -16,7 +16,8 @@ library(shiny)
 source("model.R")
 source("numerical.R")
 
-STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
+STUDIES_DB = "data/CaseStudies_ProtoDB-TEST.xlsx"
+STUDIES <- read_excel(STUDIES_DB, "ArticleStudiesMinimal")
 # STUDIES <- read_excel("data/CaseStudies_ProtoDB.xlsx", "ArticleStudiesMinimal")
 FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
 
@@ -103,7 +104,6 @@ ui <- function(request) { fluidPage(
            # TODO: SAVE button 
         )
     ),
-    # print(tags),
     tags$head(tags$script(src = "message-handler.js")),
     div(id = "save-btn-div", 
         actionButton("saveBtn", "Save")
@@ -127,8 +127,6 @@ server <- function(input, output, session) {
     treatment <- reactive({treatmentSplit()[[1]][2]})
     treatmentRow <- reactive({STUDIES[STUDIES$TreatmentTag == treatment(), ]})
     
-    # print({treatmentRow()})
-
     kVec <- reactive({treatmentRow()$MinBinValue:treatmentRow()$MaxBinValue})
     output$MinBinValue <- reactive({treatmentRow()$MinBinValue})
     output$MaxBinValue <- reactive({treatmentRow()$MaxBinValue})
@@ -218,16 +216,10 @@ server <- function(input, output, session) {
     #     session$doBookmark()
     # })
     observeEvent(input$treatmentTag, {
-        print(input$treatmentTag)
         treatmentSplit <- strsplit(input$treatmentTag, " - ")
-        print(treatmentSplit)
         article <- treatmentSplit[[1]][1]
         treatment <- treatmentSplit[[1]][2]
-        print(article)
-        print(treatment)
-        # print(STUDIES[STUDIES$TreatmentTag == treatment, ])
         treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
-        print(treatmentRow)
         updateNumericInput(session, 
                            "LatentMean", 
                            value = treatmentRow$LatentMean)
@@ -252,24 +244,30 @@ server <- function(input, output, session) {
         updateCheckboxInput(session,
                             "Plausible",
                             value = treatmentRow$Plausible)
-        print("")
-        print("*YOO whatup*")
     })
     
     observeEvent(input$saveBtn, {
         treatmentSplit <- strsplit(input$treatmentTag, " - ")
-        print(treatmentSplit)
         article <- treatmentSplit[[1]][1]
         treatment <- treatmentSplit[[1]][2]
-        print(article)
-        print(treatment)
-        # print(STUDIES[STUDIES$TreatmentTag == treatment, ])
+        
         treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
         treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
         treatmentRow$ObservedMeanPre <- input$ObservedMeanPre
         treatmentRow$ObservedMeanPost <- input$ObservedMeanPost
         treatmentRow$LatentMean <- input$LatentMean
+        print(input$LatentSDPre)
+
+        treatmentRow$LatentSDPre <- latentPreSDResult()[1]
+        treatmentRow$LatentSDPost <- latentPostSDResult()[1]
+
         print(treatmentRow)
+
+        library(tidyverse)
+        # CONVERT COLUMNS TO DOUBLE (LATENT MEAN, OTHERS?)
+
+        STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
+        print(STUDIES[STUDIES$TreatmentTag == treatment, ])
     })
 
     onBookmarked(function(url) { updateQueryString(url) })
