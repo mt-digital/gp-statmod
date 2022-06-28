@@ -33,10 +33,10 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
 ##
 # Called hill climbing, but it's really hill tumbling to find the minimum.
 #
-hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
+hillclimbing <- function(errfunc, sd_guess, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
 {
-    xcurr <- x
-    ycurr <- f(x)
+    sd_curr <- sd_guess
+    err_curr <- errfunc(sd_curr)
     
     its <- 0
     # totalIts <- 0
@@ -46,23 +46,25 @@ hillclimbing <- function(f, x, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
     {
         its <- its + 1
 
-        xnext <- rnorm(1, xcurr, stepSize)
-        ynext <- f(xnext)
+        # Undirected, random search for a better standard deviation to 
+        # generate pre or post observed mean.
+        sd_next <- rnorm(1, sd_curr, stepSize)
+        err_next <- errfunc(sd_next)
 
-        change <- ynext - ycurr
+        change <- err_next - err_curr
 
         if (abs(change) < tol)
         {
-            return (c(xcurr, ycurr, its));
+            return (c(sd_curr, err_curr, its));
         }
         
-        # A negative change means ynext is less that ycurr, and closer/better
+        # A negative change means err_next is less that err_curr, and closer/better
         # to minimum solution.
         if (change < 0)
         {
-            xcurr <- xnext
-            ycurr <- ynext
+            sd_curr <- sd_next
+            err_curr <- err_next
         }
     }
-    return (c(xcurr, ycurr, its));
+    return (c(sd_curr, err_curr, its));
 }

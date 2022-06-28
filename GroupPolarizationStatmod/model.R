@@ -40,19 +40,10 @@ makeProbVec <- function(kVec, latentMean, latentSD)
     K <- length(kVec)
 
     probVec <- numeric(K)
-    # print("in makeProbVec")
-    # print(K)
-    # print(probVec)
-
-    # print(kVec)
-    # print(L)
 
     for (ii in 1:K)
     {
         res <- binProb(kVec[ii], L, K, latentMean, latentSD)
-        # print(ii)
-        # print(res)
-        # print(probVec[ii])
         probVec[ii] <- binProb(kVec[ii], L, K, latentMean, latentSD)
     }
 

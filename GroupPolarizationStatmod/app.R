@@ -11,7 +11,6 @@ source("numerical.R")
 # STUDIES <- read_excel(STUDIES_DB, "ArticleStudiesMinimal")
 STUDIES_DB = "data/StudiesAnalysis-TEST.csv"
 STUDIES <- read.csv(STUDIES_DB)
-print(head(STUDIES))
 # STUDIES <- read_excel("data/CaseStudies_ProtoDB.xlsx", "ArticleStudiesMinimal")
 FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
 
@@ -185,8 +184,8 @@ server <- function(input, output, session) {
             # ", latPostSD=", fmtVal(latentPostSDResult()[1]^0.5), "\n",
             "simObsPreSD=", fmtVal(sdObsPre()), 
             ", simObsPostSD=", fmtVal(sdObsPost()), 
-            ".\nSq. Error: pre = ", fmtVal(latentPreSDResult()[2]),
-            ", post = ", fmtVal(latentPostSDResult()[2]),
+            ".\nAbs. Error: pre = ", fmtVal(sqrt(latentPreSDResult()[2])),
+            ", post = ", fmtVal(sqrt(latentPostSDResult()[2])),
             sep = ""
         )
 
@@ -261,20 +260,18 @@ server <- function(input, output, session) {
         treatmentRow$ObservedMeanPre <- input$ObservedMeanPre
         treatmentRow$ObservedMeanPost <- input$ObservedMeanPost
         treatmentRow$LatentMean <- input$LatentMean
-        print(input$LatentSDPre)
 
         treatmentRow$LatentSDPre <- latentPreSDResult()[1]
         treatmentRow$LatentSDPost <- latentPostSDResult()[1]
+
+        treatmentRow$ObservedMeanPreAbsError <- latentPreSDResult()[2]
+        treatmentRow$ObservedMeanPostAbsError <- latentPostSDResult()[2]
 
         treatmentRow$HillclimbStepSize <- input$HillclimbStepSize
         treatmentRow$HillclimbSuccessThreshold <- input$HillclimbSuccessThreshold
         treatmentRow$Notes <- input$Notes
 
-        print(treatmentRow)
-
         STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
-        print(STUDIES[STUDIES$TreatmentTag == treatment, ])
-        print(STUDIES[STUDIES$TreatmentTag == treatment, ]$LatentMean)
         write.csv(STUDIES, STUDIES_DB)
     })
 
