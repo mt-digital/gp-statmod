@@ -252,6 +252,7 @@ server <- function(input, output, session) {
     
     observeEvent(input$saveBtn, {
         treatmentSplit <- strsplit(input$treatmentTag, " - ")
+        print(treatmentSplit)
         article <- treatmentSplit[[1]][1]
         treatment <- treatmentSplit[[1]][2]
         
