@@ -214,11 +214,9 @@ server <- function(input, output, session) {
             ggtitle(plotTitle())
     })
 
-    # observe({
-    #     reactiveValuesToList(input)
-    #     session$doBookmark()
-    # })
     observeEvent(input$treatmentTag, {
+        STUDIES_DB = "data/StudiesAnalysis.csv"
+        STUDIES <- read.csv(STUDIES_DB)
         treatmentSplit <- strsplit(input$treatmentTag, " - ")
         article <- treatmentSplit[[1]][1]
         treatment <- treatmentSplit[[1]][2]
@@ -266,8 +264,6 @@ server <- function(input, output, session) {
         treatmentRow$LatentSDPre <- latentPreSDResult()[1]
         treatmentRow$LatentSDPost <- latentPostSDResult()[1]
 
-        # treatmentRow$SimulatedObservedMeanPre <- meanObs(kVec(), probVecPre())
-        # treatmentRow$SimulatedObservedMeanPost <- meanObs(kVec(), probVecPost())
         treatmentRow$ObservedMeanPreError <- latentPreSDResult()[2]
         treatmentRow$ObservedMeanPostError <- latentPostSDResult()[2]
 
@@ -276,6 +272,7 @@ server <- function(input, output, session) {
         treatmentRow$Notes <- input$Notes
 
         STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
+        print(STUDIES[STUDIES$TreatmentTag == treatment, ])
         write.csv(STUDIES, STUDIES_DB, row.names = F)
     })
 
