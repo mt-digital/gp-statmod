@@ -16,17 +16,18 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
 {
     # Keep the squared error function to be minimized through hillclimbing
     # separate from hillclimbing itself.
-    sqErr <- function(latentSD)
+    errfunc <- function(latentSD)
     {
         simulatedObservedMean <- meanObs(
             kVec,
             makeProbVec(kVec, latentMean, latentSD)
         )
-
-        return ((observedMean - simulatedObservedMean)^2);
+        
+        # return ((observedMean - simulatedObservedMean)^2);
+        return (simulatedObservedMean - observedMean);
     }
 
-    return (hillclimbing(sqErr, guess, step, maxIts, tol))
+    return (hillclimbing(errfunc, guess, step, maxIts, tol))
 }
 
 
@@ -36,10 +37,13 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
 hillclimbing <- function(errfunc, sd_guess, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
 {
     sd_curr <- sd_guess
+    # sqerr_curr <- errfunc(sd_curr)[2]
+    # err_curr <-  errfunc(sd_curr)[2]
+    # sqerr_curr <- err_curr^2
     err_curr <- errfunc(sd_curr)
+    sqerr_curr <- err_curr^2
     
     its <- 0
-    # totalIts <- 0
     change <- 0.0
 
     while(its < maxIts)
@@ -50,20 +54,22 @@ hillclimbing <- function(errfunc, sd_guess, stepSize = 0.1, maxIts = 1e5, tol = 
         # generate pre or post observed mean.
         sd_next <- rnorm(1, sd_curr, stepSize)
         err_next <- errfunc(sd_next)
+        sqerr_next <- err_next^2
 
-        change <- err_next - err_curr
+        change <- sqerr_next - sqerr_curr
 
         if (abs(change) < tol)
         {
             return (c(sd_curr, err_curr, its));
         }
         
-        # A negative change means err_next is less that err_curr, and closer/better
+        # A negative change means err_next is less that sqerr_curr, and closer/better
         # to minimum solution.
         if (change < 0)
         {
             sd_curr <- sd_next
             err_curr <- err_next
+            sqerr_curr <- sqerr_next
         }
     }
     return (c(sd_curr, err_curr, its));

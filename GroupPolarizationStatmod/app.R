@@ -9,7 +9,7 @@ source("numerical.R")
 
 # STUDIES_DB = "data/CaseStudies_ProtoDB-TEST.xlsx"
 # STUDIES <- read_excel(STUDIES_DB, "ArticleStudiesMinimal")
-STUDIES_DB = "data/StudiesAnalysis-TEST.csv"
+STUDIES_DB = "data/StudiesAnalysis.csv"
 STUDIES <- read.csv(STUDIES_DB)
 # STUDIES <- read_excel("data/CaseStudies_ProtoDB.xlsx", "ArticleStudiesMinimal")
 FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
@@ -116,7 +116,7 @@ server <- function(input, output, session) {
 
     # STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
     # FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
-    STUDIES_DB = "data/StudiesAnalysis-TEST.csv"
+    STUDIES_DB = "data/StudiesAnalysis.csv"
     STUDIES <- read.csv(STUDIES_DB)
 
     STUDIES$LatentMean <- as.numeric(STUDIES$LatentMean)
@@ -184,8 +184,10 @@ server <- function(input, output, session) {
             # ", latPostSD=", fmtVal(latentPostSDResult()[1]^0.5), "\n",
             "simObsPreSD=", fmtVal(sdObsPre()), 
             ", simObsPostSD=", fmtVal(sdObsPost()), 
-            ".\nAbs. Error: pre = ", fmtVal(sqrt(latentPreSDResult()[2])),
-            ", post = ", fmtVal(sqrt(latentPostSDResult()[2])),
+            ".\nMeans: mu_pre = ", fmtVal(meanObs(kVec(), probVecPre())),
+            ", mu_post = ", fmtVal(meanObs(kVec(), probVecPost())),
+            ".\nError in means: mu_pre = ", fmtVal(latentPreSDResult()[2]),
+            ", mu_post = ", fmtVal(latentPostSDResult()[2]),
             sep = ""
         )
 
@@ -264,15 +266,17 @@ server <- function(input, output, session) {
         treatmentRow$LatentSDPre <- latentPreSDResult()[1]
         treatmentRow$LatentSDPost <- latentPostSDResult()[1]
 
-        treatmentRow$ObservedMeanPreAbsError <- latentPreSDResult()[2]
-        treatmentRow$ObservedMeanPostAbsError <- latentPostSDResult()[2]
+        # treatmentRow$SimulatedObservedMeanPre <- meanObs(kVec(), probVecPre())
+        # treatmentRow$SimulatedObservedMeanPost <- meanObs(kVec(), probVecPost())
+        treatmentRow$ObservedMeanPreError <- latentPreSDResult()[2]
+        treatmentRow$ObservedMeanPostError <- latentPostSDResult()[2]
 
         treatmentRow$HillclimbStepSize <- input$HillclimbStepSize
         treatmentRow$HillclimbSuccessThreshold <- input$HillclimbSuccessThreshold
         treatmentRow$Notes <- input$Notes
 
         STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
-        write.csv(STUDIES, STUDIES_DB)
+        write.csv(STUDIES, STUDIES_DB, row.names = F)
     })
 
     onBookmarked(function(url) { updateQueryString(url) })

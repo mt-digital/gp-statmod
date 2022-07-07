@@ -1,0 +1,216 @@
+% Author: Matthew Turner
+
+% \documentclass[11pt,letterpaper]{scrartcl}
+\documentclass[letterpaper,man,natbib]{apa6}
+% \documentclass[11pt]{report}
+% \documentclass{report}
+% \documentclass{book}
+\usepackage[bookmarks, hidelinks]{hyperref}
+\usepackage{amssymb,amsmath}
+% \usepackage{fullpage}
+\usepackage{tabulary}
+\usepackage{tabularx}
+\usepackage{float}
+% \usepackage[margin=1.00in]{geometry}
+% \usepackage[margin=0.90in]{geometry}
+
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{pslatex}
+\usepackage{apacite}
+\usepackage{authblk}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepackage{wrapfig}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+% \usepackage{setspace}
+% \doublespace
+% \usepackage{url}
+\usepackage{bigfoot}
+\usepackage[export]{adjustbox}
+% \setlength\intextsep{0pt}
+
+\usepackage{graphicx}
+
+\title{How simple consensus to the mean can be mistaken for ``group polarization'' extremity-shifted consensus}
+\shorttitle{Group polarization or simple consensus?}
+\author[1]{{Matthew A.~Turner}}
+\affil[1]{Department of Earth System Science, Stanford University}
+
+\author[2,3]{{Paul E.~Smaldino}}
+\affil[2]{Cognitive and Information Sciences, University of California, Merced}
+\affil[3]{Center for Advanced Study in the Behavioral Sciences, Stanford University}
+
+\abstract{
+  Group polarization is the name given by social scientists for the observed tendency of
+  like-minded groups to become more extreme as they discuss some topic of interest.
+  Clearly it is important to understand such a phenomenon to understand broader
+  problematic trends towards increased polariztion across society as a whole.
+  This group-level shift in opinion extremity is often measured 
+  Unfortunately, recent analyses have demonstrated that this measurement and
+  analysis approach can result in false positive detections of changes in mean
+  that are actually due to floor/ceiling effects from using ordinal scales to
+  measuring continuously-distributed latent psychological variables, and not
+  accounting for this mismatch. In this paper we analyze a selection of influential
+  group polarization studies to demonstrate that many group polarization 
+  detections reported throughout decades of literature are plausibly false
+  due to these floor/ceiling effects. We develop a generative model of group
+  polarization data, use it to represent each group polarization study, and
+  investigate whether we can generate observed opinion shifts to extremity by
+  setting the latent opinion mean to be constant, but allow latent opinion variance
+  to decrease from pre- to post-discussion, which theoritcally 
+  occurs in \emph{simple consensus} where the mean stays constant. After we identify which
+  positive detections of group polarization are plausibly false in this way, we further
+  investigate whether the latent constant mean opinion and pre- and post-discussion
+  opinion variances can fool the statistical tests used in each study to 
+  generate false positives. Finally, we demonstrate how a more sophisticated
+  thresholded-normal statistical model can account for the metric-ordinal 
+  mismatch to estimate latent distribution parameters and accurately identify
+  simple consensus.
+}
+
+
+\begin{document}
+\maketitle
+\setlength{\parindent}{15pt}
+% \maketitle
+
+
+\section{Introduction}
+
+
+\subsection{Group polarization}
+
+\subsection{Statistical inference in opinion change}
+
+2-3 par: the right way; what GP studies do; why it's a problem (N-1 sents) and how
+to fix it (1 sent)
+
+When 
+
+
+\begin{itemize}
+  \item 
+    Group polarization studies use null-hypothesis testing that implicitly
+    assume (1) \emph{opinions} (or other equivalent latent psychological variables
+    such as \emph{attitudes} or \emph{beliefs}) are continuously-valued, and
+    (2) 
+  \item
+    The exact null-hypothesis testing procedure varies between studies $t$-tests, ANOVA, etc. 
+\end{itemize}
+
+Recently, problems with using have been made clear~\citep{Liddell2018}.
+The way to fix this problem going forward is to use a thresholded-normal 
+statistical model for group polarization data, or other related statistical 
+model that accounts for opinion binning~\citep[Ch. 23]{Liddell2018,KruschkeDBDA}.
+
+\subsection{Study selection and overview}
+
+Studies were selected to be either influential papers, based on citations or
+author prominence, that test either examine
+group polarization in political opinions, and to be representative of investigations
+of four primary group polarization explanations extant in the literature.
+At the time of paper selection we did not examine the statistical methods in detail beyond
+checking that they indeed used 
+
+Because of the difficulties casting individual research articles into our modeling
+framework, and the central task of creating the model and analyzing this first
+batch of studies with it, we limit our analysis to 10 studies. It is problem
+enough that these 10 prominent studies have the problems we demonstrate they
+plausibly do. Problems among these 10 suggest the problem may be more wide spread. 
+When we do more analyses
+they will be aided by improved data management systems for applying this model to 
+additional studies (eventually outside of group polarization).
+
+Statistical problems among these studies are not limited to a mismatch between
+measurement and statistical procedures, which requires the detailed treatment
+we provide in this paper. Other problems are more pedestrian.
+One major issue shared by several studies
+is the use of unpaired $t$-tests to detect group polarization. Since the same
+group has their opinions measured twice over time, the opinions are correlated
+and so a paired $t$-test would be required for test assumptions to be met 
+(assuming all other paired $t$-test assumptions were met, 
+which of course they are not, which is why our paper here is necessary).
+In some cases the reported shifts were ``significant'', 
+but not truly ``group polarization'' shifts, i.e., 
+shifts from initially biased group opinions
+to more extreme group opinions biased in the same direction; instead shifts 
+were from a neutral initial group opinion to a biased group opinion 
+(as in, e.g.,~\citet{Abrams1990} Uncategorized2), or from
+an opinion biased in one direction (as in, e.g.,~\citet{Abrams1990} Categorized1,
+Categorized2, AND OTHERS???). In some results of \citet{Freidkin1999a}, 
+shift values are reported with their
+standard deviations---but the shift standard deviations are greater than the
+shifts themselves, indiciating that zero shift is included in the observed
+shift confidence interval. This is \emph{prima facie} a negative result that
+should not have been counted as evidence of group polarization. 
+
+Some group polarization studies do not measure continuous latent opinions using
+a metric scale, and so are not affected by the floor and ceiling effects that
+undermine a good number of experimental results, as we examine here. There may,
+however, be other problems, such as non-group polarization shifts and the use
+of unpaired $t$-tests when paired tests are required.
+
+\subsection{Research overview}
+
+In this paper we analyze whether published statistical detections of group 
+polarization obtained through null-hypothesis statistical tests
+are plausibly false because they can be explained equally well by simple consensus
+where the mean group opinion does not change over time, but opinion variance does.
+This analysis requires several preliminary steps. 
+First we formally develop our generative model of simple consensus and group 
+polarization in terms of changes in group opinion mean and variance from 
+pre- to post-deliberation. Then we developed a search algorithm for identifying 
+which, if any, simple consensus scenarios with 
+constant latent mean and pre- and post-deliberation opinion variances 
+could generate published observations of group polarization. To apply this model
+and algorithm to published results, we developed an interactive web application
+for data input and to test which different potential simple consensus scenarios 
+could generate group polarization opinion shifts. After identifying plausibly false
+detections of group polarization we examine whether the identified simple
+consensus scenario (parameters?) can indeed generate data to fool the 
+paper's null-hypothesis tests into thinking the data actually support the inference
+that simple consensus did not occur. Finally, we examine whether, in these same
+plausibly false detections, a Bayesian thresholded-normal statistical model
+will accurately identify simple consensus instead of falsely detecting group
+polarization.
+
+\section{Model}
+
+Our model represnts the generative process of finding different forms of group consensus
+in group polarization experiments, and the process of measuring that consensus using
+an ordinal measurement scale, e.g.\ a Likert-type scale. This model considers two
+relevant forms of consensus: \emph{simple consensus} and \emph{group polarization}.
+Either process is \emph{consensus} since opinion variance among the group 
+decreases as individuals come to agree more than they did previously. 
+Group polarization experiments are designed to foster group consensus
+it is not necessary to consider clustering, negative influence, or other
+processes known to generally occur when opinions within a group significantly
+diverge~\citep{Turner2018}.
+
+\section{Analysis}
+
+\bibliographystyle{apacite}
+
+\setlength{\bibleftmargin}{.125in}
+\setlength{\bibindent}{-\bibleftmargin}
+
+\bibliography{/Users/mt/workspace/Writing/library.bib}
+
+\appendix
+
+\section{Notes on studies}
+
+\paragraph{\citet{Abrams1990}} 
+
+\paragraph{\citet{Burnstein1973}}
+
+\paragraph{\citet{Hogg1990}} It is not clear if there are indeed significant pre-post
+deliberation differences reported in this paper. The Results are a tangle of
+estimates of effect sizes and diagnostic statistical measures. It is also
+not clear that they actually report the pre- and post-deliberation opinions;
+it appears they only report the shifts. ``Opinion Difference Measures'' 
+does not seem to include a test that the shifts themselves are reliable.
+
+\end{document}
