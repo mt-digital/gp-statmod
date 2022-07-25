@@ -65,6 +65,10 @@ ui <- function(request) { fluidPage(
                                "Hypothesized latent mean:",
                                step = 0.01,
                                value = 5.5),
+                    numericInput("N",
+                               "Sample size: ",
+                               step = 1,
+                               value = 4),
                 ),
                 column(6, 
                     numericInput("MinBinValue", 
@@ -223,6 +227,9 @@ server <- function(input, output, session) {
                            "LatentMean", 
                            value = treatmentRow$LatentMean)
         updateNumericInput(session, 
+                           "N", 
+                           value = treatmentRow$N)
+        updateNumericInput(session, 
                            "ObservedMeanPre", 
                            value = treatmentRow$ObservedMeanPre)
         updateNumericInput(session, 
@@ -269,6 +276,8 @@ server <- function(input, output, session) {
         treatmentRow$HillclimbSuccessThreshold <- input$HillclimbSuccessThreshold
         treatmentRow$Plausible <- input$Plausible
         treatmentRow$Notes <- input$Notes
+
+        treatmentRow$N <- input$N
 
         STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
         print(STUDIES[STUDIES$TreatmentTag == treatment, ])
