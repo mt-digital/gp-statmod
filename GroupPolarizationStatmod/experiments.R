@@ -6,15 +6,115 @@
 # require(glue)
 require(MASS)
 
+source("JAGSModels.R")
 
-simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentStd)
+## INITIALIZE JAGS PARAMETERS (Following Kruschke (2015) DBDA2E-utilities.R)
+
+# Check that required packages are installed:
+want = c("parallel","rjags","runjags","compute.es")
+have = want %in% rownames(installed.packages())
+if ( any(!have) ) { install.packages( want[!have] ) }
+
+# Load rjags. Assumes JAGS is already installed.
+try( library(rjags) )
+
+# Load runjags. Assumes JAGS is already installed.
+try( library(runjags) )
+try( runjags.options( inits.warning=FALSE , rng.warning=FALSE ) )
+
+# set default number of chains and parallelness for MCMC:
+library(parallel) # for detectCores().
+nCores = detectCores() 
+
+if ( !is.finite(nCores) ) { nCores = 1 } 
+
+if ( nCores > 4 ) 
+{ 
+  nChainsDefault = 4  # because JAGS has only 4 rng's.
+  runjagsMethodDefault = "rjparallel"
+} else if ( nCores == 4 ) { 
+  nChainsDefault = 3  # save 1 core for other processes.
+  runjagsMethodDefault = "rjparallel"
+} else { 
+  nChainsDefault = 3 
+  runjagsMethodDefault = "rjags" # NOT parallel
+}  
+
+fileNameRoot = "JAGSOutput-"
+
+calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
+{
+    data <- makeJAGSModelData(N, firstBinValue, nBins, latentMean, latentSd)
+
+    parameters = c( "mu" , "sigma" , "thresh" )
+    numSavedSteps = 20000
+    thinSteps = 5 
+    adaptSteps = 500  # Number of steps to "tune" the samplers
+    burnInSteps = 1000
+    saveName = fileNameRoot 
+    runjagsMethod = runjagsMethodDefault
+    nChains = nChainsDefault
+    
+    ordRunJagsOut <- run.jags(method="parallel", 
+                              model="OrdAsOrdAndMet-OrdModel.txt", 
+                              monitor=parameters, 
+                              data=ordDataList,  
+                              n.chains=nChains,
+                              adapt=adaptSteps,
+                              burnin=burnInSteps, 
+                              sample=ceiling(numSavedSteps/nChains),
+                              thin=thinSteps,
+                              summarise=FALSE,
+                              plots=FALSE)
+    ordCodaSamples = as.mcmc.list(ordRunJagsOut)
+    # resulting codaSamples object has these indices: 
+    #   codaSamples[[ chainIdx ]][ stepIdx , paramIdx ]
+    if (!is.null(saveName)) {
+        save(ordCodaSamples , file=paste(saveName,"-Ord-Mcmc.Rdata",sep=""))
+    }
+
+    return (ordRunJagsOut)
+}
+
+
+tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre, 
+                            latentSdPost, paired = TRUE, var.equal = FALSE)
+{
+    simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
+    # print(simObsPre)
+    print(mean(simObsPre))
+    # print("")
+    simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
+    # print(simObsPost)
+    print(mean(simObsPost))
+
+    # df <- data.frame("pre" = simObsPre, "post" = simObsPost)
+
+    return (t.test(simObsPre, simObsPost, paired = paired, var.equal = var.equal))
+    # return (t.test(pre, post, data=df, paired = paired, var.equal = var.equal))
+}
+
+
+orderedProbitExperiment <- function(N, firstBinValue, nBins, latentMean,
+                                        latentSdPre, latentSdPost, paired = TRUE,
+                                        var.equal = FALSE)
+{
+    simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
+    simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
+
+    # Call helper function to run Bayesian analysis adapted from L&K 2018.
+}
+
+
+simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentSd)
 {
     # Draw latent opinion data for each participant; parameters are set
     # to empirical, as opposed to population, values.
     
     # mvrnorm uses variance, not standard deviation, for its spread parameter.
-    latentVariance <- latentStd^2
-    latentData <- mvrnorm(N, latentMean, latentVariance, empirical=TRUE)
+    # latentVariance <- latentSd^2
+    # latentData <- mvrnorm(N, latentMean, latentVariance, empirical=TRUE)
+    latentData <- rnorm(N, latentMean, latentSd)
 
     # Create the bins and thresholds to be used to bin latentData.
     bins <- seq(from=firstBinValue, length.out=nBins)

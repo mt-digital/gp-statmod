@@ -1109,7 +1109,7 @@ for ( simIdx in c( "1QeqM" , "1QuneqM" ,
         ordMcmcMat[ stepIdx , paste0("thresh[",qIdx,",",1:(max(thisY)-1),"]") ] ,
         ordMcmcMat[ stepIdx , paste0("mu") ] ,
         ordMcmcMat[ stepIdx , paste0("sigma") ] )
-      outProb[stepIdx,] = c(threshCumProb,1) - c(0,threshCumProb)
+      outProb[stepIdx,] = c(threshCumProb, 1) - c(0, threshCumProb)
     }
     oneUp = round(nullHypVal)+1
     oneDown = round(nullHypVal)-1
