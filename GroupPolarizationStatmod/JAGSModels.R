@@ -1,10 +1,13 @@
 makeJAGSModelData <- function(N, firstBinValue, nBins, latentMean, latentSd)  # Pre, latentSdPost)
 {
     thetaVec = as.vector(matrix(NA, ncol=nBins - 1, nrow=1))
+    thetaVec[1] = firstBinValue + 0.5
+    thetaVec[nBins - 1] = (firstBinValue + nBins - 1.5)  # e.g. fbv=1, nbins=10, this val is 9.5
 
     opinions = simulatedObservation(N, firstBinValue, nBins, latentMean, latentSd)
 
     modelDataList = list(
+        N = N,
         o = opinions,
         thetaVec = thetaVec,
         nBins = nBins
@@ -15,35 +18,35 @@ makeJAGSModelData <- function(N, firstBinValue, nBins, latentMean, latentSd)  # 
 
 
 # JAGS model definition 
-ordSingleModelString = "
+# ordSingleModelString = "
 
-  model {
+#   model {
 
-    for (i in 1:N) {
+#     for (i in 1:N) {
 
-      o[i] ~ dcat(pr[i, 1:nBins])
-      pr[i,1] <- pnorm(thetaVec[1], mu, 1/sigma^2)
+#       o[i] ~ dcat(pr[i, 1:nBins])
+#       pr[i,1] <- pnorm(thetaVec[1], mu, 1/sigma^2)
 
-      for (k in 2:(nBins - 1)) {
-        pr[i, k] <- max(
-          0, 
-          pnorm(thetaVec[k], mu, 1 / (sigma^2)) - pnorm(thetaVec[k - 1], mu, 1 / (sigma^2)) 
-        )
-      }
+#       for (k in 2:(nBins - 1)) {
+#         pr[i, k] <- max(
+#           0, 
+#           pnorm(thetaVec[k], mu, 1 / (sigma^2)) - pnorm(thetaVec[k - 1], mu, 1 / (sigma^2)) 
+#         )
+#       }
 
-      pr[i, nBins <- (1 - pnorm(thetaVec[nBins - 1], mu, 1/sigma^2))
-    }
+#       pr[i, nBins <- (1 - pnorm(thetaVec[nBins - 1], mu, 1/sigma^2))
+#     }
 
-    mu ~ dnorm((1+max(nBins)) / 2, 1 / (max(nBins)^2))
-    sigma ~ dunif(0.01 , max(nBins)*10)
+#     mu ~ dnorm((1+max(nBins)) / 2, 1 / (max(nBins)^2))
+#     sigma ~ dunif(0.01 , max(nBins)*10)
 
-    # Prior on thetaVec[q,k]. Stochastic for all except thetaVec[1,1] and thetaVec[1,last].
-    for (kIdx in 2:(nBins - 2)) { # 1 and nBins-1 are fixed
-      thetaVec[kIdx] ~ dnorm(kIdx + 0.5, 1/(2^2))
-    }
-}
+#     # Prior on thetaVec[q,k]. Stochastic for all except thetaVec[1,1] and thetaVec[1,last].
+#     for (kIdx in 2:(nBins - 2)) { # 1 and nBins-1 are fixed
+#       thetaVec[kIdx] ~ dnorm(kIdx + 0.5, 1/(2^2))
+#     }
+# }
 
-" # close quote for ordModelString
+# " # close quote for ordModelString
 
 
 

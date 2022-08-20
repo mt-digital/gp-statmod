@@ -1,0 +1,26 @@
+model {
+
+    for (i in 1:N) {
+
+      o[i] ~ dcat(pr[i, 1:nBins])
+      pr[i,1] <- pnorm(thetaVec[1], mu, 1/sigma^2)
+
+      for (k in 2:(nBins - 1)) {
+        pr[i, k] <- max(
+          0, 
+          pnorm(thetaVec[k], mu, 1 / (sigma^2)) - pnorm(thetaVec[k - 1], mu, 1 / (sigma^2)) 
+        )
+      }
+
+      pr[i, nBins] <- (1 - pnorm(thetaVec[nBins - 1], mu, 1/sigma^2))
+    }
+
+    mu ~ dnorm((1+max(nBins)) / 2, 1 / (max(nBins)^2))
+    sigma ~ dunif(0.01 , max(nBins)*10)
+
+    # Prior on thetaVec[q,k]. Stochastic for all except thetaVec[1,1] and thetaVec[1,last].
+    for (kIdx in 2:(nBins - 2)) { # 1 and nBins-1 are fixed
+      thetaVec[kIdx] ~ dnorm(kIdx + 0.5, 1/(2^2))
+    }
+
+}

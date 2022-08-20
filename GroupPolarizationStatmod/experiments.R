@@ -44,9 +44,9 @@ fileNameRoot = "JAGSOutput-"
 
 calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 {
-    data <- makeJAGSModelData(N, firstBinValue, nBins, latentMean, latentSd)
+    ordDataList <- makeJAGSModelData(N, firstBinValue, nBins, latentMean, latentSd)
 
-    parameters = c( "mu" , "sigma" , "thresh" )
+    parameters = c( "mu" , "sigma" , "thetaVec" )
     numSavedSteps = 20000
     thinSteps = 5 
     adaptSteps = 500  # Number of steps to "tune" the samplers
@@ -56,7 +56,7 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
     nChains = nChainsDefault
     
     ordRunJagsOut <- run.jags(method="parallel", 
-                              model="OrdAsOrdAndMet-OrdModel.txt", 
+                              model="singleOrdinalModel.jags", 
                               monitor=parameters, 
                               data=ordDataList,  
                               n.chains=nChains,
@@ -95,15 +95,15 @@ tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre,
 }
 
 
-orderedProbitExperiment <- function(N, firstBinValue, nBins, latentMean,
-                                        latentSdPre, latentSdPost, paired = TRUE,
-                                        var.equal = FALSE)
-{
-    simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
-    simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
+# orderedProbitExperiment <- function(N, firstBinValue, nBins, latentMean,
+#                                         latentSdPre, latentSdPost, paired = TRUE,
+#                                         var.equal = FALSE)
+# {
+#     simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
+#     simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
 
-    # Call helper function to run Bayesian analysis adapted from L&K 2018.
-}
+#     # Call helper function to run Bayesian analysis adapted from L&K 2018.
+# }
 
 
 simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentSd)
