@@ -118,7 +118,7 @@ ui <- function(request) { fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
 
-    STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
+    # STUDIES <- read_excel("data/CaseStudies_ProtoDB-TEST.xlsx", "ArticleStudiesMinimal")
     FULL_TAGS <- sort(paste(STUDIES$ArticleTag, STUDIES$TreatmentTag, sep=" - "))
     STUDIES_DB = "data/StudiesAnalysis.csv"
     STUDIES <- read.csv(STUDIES_DB)
@@ -219,6 +219,9 @@ server <- function(input, output, session) {
     })
 
     observeEvent(input$treatmentTag, {
+
+        STUDIES <- read.csv(STUDIES_DB)
+
         treatmentSplit <- strsplit(input$treatmentTag, " - ")
         article <- treatmentSplit[[1]][1]
         treatment <- treatmentSplit[[1]][2]
@@ -251,16 +254,17 @@ server <- function(input, output, session) {
                             "Plausible",
                             value = treatmentRow$Plausible)
         updateTextAreaInput(session,
-                        "Notes",
-                        value = treatmentRow$Notes)
+                            "Notes",
+                            value = treatmentRow$Notes)
     })
     
     observeEvent(input$saveBtn, {
+        STUDIES <- read.csv(STUDIES_DB)
+
         treatmentSplit <- strsplit(input$treatmentTag, " - ")
         article <- treatmentSplit[[1]][1]
         treatment <- treatmentSplit[[1]][2]
         
-        treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
         treatmentRow <- STUDIES[STUDIES$TreatmentTag == treatment, ]
         treatmentRow$ObservedMeanPre <- input$ObservedMeanPre
         treatmentRow$ObservedMeanPost <- input$ObservedMeanPost
@@ -282,6 +286,8 @@ server <- function(input, output, session) {
         STUDIES[STUDIES$TreatmentTag == treatment, ] <- treatmentRow
         print(STUDIES[STUDIES$TreatmentTag == treatment, ])
         write.csv(STUDIES, STUDIES_DB, row.names = F)
+
+        STUDIES <- read.csv(STUDIES_DB)
 
     })
 

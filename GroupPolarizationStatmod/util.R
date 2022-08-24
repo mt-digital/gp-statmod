@@ -35,7 +35,7 @@ library(ggplot2)
 source("model.R")
 source("numerical.R")
 
-CaseStudyData <- read.csv('caseStudies.csv', row.names='CaseStudyTag')
+# CaseStudyData <- read.csv('caseStudies.csv', row.names='CaseStudyTag')
 
 
 ##
@@ -115,4 +115,21 @@ largeNBarplots <- function(input, time)
 convertFriedkinTo20Bin <- function(friedkinVal)
 {
     return ( 20 * (friedkinVal / 100.0) )
+}
+
+pooled.sd <- function(x1, x2)
+{
+  #calculate sample size of each group
+  n1 <- length(x1)
+  n2 <- length(x2)
+  
+  #calculate sample variance of each group
+  var1 <- var(x1)
+  var2 <- var(x2)
+  
+  #calculate pooled variance between the two groups
+  pooled <- ((n1-1)*var1 + (n2-1)*var2) / (n1+n2-2)
+  
+  #display pooled variance
+  return (pooled)
 }

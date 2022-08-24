@@ -8,7 +8,12 @@ require(MASS)
 
 source("JAGSModels.R")
 
-## INITIALIZE JAGS PARAMETERS (Following Kruschke (2015) DBDA2E-utilities.R)
+## INITIALIZE JAGS PARAMETERS (Following Kruschke (2015) DBDA2E-utilities.R)'
+# 
+# Author: Matthew A. Turner <maturner01@gmail.com>
+# Date: 8/23/2022
+#
+
 
 # Check that required packages are installed:
 want = c("parallel","rjags","runjags","compute.es")
@@ -21,6 +26,8 @@ try( library(rjags) )
 # Load runjags. Assumes JAGS is already installed.
 try( library(runjags) )
 try( runjags.options( inits.warning=FALSE , rng.warning=FALSE ) )
+
+library(tidyverse)
 
 # set default number of chains and parallelness for MCMC:
 library(parallel) # for detectCores().
@@ -42,6 +49,102 @@ if ( nCores > 4 )
 
 fileNameRoot = "JAGSOutput-"
 
+makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv", 
+                                 output.csv = "data/BayesianAnalysis.csv")
+{
+    studiesDf <- read.csv(studies.data.csv)
+    
+    outputDf <- tibble("TreatmentTag" = character(0), "ArticleTag" = character(0), 
+                           "N" = integer(0), 
+                          
+                           "ObservedMeanPre" = numeric(0), "ObservedMeanPost" = numeric(0),
+                           
+                           "MinBinValue" = integer(0), "MaxBinValue" = integer(0),
+                           
+                           "LatentMean" = numeric(0), 
+                           "LatentSDPre" = numeric(0), "LatentSDPost" = numeric(0),
+                           
+                           "LatentMeanPrePosteriorLower95" = numeric(0),
+                           "LatentMeanPrePosteriorMedian" = numeric(0),  
+                           "LatentMeanPrePosteriorUpper95" = numeric(0), 
+                           "LatentMeanPrePosteriorMean" = numeric(0),  
+                           "LatentMeanPrePosteriorSD" = numeric(0),
+                           
+                           "LatentMeanPostPosteriorLower95" = numeric(0),
+                           "LatentMeanPostPosteriorMedian" = numeric(0), 
+                           "LatentMeanPostPosteriorUpper95" = numeric(0),
+                           "LatentMeanPostPosteriorMean" = numeric(0),  
+                           "LatentMeanPostPosteriorSD" = numeric(0)
+                           )
+
+    for (rowIdx in 1:nrow(studiesDf))
+    # for (rowIdx in 1:3)
+    {
+        row <- studiesDf[rowIdx, ]
+        if (row$Include && row$Plausible && row$MinBinValue > 0)
+        {
+            N <- row$N; firstBinValue <- row$MinBinValue; 
+            nBins <- row$MaxBinValue - row$MinBinValue + 1; 
+            latentMean <- row$LatentMean; 
+            latentSdPre <- row$LatentSDPre; latentSdPost <- row$LatentSDPost;
+            observedMeanPre <- row$ObservedMeanPre; 
+            observedMeanPost <- row$ObservedMeanPost;
+
+            cat(paste("\n\n**************************************************\n", 
+                        "Fitting Bayesian Ordered Probit for ", row$ArticleTag,
+                        "-", row$TreatmentTag, 
+                        "\n**************************************************\n\n",
+                        sep=""))
+            
+            # tryCatch({
+            suPre <- summary(
+                calculateBayesian(N, firstBinValue, nBins, latentMean, latentSdPre)
+            )
+
+            suPost <- summary(
+                calculateBayesian(N, firstBinValue, nBins, latentMean, latentSdPost)
+            )
+                # },
+                # error = function(e) { next }
+            # )
+            muPrePost = suPre["mu",]
+            muPostPost = suPost["mu",]
+
+            tibbleRow <- tibble_row(
+                TreatmentTag = row$TreatmentTag, ArticleTag = row$ArticleTag,
+                N = N, 
+                MinBinValue = firstBinValue, 
+                MaxBinValue = firstBinValue + nBins - 1, 
+                ObservedMeanPre = row$ObservedMeanPre,
+                ObservedMeanPost = row$ObservedMeanPost,
+                LatentMean = latentMean, LatentSDPre = latentSdPre, 
+                LatentSDPost = latentSdPost, 
+                
+                LatentMeanPrePosteriorLower95 = muPrePost["Lower95"],
+                LatentMeanPrePosteriorMedian = muPrePost["Median"],
+                LatentMeanPrePosteriorUpper95 = muPrePost["Upper95"],
+                LatentMeanPrePosteriorMean = muPrePost["Mean"],
+                LatentMeanPrePosteriorSD = muPrePost["SD"],
+
+                LatentMeanPostPosteriorLower95 = muPostPost["Lower95"],
+                LatentMeanPostPosteriorMedian = muPostPost["Median"],
+                LatentMeanPostPosteriorUpper95 = muPostPost["Upper95"],
+                LatentMeanPostPosteriorMean = muPostPost["Mean"],
+                LatentMeanPostPosteriorSD = muPostPost["SD"]
+            )
+
+            # print("")
+            # print("Tibble row:")
+            # print(tibbleRow)
+            # print("")
+
+            outputDf <- add_row(outputDf, tibbleRow)
+        }
+    }
+
+    return (outputDf)
+}
+
 calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 {
     ordDataList <- makeJAGSModelData(N, firstBinValue, nBins, latentMean, latentSd)
@@ -49,11 +152,12 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
     parameters = c( "mu" , "sigma" , "thetaVec" )
     numSavedSteps = 20000
     thinSteps = 5 
-    adaptSteps = 500  # Number of steps to "tune" the samplers
-    burnInSteps = 1000
+    adaptSteps = 1000  # Number of steps to "tune" the samplers
+    burnInSteps = 2000
     saveName = fileNameRoot 
     runjagsMethod = runjagsMethodDefault
-    nChains = nChainsDefault
+    # nChains = nChainsDefault
+    nChains = 10
     
     ordRunJagsOut <- run.jags(method="parallel", 
                               model="singleOrdinalModel.jags", 
