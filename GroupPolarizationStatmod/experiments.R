@@ -182,20 +182,15 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 
 
 tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre, 
-                            latentSdPost, paired = TRUE, var.equal = FALSE)
+                            latentSdPost, paired = FALSE, var.equal = FALSE)
 {
-    simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
-    # print(simObsPre)
-    print(mean(simObsPre))
-    # print("")
-    simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
-    # print(simObsPost)
-    print(mean(simObsPost))
+  print(latentMean)
+  print(latentSdPre)
+  simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
 
-    # df <- data.frame("pre" = simObsPre, "post" = simObsPost)
+  simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
 
-    return (t.test(simObsPre, simObsPost, paired = paired, var.equal = var.equal))
-    # return (t.test(pre, post, data=df, paired = paired, var.equal = var.equal))
+  return (t.test(simObsPre, simObsPost, paired = paired, var.equal = var.equal))
 }
 
 
@@ -212,37 +207,40 @@ tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre,
 
 simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentSd)
 {
-    # Draw latent opinion data for each participant; parameters are set
-    # to empirical, as opposed to population, values.
-    
-    # mvrnorm uses variance, not standard deviation, for its spread parameter.
-    # latentVariance <- latentSd^2
-    # latentData <- mvrnorm(N, latentMean, latentVariance, empirical=TRUE)
-    latentData <- rnorm(N, latentMean, latentSd)
+  # Draw latent opinion data for each participant; parameters are set
+  # to empirical, as opposed to population, values.
+  
+  # mvrnorm uses variance, not standard deviation, for its spread parameter.
+  # latentVariance <- latentSd^2
+  # latentData <- mvrnorm(N, latentMean, latentVariance, empirical=TRUE)
+  print(N)
+  print(latentMean)
+  print(latentSd)
+  latentData <- rnorm(N, latentMean, latentSd)
 
-    # Create the bins and thresholds to be used to bin latentData.
-    bins <- seq(from=firstBinValue, length.out=nBins)
-    thresholds <- bins[1:length(bins)-1] + 0.5 
+  # Create the bins and thresholds to be used to bin latentData.
+  bins <- seq(from=firstBinValue, length.out=nBins)
+  thresholds <- bins[1:length(bins)-1] + 0.5 
 
-    # Bin latent data transforming to ordinal scale.
-    ordinalData <- 0 * latentData
-    for (sIdx in 1:length(ordinalData)) 
-    {
-        # Identify bin index from multiple comparisons of latent data with
-        # threshold values. c(-Inf, thresholds) is a 1-D vector of 
-        # -Inf followed by the threshold values. The `which` function gets 
-        # the indexes where the greater than statement is TRUE. I.e., if the
-        # opinion is not greater than any of the thresholds, and only -Inf,
-        # then it will go in the first bin. If it is only greater than the
-        # first threshold (second position in the -Inf, thresholds vector)
-        # then the opinion goes in the second bin, and so on.
-        binIdx <- max(which(latentData[sIdx] > c(-Inf, thresholds)))
+  # Bin latent data transforming to ordinal scale.
+  ordinalData <- 0 * latentData
+  for (sIdx in 1:length(ordinalData)) 
+  {
+      # Identify bin index from multiple comparisons of latent data with
+      # threshold values. c(-Inf, thresholds) is a 1-D vector of 
+      # -Inf followed by the threshold values. The `which` function gets 
+      # the indexes where the greater than statement is TRUE. I.e., if the
+      # opinion is not greater than any of the thresholds, and only -Inf,
+      # then it will go in the first bin. If it is only greater than the
+      # first threshold (second position in the -Inf, thresholds vector)
+      # then the opinion goes in the second bin, and so on.
+      binIdx <- max(which(latentData[sIdx] > c(-Inf, thresholds)))
 
-        # Assign this subject's ordinal data to be the binned value.
-        ordinalData[sIdx] <- bins[binIdx]
-    }
-    
-    return (ordinalData)
+      # Assign this subject's ordinal data to be the binned value.
+      ordinalData[sIdx] <- bins[binIdx]
+  }
+  
+  return (ordinalData)
 }
 
 
