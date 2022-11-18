@@ -133,11 +133,6 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
                 LatentMeanPostPosteriorSD = muPostPost["SD"]
             )
 
-            # print("")
-            # print("Tibble row:")
-            # print(tibbleRow)
-            # print("")
-
             outputDf <- add_row(outputDf, tibbleRow)
         }
     }
@@ -184,8 +179,6 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre, 
                             latentSdPost, paired = FALSE, var.equal = FALSE)
 {
-  print(latentMean)
-  print(latentSdPre)
   simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
 
   simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
@@ -211,11 +204,6 @@ simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentSd)
   # to empirical, as opposed to population, values.
   
   # mvrnorm uses variance, not standard deviation, for its spread parameter.
-  # latentVariance <- latentSd^2
-  # latentData <- mvrnorm(N, latentMean, latentVariance, empirical=TRUE)
-  print(N)
-  print(latentMean)
-  print(latentSd)
   latentData <- rnorm(N, latentMean, latentSd)
 
   # Create the bins and thresholds to be used to bin latentData.

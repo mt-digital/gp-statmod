@@ -1,40 +1,128 @@
-% Author: Matthew Turner
+% % Author: Matthew Turner
 
-% \documentclass[11pt,letterpaper]{scrartcl}
-\documentclass[letterpaper,man,natbib]{apa6}
-% \documentclass[11pt]{report}
-% \documentclass{report}
-% \documentclass{book}
-\usepackage[bookmarks, hidelinks]{hyperref}
-\usepackage{amssymb,amsmath}
-% \usepackage{fullpage}
-\usepackage{tabulary}
-\usepackage{tabularx}
-\usepackage{float}
-% \usepackage[margin=1.00in]{geometry}
+% % \documentclass[11pt,letterpaper]{scrartcl}
+% % \documentclass[letterpaper,man,natbib]{apa6}
+% \documentclass[11pt,letterpaper]{amsart}
+% % \documentclass[11pt, letterpaper]{article}
+% % \usepackage{natbib}
+% % \documentclass[11pt]{report}
+% % \documentclass{report}
+% % \documentclass{book}
+% \usepackage[bookmarks, hidelinks]{hyperref}
+% \usepackage{amssymb,amsmath}
+% % \usepackage{fullpage}
+% \usepackage{tabulary}
+% \usepackage{tabularx}
+% \usepackage{float}
+% % \usepackage[margin=1.00in]{geometry}
 % \usepackage[margin=0.90in]{geometry}
 
-\usepackage{caption}
-\usepackage{booktabs}
-\usepackage{pslatex}
-\usepackage{apacite}
-\usepackage{authblk}
-\usepackage{subcaption}
-\usepackage{pgfplots}
-\usepackage{wrapfig}
-\usepackage[english]{babel}
-\usepackage{lmodern}
-% \usepackage{setspace}
-% \doublespace
-% \usepackage{url}
-\usepackage{bigfoot}
-\usepackage[export]{adjustbox}
-% \setlength\intextsep{0pt}
+% % \usepackage{fontspec} 
 
-\usepackage{graphicx}
+% % \usepackage{xunicode}
+% % \usepackage{xltxtra}
+% % \defaultfontfeatures{Mapping=tex-text}
+% % \setmainfont[Ligatures={Common}, Numbers={OldStyle}, Variant=01]{Hoefler Text}
+% % \setromanfont[Ligatures={Common}, Numbers={OldStyle}, Variant=01]{Hoefler Text}
+% % \setmonofont[Scale=0.95]{PT Sans}
+% \usepackage{caption}
+% \usepackage{apacite}
+% \usepackage{booktabs}
+% \usepackage{pslatex}
+% \usepackage{subcaption}
+% \usepackage{pgfplots}
+% \usepackage{wrapfig}
+% \usepackage[english]{babel}
+% \usepackage{lmodern}
+% % \doublespace
+% % \usepackage{url}
+% \usepackage{bigfoot}
+% \usepackage[export]{adjustbox}
+% % \setlength\intextsep{0pt}
+
+% \usepackage{graphicx}
+
+\documentclass[12pt, letterpaper]{article}
+\usepackage{fontspec} 
+\usepackage{marvosym}
+\usepackage{setspace}
+\usepackage{longtable}
+% DOCUMENT LAYOUT
+% \usepackage{geometry} 
+\usepackage[margin=0.90in]{geometry}
+\usepackage{lineno}
+\usepackage[usenames,dvipsnames]{xcolor}
+% \geometry{letterpaper, textwidth=5.5in, textheight=8.5in, marginparsep=7pt, marginparwidth=.6in}
+% \setlength\parindent{0in}
+
+\definecolor{linenocolor}{gray}{0.6}
+\renewcommand\thelinenumber{\color{linenocolor}\arabic{linenumber}}
+% \calclayout %centers text on page.
+
+% \renewcommand{\thesubsection}{\arabic{subsection}.}
+% FONTS
+% \usepackage[usenames,dvipsnames]{color}
+% \usepackage{xunicode}
+% \usepackage{xltxtra}
+\defaultfontfeatures{Mapping=tex-text}
+% \setromanfont[Ligatures={Common}, Variant=01]{Hoefler Text}
+% \setromanfont[Ligatures={Common}, Variant=01]{Palatino}
+\setromanfont[Ligatures={Common}, Variant=01]{Baskerville}
+% \setromanfont[Ligatures={Common}, Variant=01]{Plantagenet Cherokee}
+% \setmainfont [BoldFont={STIX Two Text SemiBold}, Ligatures={Common},
+% Numbers={OldStyle}, Variant=01]{STIX Two Text}
+% \setmainfont [BoldFont={STIX Two Text SemiBold}, Ligatures={Common},
+% Numbers={OldStyle}, Variant=01]{STIX Two Text}
+% \setromanfont [Ligatures={Common},
+% Numbers={OldStyle}, Variant=01]{STIX Two Text}
+\setmonofont[Scale=0.95]{PT Sans}
+
+% ---- CUSTOM COMMANDS
+% \chardef\&="E050
+\newcommand{\html}[1]{\href{#1}{\scriptsize\textsc{[html]}}}
+\newcommand{\pdf}[1]{\href{#1}{\scriptsize\textsc{[pdf]}}}
+\newcommand{\doi}[1]{\href{#1}{\scriptsize\textsc{[doi]}}}
+\newcommand{\lurl}[1]{\href{#1}{\scriptsize\textsc{[link]}}}
+
+\newcommand{\githubsymbol}{\raisebox{-2pt}{\includegraphics[height=10.5pt]{github}}}
+\newcommand{\twittersymbol}{\raisebox{-2pt}{\includegraphics[height=10.5pt]{twitter}}}
+\newcommand{\monitorsymbol}{\raisebox{-2pt}{\includegraphics[height=10.5pt]{monitor}}}
+
+% ---- MARGIN YEARS
+\usepackage{marginnote}
+\newcommand{\amper{}}{\chardef\amper="E0BD }
+\newcommand{\years}[1]{\marginnote{\small #1}}
+\renewcommand*{\raggedleftmarginnote}{}
+\setlength{\marginparsep}{7pt}
+\reversemarginpar
+
+% HEADINGS
+\usepackage{sectsty} 
+\usepackage[normalem]{ulem} 
+\sectionfont{\upshape\Large}
+\subsectionfont{\scshape\normalsize} 
+\subsubsectionfont{\upshape\large} 
+
+
+% PDF SETUP
+% ---- FILL IN HERE THE DOC TITLE AND AUTHOR
+\usepackage[%dvipdfm, 
+bookmarks, colorlinks, breaklinks, 
+% ---- FILL IN HERE THE TITLE AND AUTHOR
+	pdftitle={Matthew A. Turner - Vita},
+	pdfauthor={Matthew A. Turner, PhD},
+	pdfproducer={https://mt.digital}
+]{hyperref}  
+\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=MidnightBlue} 
+
+\usepackage{apacite}
+\usepackage{booktabs}
+\usepackage{authblk}
+
+\begin{document}
 
 \title{Group polarization is often a mirage caused by inappropriate statistical analyses}
-\shorttitle{Group polarization or simple consensus?}
+% \shorttitle{Group polarization or simple consensus?}
 \author[1,2]{{Matthew A.~Turner}}
 \affil[1]{Department of Earth System Science, Stanford University}
 \affil[2]{Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
@@ -44,7 +132,19 @@
 \affil[4]{Center for Advanced Study in the Behavioral Sciences, Stanford University}
 \affil[5]{Santa Fe Institute}
 
-\abstract{
+
+
+\maketitle
+% \setlength{\parindent}{15pt}
+% \maketitle
+
+\spacing{1.5}
+
+\linenumbers
+\modulolinenumbers[5]
+
+\begin{abstract}
+  \noindent
   Group polarization is the observed tendency of
   like-minded groups to arrive at a more extreme consensus opinion than
   the average opinion after discussing some topic of interest.
@@ -68,14 +168,7 @@
   explanations. A search for explanations is pointless, however, without sound
   evidence. We believe this work will provide a sturdier analytical foundation for 
   future group-polarization research.
-}
-
-
-\begin{document}
-\maketitle
-\setlength{\parindent}{15pt}
-% \maketitle
-
+\end{abstract}
 
 \section{Introduction}
 
@@ -100,10 +193,10 @@ When
     The exact null-hypothesis testing procedure varies between studies $t$-tests, ANOVA, etc. 
 \end{itemize}
 
-Recently, problems with using have been made clear~\citep{Liddell2018}.
+Recently, problems with using have been made clear~\cite{Liddell2018}.
 The way to fix this problem going forward is to use a thresholded-normal 
 statistical model for group polarization data, or other related statistical 
-model that accounts for opinion binning~\citep[Ch. 23]{Liddell2018,KruschkeDBDA}.
+model that accounts for opinion binning~\cite[Ch. 23]{Liddell2018,KruschkeDBDA}.
 
 \subsection{Study selection and overview}
 
@@ -137,9 +230,9 @@ but not truly ``group polarization'' shifts, i.e.,
 shifts from initially biased group opinions
 to more extreme group opinions biased in the same direction; instead shifts 
 were from a neutral initial group opinion to a biased group opinion 
-(as in, e.g.,~\citet{Abrams1990} Uncategorized2), or from
-an opinion biased in one direction (as in, e.g.,~\citet{Abrams1990} Categorized1,
-Categorized2, AND OTHERS???). In some results of \citet{Freidkin1999a}, 
+(as in, e.g.,~\citeA{Abrams1990} Uncategorized2), or from
+an opinion biased in one direction (as in, e.g.,~\citeA{Abrams1990} Categorized1,
+Categorized2, AND OTHERS???). In some results of \citeA{Freidkin1999a}, 
 shift values are reported with their
 standard deviations---but the shift standard deviations are greater than the
 shifts themselves, indiciating that zero shift is included in the observed
@@ -187,22 +280,22 @@ decreases as individuals come to agree more than they did previously.
 Group polarization experiments are designed to foster group consensus
 it is not necessary to consider clustering, negative influence, or other
 processes known to generally occur when opinions within a group significantly
-diverge~\citep{Turner2018}.
+diverge~\cite{Turner2018}.
 
 We collected group polarization data from ten empirical studies with sixty constituent
 experimental treatments across all studies, specifically the opinion shift and pre- and
 post-deliberation mean opinions, and the number of participants
-in each treatment (\citet{Burnstein1975} did not report pre- and post-deliberation
+in each treatment (\citeA{Burnstein1975} did not report pre- and post-deliberation
 means, only the shift in means). We did not include experimental treatments that did not 
 yield a positive detection of group polarization since we are only estimating
 the rate of plausible false positive detections of group polarization. 
 We then created new data that indicated whether a reported. 
 
 In two cases, reported opinion and shift values were converted from an ordinal
-scale to a percentage scale, specifically \citet{Friedkin1999a} and \citet{Krizan2007}.
+scale to a percentage scale, specifically \citeA{Friedkin1999a} and \citeA{Krizan2007}.
 The authors in these papers did report the original ordinal measurement scale,
 so we converted the means back to the orignial measurement scale.
-In a few cases from \citet{Friedkin1999a} we did not need to apply our 
+In a few cases from \citeA{Friedkin1999a} we did not need to apply our 
 model to the reported data because we could determine a reported opinion shift was 
 \emph{prima facie} false since reported opinion shift magnitudes
 were smaller than the standard deviation in shifts (see Table 1, p. 868, \emph{ibid}),
@@ -259,19 +352,24 @@ are at least as well described by a simple-consensus model.
 We found that X\% of group polarization detections across all studies were 
 plausibly false positives (Table~\ref{tab:XXXXX}).
 
+\spacing{1.0}
+\input{plausibleFP-table.tex}
+\spacing{1.5}
+
 \subsection{Do $t$-tests accurately detect simple consensus?}
 
 We found that in X\% of generated simple consensus data led to false positive
 detections 
 
 When simulated data reliably result in false positive $t$-test results (where
-the $t$-test $p \le 0.1$) this strengthens the case that.
+the $t$-test $p \le 0.1$) this strengthens the case that reported detections
+of a false group polarization detection.
 
-One complicating factor to this approach is that statistical power, $W$, varies
-between treatments. Therefore, simulated data should yield statistically-significant
-group polarization with frequency close to $W$ for a given treatment at a given
-significance value, $\alpha$. 
 
+\spacing{1.0}
+% \input{t-test-table.tex}
+\input{t-test-table-custom.tex}
+\spacing{1.5}
 
 \subsection{Do Bayesian ordered-probit models accurately detect simple consensus?}
 
@@ -336,7 +434,7 @@ polarization was measured in each paper. I also explain how I decided which
 group polarization detections I included from each paper, and how we decided
 if they were plausibly false positives, including whether we needed to 
 
-\paragraph{\citet{Abrams1990}} This study is meant to support the presence of the "self-categorization" effect in
+\paragraph{{Abrams1990}} This study is meant to support the presence of the "self-categorization" effect in
 social psychology. The paper presents three experiments and their results--Experiment 3 is the group polarization
 experiment, designed to show that self-categorization is at work in the emergence of group polarization. Uses high
 schoolers aged 16-17 in Hawkes Bay, New Zealand. There are five deliberation topics (p. 112) across two conditions
@@ -346,7 +444,7 @@ opinion relative to other group members' opinions ("Uncategorized"). It was conf
 Table 2 (p. 114), but parsing the "Dependent measures" subsection several times led me to understand the last
 paragraph, that "[a]ttitude shift overall was...assessed...on the unconverted +4 to -4 scale."
 
-\paragraph{\citet{Burnstein1973}} First I want to note this study was funded in part by a Guggenheim fellowship (see
+\paragraph{{Burnstein1973}} First I want to note this study was funded in part by a Guggenheim fellowship (see
 note on first page) and the authors acknolwedge the assistance of "vinous" discussions with colleagues at the
 University of Provence and the "spirited and intelligent efforts" of two female research assistants. The study
 presents the results of two experiments (really one experiment with two pools of participants) that test the
@@ -366,7 +464,7 @@ to their cause"). Thus, in our table we have conditions A, B, E, F, and H. Even 
 shift, it does in this study, which is possibly further evidence that this study merely shows participant consensus
 formation, not opinion shifts.
 
-\paragraph{\citet{Burnstein1975}} In this study, Burnstein and Vinokur ran an experiment to evaluate their theory
+\paragraph{{Burnstein1975}} In this study, Burnstein and Vinokur ran an experiment to evaluate their theory
 that generating persuasive arguments are necessary for group polarization to occur. The authors design a study with
 three conditions, one Experimental and two Control, where participants (60 male students from intro psych at the
 University of Michigan) first answered four CDQ items that typically generate shifts towards more risk, then, in the
@@ -378,7 +476,7 @@ opinions at all. Thus, Burnstein and Vinokur hypothesize that significant shifts
 Experimental condition. We thus only include Condition I in our analysis. The authors only report the shift, meaning
 we are free to choose any pre- and post-deliberation value to see if the null hypothesis is actually plausible.  
 
-\paragraph{\citet{Schkade2010}} Friedkin uses three CDQ topics, "Sports", "School", and "Surgery" that use a
+\paragraph{{Schkade2010}} Friedkin uses three CDQ topics, "Sports", "School", and "Surgery" that use a
 20-point CDQ risk scale in fractional units, 0.05, 0.10, ..., 1.00 across three group sizes (2, 3, and 4, which he
 calls "dyads", "triads", and "tetrads", which we use in our CaseStudyTag). Friedkin only gives opinion shifts, and
 apparently transforms the fractional CDQ responses into percentages, since the shifts range between 5 and 9.
@@ -391,7 +489,7 @@ rate 13 institutions, which participants rated on a scale from 0 to 100 percent 
 participant has in each institution. We only consider the CDQ topics since these are the ones rated on a discrete
 scale. 
 
-\paragraph{\citet{Hogg1990}} It is not clear if there are indeed significant
+\paragraph{{Hogg1990}} It is not clear if there are indeed significant
 pre-post deliberation differences reported in this paper. The Results are a
 tangle of estimates of effect sizes and diagnostic statistical measures. It
 is also not clear that they actually report the pre- and post-deliberation
@@ -405,7 +503,7 @@ not necessary to show that group polarization itself occurs, only that the
 various experimental treatments yield different shifts---but if the shifts
 themselves are insignificant, then what is being measured, exactly?
 
-\paragraph{\citet{Krizan2007}} Uses five CDQ topics ("scenarios") from Kogan and
+\paragraph{{Krizan2007}} Uses five CDQ topics ("scenarios") from Kogan and
 Wallach (1967) that typically provide shifts toward more risky decisions.  These are
 given in Footnote 2 on p. 194. Krizan and Baron report shifts and mean pre-test
 opinions on the risk scale, meaning that shifts are expected to be negative towards
@@ -426,7 +524,7 @@ statistical control for inter-item variability. I noted that false detections ar
 plausible in all cases due to the fact that the standard deviations of shifts overwhelm
 the shifts themselves, but I will still run the model on these cases to confirm.
 
-\paragraph{\citet{Moscovici1969}} Moscovici and Zavalloni studied whether group
+\paragraph{{Moscovici1969}} Moscovici and Zavalloni studied whether group
 polarization is more general than CDQ by using opinions about political topics. There
 were two general topics--attitudes about "Americans" and attitudes about then-president
 of France Charles "DeGaulle"--with 12 and 11 specific items, respectively, on which
@@ -436,7 +534,7 @@ The authors reported pre-consensus and post-consensus mean opinions taken over a
 participants and items for each of the two general topics I have called the "Americans"
 and "DeGaulle" conditions.
 
-\paragraph{\citet{Myers1970}} Myers and Bishop test whether group polarization occurs
+\paragraph{{Myers1970}} Myers and Bishop test whether group polarization occurs
 in groups with different levels of racial bias determined by a survey that is not also
 the deliberation topic. The participants were high school students from western
 Michigan. In the experimental condition, social influence occurs through deliberation;
@@ -448,8 +546,8 @@ attitude measurement instrument, called "low", "medium", and "high" prejudice gr
 The participants then gave their opinions, deliberated, and gave opinions again on
 eight deliberation topics. Means were taken across items and prejudice group.
 
-\paragraph{\citet{Myers1975}} Myers performs two experiments each with experimental and control conditions for two group types with initial biases. In Experiment 1, Myers creates biased groups by having participants (intro psychology students) read a description of six different teachers, three "bad" professors and three "good" professors, which the participants are assumed to infer through vignettes about the professors. The participants in the experimental condition of Experiment 1 deliberated in small groups after giving their initial opinions on six items a 0-to-10 bad-to-good scale. In Experiment 2, participants were put into conservatively or liberally biased small groups based on their pre-deliberation opinions on six deliberation items regarding womens' rights and the role of women in the family and society. Again, in the experimental group, participants deliberated each item before giving their final opinions on the items. In the control group in each Experiment, there was no deliberation, just some filler task. Curiously, significant shifts were still found in the control groups--it is unclear to us why. Experiment 1 also had participants adjust the bad and good professors' pay to obtain non-ordinal measures of opinion regarding these professors, which we do not consider here. However, as we will discuss in the paper, this does not make it free of problems--like so many other group polarization studies, Myers statistical model does not account for inter-item, inter-group, or inter-participant variability.
+\paragraph{{Myers1975}} Myers performs two experiments each with experimental and control conditions for two group types with initial biases. In Experiment 1, Myers creates biased groups by having participants (intro psychology students) read a description of six different teachers, three "bad" professors and three "good" professors, which the participants are assumed to infer through vignettes about the professors. The participants in the experimental condition of Experiment 1 deliberated in small groups after giving their initial opinions on six items a 0-to-10 bad-to-good scale. In Experiment 2, participants were put into conservatively or liberally biased small groups based on their pre-deliberation opinions on six deliberation items regarding womens' rights and the role of women in the family and society. Again, in the experimental group, participants deliberated each item before giving their final opinions on the items. In the control group in each Experiment, there was no deliberation, just some filler task. Curiously, significant shifts were still found in the control groups--it is unclear to us why. Experiment 1 also had participants adjust the bad and good professors' pay to obtain non-ordinal measures of opinion regarding these professors, which we do not consider here. However, as we will discuss in the paper, this does not make it free of problems--like so many other group polarization studies, Myers statistical model does not account for inter-item, inter-group, or inter-participant variability.
 
-\paragraph{\citet{Schkade2010}} Participants in Schkade, Sunstein, and Hastie's study were put into two politically ideologically biased groups based on their geographical location in the US state of Colorado: participants were drawn from Boulder, Colorado (abbreviated CO), to be liberally biased and from Colorado Springs, CO, to be conservatively biased. Participants gave their opinions and discussed three topics related to Global Warming, Civil Unions, and Affirmative Action. Pre- and post-deliberation mean are given in Table 1 (p. 232) for all six (topics x geographies).  
+\paragraph{{Schkade2010}} Participants in Schkade, Sunstein, and Hastie's study were put into two politically ideologically biased groups based on their geographical location in the US state of Colorado: participants were drawn from Boulder, Colorado (abbreviated CO), to be liberally biased and from Colorado Springs, CO, to be conservatively biased. Participants gave their opinions and discussed three topics related to Global Warming, Civil Unions, and Affirmative Action. Pre- and post-deliberation mean are given in Table 1 (p. 232) for all six (topics x geographies).  
 
 \end{document}

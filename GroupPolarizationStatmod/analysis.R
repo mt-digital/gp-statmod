@@ -1,5 +1,7 @@
 library(dplyr)
+library(tidystats)
 
+source("experiments.R")
 ##
 # Arguments:
 #  studiesAnalysisDfPath (string): path where exact analysis was done using web app
@@ -31,7 +33,7 @@ makePlausibleFPTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.c
 #    treatments yielding plausibly false positive results.
 #  limit (int): Limit the number of treatments to test for initial development.
 #
-makeTtestReliabilityTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv",
+makeTtestSimulationsTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv",
                                       outputPath = "data/output/TtestFitTable.csv",
                                       diagnosticSavePath = "data/diagnostic/tTestFits.RDS",
                                       ntrials = 2, limit = 2)
@@ -40,7 +42,7 @@ makeTtestReliabilityTable <- function(studiesAnalysisDfPath = "data/StudiesAnaly
   studiesDf <- read.csv(studiesAnalysisDfPath)
 
   # Filter out implausible false positives.
-  studiesDf <- filter(studiesDf, (IncludeInt == 1) && (PlausibleInt == 1))
+  studiesDf <- filter(studiesDf, (IncludeInt == 1) & (PlausibleInt == 1))
   
   # Limit number of plausible false positives for preliminary development.
   if (limit > 0)
@@ -97,7 +99,21 @@ makeTtestReliabilityTable <- function(studiesAnalysisDfPath = "data/StudiesAnaly
   write.csv(resultsDf, outputPath)
   saveRDS(allTestsDiagnostic, file = diagnosticSavePath)
   
-  return (resultsDf)
+  # return (resultsDf)
+}
+
+summarizeTTestFitTable <- function(fitTablePath = "data/output/TtestFitTable.csv",
+                                   summaryTTablePath = "data/output/TtestSummaryTable.csv",
+                                   significanceVal = 0.1)
+{
+  fitTableDf <- 
+    read.csv(fitTablePath) %>%
+    group_by(ArticleTag, TreatmentTag, ExpectedPower) %>%
+    summarize(FractionSignificant = mean(tTestPvalue < significanceVal), .groups='keep')
+  
+  write.csv(fitTableDf, summaryTTablePath, row.names = FALSE)
+  
+  return (fitTableDf)
 }
 
 doAnalyses <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv")
