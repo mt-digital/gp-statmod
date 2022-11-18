@@ -2,12 +2,15 @@ library(dplyr)
 library(tidystats)
 
 source("experiments.R")
+
+
 ##
 # Arguments:
 #  studiesAnalysisDfPath (string): path where exact analysis was done using web app
 #    to determine whether a result was a false positive or not.
 #  
-makePlausibleFPTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv", useSynced = FALSE) 
+makePlausibleFPTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv", 
+                                 useSynced = FALSE) 
 {
   plausibleFPTable <-
     read.csv(studiesAnalysisDfPath) %>%
