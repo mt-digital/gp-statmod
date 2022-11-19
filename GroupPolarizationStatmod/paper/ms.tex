@@ -1,55 +1,10 @@
-% % Author: Matthew Turner
-
-% % \documentclass[11pt,letterpaper]{scrartcl}
-% % \documentclass[letterpaper,man,natbib]{apa6}
-% \documentclass[11pt,letterpaper]{amsart}
-% % \documentclass[11pt, letterpaper]{article}
-% % \usepackage{natbib}
-% % \documentclass[11pt]{report}
-% % \documentclass{report}
-% % \documentclass{book}
-% \usepackage[bookmarks, hidelinks]{hyperref}
-% \usepackage{amssymb,amsmath}
-% % \usepackage{fullpage}
-% \usepackage{tabulary}
-% \usepackage{tabularx}
-% \usepackage{float}
-% % \usepackage[margin=1.00in]{geometry}
-% \usepackage[margin=0.90in]{geometry}
-
-% % \usepackage{fontspec} 
-
-% % \usepackage{xunicode}
-% % \usepackage{xltxtra}
-% % \defaultfontfeatures{Mapping=tex-text}
-% % \setmainfont[Ligatures={Common}, Numbers={OldStyle}, Variant=01]{Hoefler Text}
-% % \setromanfont[Ligatures={Common}, Numbers={OldStyle}, Variant=01]{Hoefler Text}
-% % \setmonofont[Scale=0.95]{PT Sans}
-% \usepackage{caption}
-% \usepackage{apacite}
-% \usepackage{booktabs}
-% \usepackage{pslatex}
-% \usepackage{subcaption}
-% \usepackage{pgfplots}
-% \usepackage{wrapfig}
-% \usepackage[english]{babel}
-% \usepackage{lmodern}
-% % \doublespace
-% % \usepackage{url}
-% \usepackage{bigfoot}
-% \usepackage[export]{adjustbox}
-% % \setlength\intextsep{0pt}
-
-% \usepackage{graphicx}
-
-\documentclass[12pt, letterpaper]{article}
-\usepackage{fontspec} 
+\documentclass[11pt, letterpaper]{article}
 \usepackage{marvosym}
 \usepackage{setspace}
 \usepackage{longtable}
 % DOCUMENT LAYOUT
 % \usepackage{geometry} 
-\usepackage[margin=0.90in]{geometry}
+\usepackage[margin=1.0in]{geometry}
 \usepackage{lineno}
 \usepackage[usenames,dvipsnames]{xcolor}
 % \geometry{letterpaper, textwidth=5.5in, textheight=8.5in, marginparsep=7pt, marginparwidth=.6in}
@@ -59,42 +14,34 @@
 \renewcommand\thelinenumber{\color{linenocolor}\arabic{linenumber}}
 % \calclayout %centers text on page.
 
+% \usepackage{fontspec} 
 % \renewcommand{\thesubsection}{\arabic{subsection}.}
 % FONTS
 % \usepackage[usenames,dvipsnames]{color}
 % \usepackage{xunicode}
 % \usepackage{xltxtra}
-\defaultfontfeatures{Mapping=tex-text}
-% \setromanfont[Ligatures={Common}, Variant=01]{Hoefler Text}
-% \setromanfont[Ligatures={Common}, Variant=01]{Palatino}
-\setromanfont[Ligatures={Common}, Variant=01]{Baskerville}
-% \setromanfont[Ligatures={Common}, Variant=01]{Plantagenet Cherokee}
-% \setmainfont [BoldFont={STIX Two Text SemiBold}, Ligatures={Common},
-% Numbers={OldStyle}, Variant=01]{STIX Two Text}
-% \setmainfont [BoldFont={STIX Two Text SemiBold}, Ligatures={Common},
-% Numbers={OldStyle}, Variant=01]{STIX Two Text}
-% \setromanfont [Ligatures={Common},
-% Numbers={OldStyle}, Variant=01]{STIX Two Text}
-\setmonofont[Scale=0.95]{PT Sans}
+% \defaultfontfeatures{Mapping=tex-text}
+% % \setromanfont[Ligatures={Common}, Variant=01]{Hoefler Text}
+% % \setromanfont[Ligatures={Common}, Variant=01]{Palatino}
+% \setromanfont[Ligatures={Common}, Variant=01]{Baskerville}
+% % \setromanfont[Ligatures={Common}, Variant=01]{STIX Two Math}
+% % \setmathrm{Baskerville}
+% % \setromanfont[Ligatures={Common}, Variant=01]{Plantagenet Cherokee}
+% % \setmainfont [BoldFont={STIX Two Text SemiBold}, Ligatures={Common},
+% % Numbers={OldStyle}, Variant=01]{STIX Two Math}
+% % \setmathrm{STIX Two Math}
+% % \setmainfont [BoldFont={STIX Two Text SemiBold}, Ligatures={Common},
+% % Numbers={OldStyle}, Variant=01]{STIX Two Text}
+% % \setromanfont [Ligatures={Common},
+% % Numbers={OldStyle}, Variant=01]{STIX Two Text}
+% \setmonofont[Scale=0.95]{PT Sans}
 
-% ---- CUSTOM COMMANDS
-% \chardef\&="E050
-\newcommand{\html}[1]{\href{#1}{\scriptsize\textsc{[html]}}}
-\newcommand{\pdf}[1]{\href{#1}{\scriptsize\textsc{[pdf]}}}
-\newcommand{\doi}[1]{\href{#1}{\scriptsize\textsc{[doi]}}}
-\newcommand{\lurl}[1]{\href{#1}{\scriptsize\textsc{[link]}}}
-
-\newcommand{\githubsymbol}{\raisebox{-2pt}{\includegraphics[height=10.5pt]{github}}}
-\newcommand{\twittersymbol}{\raisebox{-2pt}{\includegraphics[height=10.5pt]{twitter}}}
-\newcommand{\monitorsymbol}{\raisebox{-2pt}{\includegraphics[height=10.5pt]{monitor}}}
-
-% ---- MARGIN YEARS
-\usepackage{marginnote}
-\newcommand{\amper{}}{\chardef\amper="E0BD }
-\newcommand{\years}[1]{\marginnote{\small #1}}
-\renewcommand*{\raggedleftmarginnote}{}
-\setlength{\marginparsep}{7pt}
-\reversemarginpar
+\usepackage{mathspec}
+% \setallmainfonts(Digits,Latin){STIX Two Text}
+% \setallmainfonts(Digits,Latin){Baskerville}
+% \setallmainfonts(Digits,Latin){Plantagenet Cherokee}
+\setallmainfonts(Digits,Latin){Palatino}
+% \setallmainfonts(Digits,Latin){Hoefler Text}
 
 % HEADINGS
 \usepackage{sectsty} 
@@ -103,14 +50,14 @@
 \subsectionfont{\scshape\normalsize} 
 \subsubsectionfont{\upshape\large} 
 
-
 % PDF SETUP
 % ---- FILL IN HERE THE DOC TITLE AND AUTHOR
 \usepackage[%dvipdfm, 
 bookmarks, colorlinks, breaklinks, 
 % ---- FILL IN HERE THE TITLE AND AUTHOR
-	pdftitle={Matthew A. Turner - Vita},
-	pdfauthor={Matthew A. Turner, PhD},
+	pdftitle={Many claims of group polarization are plausibly false due to inappropriate
+    statistics},
+	pdfauthor={Matthew A. Turner},
 	pdfproducer={https://mt.digital}
 ]{hyperref}  
 \hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=MidnightBlue} 
@@ -121,7 +68,8 @@ bookmarks, colorlinks, breaklinks,
 
 \begin{document}
 
-\title{Group polarization is often a mirage caused by inappropriate statistical analyses}
+\title{Many claims of group polarization are plausibly false due to inappropriate
+    statistics}
 % \shorttitle{Group polarization or simple consensus?}
 \author[1,2]{{Matthew A.~Turner}}
 \affil[1]{Department of Earth System Science, Stanford University}
@@ -338,6 +286,10 @@ published results are false positive detections of group polarization that
 are at least as well described by a simple-consensus model.
 
 
+\begin{equation}
+  \int_{-\infty}^\infty x^2 dx \neq \pi
+\end{equation}
+\noindent
 
 \subsubsection{Identifying parameters that plausibly generate false detections of group polarization}
 
@@ -352,8 +304,17 @@ are at least as well described by a simple-consensus model.
 We found that X\% of group polarization detections across all studies were 
 plausibly false positives (Table~\ref{tab:XXXXX}).
 
+\vspace{.5em}
 \spacing{1.0}
-\input{plausibleFP-table.tex}
+% \input{plausibleFP-table.tex}
+  \begin{table}
+    \begin{center}
+      \caption{Number and fraction of experimental conditions where group polarization was
+               reported to have occurred, but plausibly did not.}
+      \vspace{.5em}
+      \input{plausibleFP-table-custom.tex}
+    \end{center}
+  \end{table}
 \spacing{1.5}
 
 \subsection{Do $t$-tests accurately detect simple consensus?}

@@ -1,5 +1,7 @@
 library(dplyr)
 library(tidystats)
+library(knitr)
+library(kableExtra)
 
 source("experiments.R")
 
@@ -16,7 +18,7 @@ makePlausibleFPTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.c
     read.csv(studiesAnalysisDfPath) %>%
     filter(IncludeInt == 1) %>% 
     group_by(ArticleTag) %>%
-    summarize(PlausibleFPRate = mean(PlausibleInt))
+    summarize(PlausibleFPs = sum(PlausibleInt), ConditionCount = n(), PlausibleFPRate = mean(PlausibleInt), )
   
   write.csv(plausibleFPTable, file = "data/output/PlausibleFPTable.csv", row.names = FALSE)
   
@@ -118,6 +120,31 @@ summarizeTTestFitTable <- function(fitTablePath = "data/output/TtestFitTable.csv
   
   return (fitTableDf)
 }
+
+
+latexifyPlausibleFPTable <- function(plausibleFPTablePath = "data/output/PlausibleFPTable.csv",
+                                     latexifiedPath = "papers/plausibleFP-table.tex")
+{
+    plausibleFP_table <- read.csv(plausibleFPTablePath)
+    plausibleFP_latex <- 
+        kable(plausibleFP_table, "latex", longtable = T, booktabs = T, digits=2) %>%
+        kable_styling(latex_options = c("repeat_header"))
+
+    writeLines(plausibleFP_latex, latexifiedPath) 
+}
+
+
+latexifyTTestExperiment <- function(tTestTablePath = "data/output/TtestSummaryTable.csv",
+                                    latexifiedPath = "papers/t-test-table.tex")
+{
+    tTestTable <- read.csv(tTestTablePath)
+    ttestTable_latex <- 
+        kable(tTestTable, "latex", longtable = T, booktabs = T, digits=2) %>%
+        kable_styling(latex_options = c("repeat_header"))
+
+    writeLines(ttestTable_latex, latexifiedPath)
+}
+
 
 doAnalyses <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv")
 {
