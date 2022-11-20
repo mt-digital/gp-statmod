@@ -75,7 +75,8 @@ makeTtestSimulationsTable <- function(studiesAnalysisDfPath = "data/StudiesAnaly
     
     # Assemble trials dataframe.
     trialsDf <- data.frame(ArticleTag = c(), TreatmentTag = c(), 
-                           TrialIndex = c(), tTestPvalue = c(), 
+                           TrialIndex = c(), LatentMean = c(), LatentSDPre = c(),
+                           LatentSDPost = c(), tTestPvalue = c(), ObservedShift = c(),
                            ExpectedPower = c())
     
     expectedPower = power.t.test(delta = row$ObservedShift, n = row$N, 
@@ -90,7 +91,10 @@ makeTtestSimulationsTable <- function(studiesAnalysisDfPath = "data/StudiesAnaly
                                      row$LatentSDPost)
       # return (tTestResult$p.value)
       trial_row = data.frame(ArticleTag = row$ArticleTag, TreatmentTag = row$TreatmentTag,
-                             TrialIndex = trialIdx, tTestPvalue = tTestResult$p.value,
+                             TrialIndex = trialIdx, LatentMean = row$LatentMean,
+                             ObservedShift = row$ObservedShift,
+                             LatentSDPre = row$LatentSDPre, LatentSDPost = row$LatentSDPost,
+                             tTestPvalue = tTestResult$p.value,
                              ExpectedPower = expectedPower)
       
       resultsDf <- bind_rows(resultsDf, trial_row)
@@ -113,7 +117,7 @@ summarizeTTestFitTable <- function(fitTablePath = "data/output/TtestFitTable.csv
 {
   fitTableDf <- 
     read.csv(fitTablePath) %>%
-    group_by(ArticleTag, TreatmentTag, ExpectedPower) %>%
+    group_by(ArticleTag, TreatmentTag, ObservedShift, LatentSDPre, LatentSDPost, ExpectedPower) %>%
     summarize(FractionSignificant = mean(tTestPvalue < significanceVal), .groups='keep')
   
   write.csv(fitTableDf, summaryTTablePath, row.names = FALSE)
@@ -135,11 +139,27 @@ latexifyPlausibleFPTable <- function(plausibleFPTablePath = "data/output/Plausib
 
 
 latexifyTTestExperiment <- function(tTestTablePath = "data/output/TtestSummaryTable.csv",
-                                    latexifiedPath = "papers/t-test-table.tex")
+                                    latexifiedPath = "paper/t-test-table.tex")
 {
     tTestTable <- read.csv(tTestTablePath)
+    tTestTable$Article_Condition <- paste(tTestTable$ArticleTag, tTestTable$TreatmentTag, sep = "_")
+    
+    # tTestTable <- subset(tTestTable, select = -c(ExpectedPower, ArticleTag, TreatmentTag))
+    tTestTable <- subset(tTestTable, select = -c(ArticleTag, TreatmentTag))
+    
+    col_order <- c("Article_Condition", "LatentMean", "LatentSDPre", 
+                   "LatentSDPost", "FractionSignificant")
+    col_order <- c("Article_Condition", "ObservedShift", "LatentSDPre", 
+                   "LatentSDPost", "ExpectedPower", "FractionSignificant")
+    
+    
+    tTestTable <- tTestTable[, col_order]
+    
+    tTestTable <- tTestTable %>% rename(FPRate = FractionSignificant, 
+                                        Est.FPRate = ExpectedPower)
+    
     ttestTable_latex <- 
-        kable(tTestTable, "latex", longtable = T, booktabs = T, digits=2) %>%
+        kable(tTestTable, "latex", align = "lccccc", longtable = T, booktabs = T, digits=2) %>%
         kable_styling(latex_options = c("repeat_header"))
 
     writeLines(ttestTable_latex, latexifiedPath)
