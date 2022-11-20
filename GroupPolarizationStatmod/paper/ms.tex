@@ -16,6 +16,7 @@
 \renewcommand\thelinenumber{\color{linenocolor}\arabic{linenumber}}
 % \calclayout %centers text on page.
 
+\usepackage{amsmath}
 \usepackage{mathspec}
 % \setallmainfonts(Digits,Latin){STIX Two Text}
 % \setallmainfonts(Digits,Latin){Baskerville}
@@ -45,7 +46,6 @@ bookmarks, colorlinks, breaklinks,
 \usepackage{apacite}
 \usepackage{booktabs}
 \usepackage{authblk}
-
 
 \newcommand{\sigmapre}{\sigma_\mathrm{pre}}
 \newcommand{\sigmapost}{\sigma_\mathrm{post}}
@@ -273,14 +273,50 @@ For example, on a 7-point ordinal scale -3 could indcate
 neutral, and intermediate values are less extreme opinions of either valence, 
 such as was used by \citeA{Moscovici1969}. Or, one might 
 
-All ten studies analyzed here used an ordinal scale, but group polarization experiments seem to
-lack any systematicity in experimental design beyond that. (EXAMPLES)
+We assume that participant $i$'s internal, latent psychological opinion at 
+time of reporting ($t \in \{pre, post\}$) is drawn from a normal distribution
+with mean $\mu_t$ and standard deviation $\sigma_t$,
+\begin{equation}
+  o_{i,t} \sim \mathcal{N}(\mu_t, \sigma_t).
+  \label{eq:opinionDistribution}
+\end{equation}
+\noindent
+This is the condition-level distribution of opinions at time, $t$, chosen to
+represent the common experimental design used by group polarization studies,
+not because it is statistically appropriate---in fact it is not, which is what
+we aim to show in this paper.
 
 \subsection{Evaluating whether a group polarization finding is plausibly false}
 
 We used large-$N$ and generative modeling supported by $t$-tests on simulated
 data to demonstrate that many published findings are plausibly false. 
 
+We model measurement of $N \to \infty$ participant opinions,
+which results in a histogram of frequency of opinions
+in each bin, i.e., $o_{i,t} = b_k$. The frequency of responses in each bin is 
+the integral over the continuous normal probability density function from 
+one bin threshold to another. This transforms the probability density 
+function from $p(o_{i,t};~\mu_t, \sigma_t)$ to the probability
+of observing a reported opinion of each bin value. 
+The probability of observing an opinion in bin
+$b_k$ is calculated by integrating the normal probability density 
+function over the range of $\theta_{k-1}$ to $\theta_{k}$. 
+Formally, we write the 
+probability of observing an opinion in bin $k$ at time $t$ as
+\begin{equation}
+\begin{aligned}
+  p(o = b_k;\mu_t, \sigma_t, \theta) 
+    &= \int_{\theta_{k-1}}^{\theta_k} p(o;\mu_t, \sigma_t) do \\
+    &= \Phi \left( \frac{o - \mu_t}{\sigma_t} \right)\Big|_{o=\theta_{k-1}}^{\theta_k} \\
+    &= \Phi \left( \frac{\theta_k - \mu_t}{\sigma_t} \right) - 
+       \Phi \left( \frac{\theta_{k-1} - \mu_t}{\sigma_t} \right)
+\end{aligned}
+\label{eq:binFrequency}
+\end{equation}
+\noindent
+where $\Phi(\frac{o - \mu}{\sigma})$ is the normalized 
+normal cumulative distribution function over opinions $o$, shifted by an amount $\mu$ with
+standard deviation $\sigma$.
 \subsubsection{Identify null-model parameters that yield plausibly-false positives}
 
 
