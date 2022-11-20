@@ -7,6 +7,8 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{lineno}
 \usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{myorange}{RGB}{240, 96, 0}
+\newcommand{\mt}[1]{{\textcolor{myorange} {({\tiny MT:} #1)}}}
 % \geometry{letterpaper, textwidth=5.5in, textheight=8.5in, marginparsep=7pt, marginparwidth=.6in}
 % \setlength\parindent{0in}
 
@@ -43,6 +45,12 @@ bookmarks, colorlinks, breaklinks,
 \usepackage{apacite}
 \usepackage{booktabs}
 \usepackage{authblk}
+
+
+\newcommand{\sigmapre}{\sigma_\mathrm{pre}}
+\newcommand{\sigmapost}{\sigma_\mathrm{post}}
+\newcommand{\normalpre}{\mathcal{N}(\mu, \sigmapre)}
+\newcommand{\normalpost}{\mathcal{N}(\mu, \sigmapost)}
 
 \begin{document}
 
@@ -112,6 +120,8 @@ following discussion with like-minded others.
 \end{quote}
 
 \section{Introduction}
+
+
 
 
 \subsection{Group polarization}
@@ -216,79 +226,74 @@ Our model represnts the generative process of finding different forms of group c
 in group polarization experiments, and the process of measuring that consensus using
 an ordinal measurement scale, e.g.\ a Likert-type scale. This model considers two
 relevant forms of consensus: \emph{simple consensus} and \emph{group polarization}.
-Either process is \emph{consensus} since opinion variance among the group 
-decreases as individuals come to agree more than they did previously. 
-Group polarization experiments are designed to foster group consensus
-it is not necessary to consider clustering, negative influence, or other
-processes known to generally occur when opinions within a group significantly
-diverge~\cite{Turner2018}.
+Either process is \emph{consensus}, if we define consensus as a reduction
+in opinion variance over time.  
+Group polarization experiments are designed to result group consensus
+since they group together like-minded individuals to see if they become more
+extreme after discussion~\cite{Turner2018}.
 
 We collected group polarization data from ten empirical studies with sixty constituent
-experimental treatments across all studies, specifically the opinion shift and pre- and
+experimental conditions across all studies. We recorded the reported opinion shift and pre- and
 post-deliberation mean opinions, and the number of participants
-in each treatment (\citeA{Burnstein1975} did not report pre- and post-deliberation
-means, only the shift in means). We did not include experimental treatments that did not 
+in each condition, as long as this data was available---\citeA{Burnstein1975} 
+did not report pre- and post-deliberation
+means, only the shift in means. We did not include experimental treatments that did not 
 yield a positive detection of group polarization since we are only estimating
 the rate of plausible false positive detections of group polarization. 
-We then created new data that indicated whether a reported. 
 
-In two cases, reported opinion and shift values were converted from an ordinal
-scale to a percentage scale, specifically \citeA{Friedkin1999a} and \citeA{Krizan2007}.
-The authors in these papers did report the original ordinal measurement scale,
-so we converted the means back to the orignial measurement scale.
-In a few cases from \citeA{Friedkin1999a} we did not need to apply our 
-model to the reported data because we could determine a reported opinion shift was 
-\emph{prima facie} false since reported opinion shift magnitudes
-were smaller than the standard deviation in shifts (see Table 1, p. 868, \emph{ibid}),
-despite Friedkin's claim that regressions (not clearly defined) on all shifts 
-yielded $p < 0.05$~\cite{Kruschke2018c}.
+Based on this data
+
+% In two cases, reported opinion and shift values were converted from an ordinal
+% scale to a percentage scale, specifically \citeA{Friedkin1999a} and \citeA{Krizan2007}.
+% The authors in these papers did report the original ordinal measurement scale,
+% so we converted the means back to the orignial measurement scale.
+% In a few cases from \citeA{Friedkin1999a} we did not need to apply our 
+% model to the reported data because we could determine a reported opinion shift was 
+% \emph{prima facie} false since reported opinion shift magnitudes
+% were smaller than the standard deviation in shifts (see Table 1, p. 868, \emph{ibid}),
+% despite Friedkin's claim that regressions (not clearly defined) on all shifts 
+% yielded $p < 0.05$~\cite{Kruschke2018c}.
 
 
-\subsection{Latent opinions, ordinal measurements}
+\subsection{Latent opinions, ordinal measurements, and how simple consensus can look like
+group polarization}
 
 Our analysis relies on two important formal concepts: latent opinions and their 
-measurement on an ordinal scale. \emph{Latent opinions} are unobservable psychological,
-continuous-valued variables that are somehow represented and stored in the
-brain-body. 
-When researchers use continuous statistical models to infer 
-that group polarization occurred (which all ten considered here do), 
-they are implicitly assuming that latent opinions are themselves continuous.
-We can only measure behaviors in group polarization experiments,
-specifically the behavior of participants marking one ordinal value or another
-to indicate their opinion---a process that is not well understood in itself,
-but which is unimportant for our analyses. \emph{Ordinal measurements} (e.g.\
-a Likert or other discrete-valued opinion scale) of latent opinions force
-participants to appropriately bin their opinion in one of several categories
-representing the valence and extremity of their opinion, e.g., on a
-7-point Likert scale -3 could indcate
-``strongly disagree'', +3 could be ``strongly agree'', 0 would be neutral, and 
-intermediate values are less extreme opinions of either valence.
+measurement on an ordinal scale. \emph{Latent opinions} are theoretical,
+unobservable, psychological, continuous-valued variables that are 
+somehow represented and stored in the brain-body, and can be reproduced with
+some accuracy when a person is prompted. \emph{Ordinal measurements} of 
+of latent opinions are ordinal-valued representations of latent opinions 
+in some physical form, such as a mark on a sheet of paper or radio button on a web form, that
+indicate the polarity and strength of a person's opinion opinion in terms of
+one of a number of opinion bin values. 
+
+For example, on a 7-point ordinal scale -3 could indcate 
+``strongly disagree'', +3 could be ``strongly agree'', 0 would be psychologically 
+neutral, and intermediate values are less extreme opinions of either valence, 
+such as was used by \citeA{Moscovici1969}. Or, one might 
 
 All ten studies analyzed here used an ordinal scale, but group polarization experiments seem to
 lack any systematicity in experimental design beyond that. (EXAMPLES)
 
-\subsection{Simple consensus and group polarization are statistical patterns}
+\subsection{Evaluating whether a group polarization finding is plausibly false}
 
-\subsection{Analytical approach}
+We used large-$N$ and generative modeling supported by $t$-tests on simulated
+data to demonstrate that many published findings are plausibly false. 
 
-The goal of this study is to understand if published detections of group polarization are
-plausibly false. 
-
-Therefore we designed a series of tests to understand if, and to what degree,
-published results are false positive detections of group polarization that
-are at least as well described by a simple-consensus model.
+\subsubsection{Identify null-model parameters that yield plausibly-false positives}
 
 
-\begin{equation}
-  \int_{-\infty}^\infty x^2 dx \neq \pi
-\end{equation}
-\noindent
-
-\subsubsection{Identifying parameters that plausibly generate false detections of group polarization}
 
 \subsubsection{$t$-tests of generated simple-consensus data}
 
-\subsubsection{Bayesian ordered-probit models of generated simple-consensus data}
+After identifying null-model parameters that yield plausibly-false positives 
+in the $N \to \infty$ case, we generated binned samples from normal opinion 
+distributions $\normalpre$ and $\normalpost$.
+
+\subsection{Bayesian ordered-probit models reliably identify simple consensus}
+
+
 
 \section{Analysis}
 
@@ -310,19 +315,17 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
   \end{table}
 \spacing{1.5}
 
+
+
 \subsection{Do $t$-tests accurately detect simple consensus?}
 
-We found that in X\% of generated simple consensus data led to false positive
-detections 
 
-When simulated data reliably result in false positive $t$-test results (where
-the $t$-test $p \le 0.1$) this strengthens the case that reported detections
-of a false group polarization detection.
+
 
 
 \spacing{1.0}
-% \input{t-test-table.tex}
-\input{t-test-table-custom.tex}
+\input{t-test-table.tex}
+% \input{t-test-table-custom.tex}
 \spacing{1.5}
 
 \subsection{Do Bayesian ordered-probit models accurately detect simple consensus?}
@@ -348,11 +351,14 @@ is a true or false positive.
 
 This problem is made all the worse by the lack of a consistent experimental design for group
 polarization experiments. This makes it impossible to systematically account for
-additional sources of vairance known to lead to (orthogonal) over-estimates
-of effect sizes~\cite{Yarkoni2021}. This is due to the rush to explain why 
-group polarization occurs using weak theory~\cite{Cartwright1971,Cartwright1973} and makes
-group polarization meta-analyses (e.g. Brown, 1986; and Isenberg, 1986)\nocite{Brown1986,Isenberg1986}
-unreliable~\cite{Meehl1990,Meehl1997}.
+additional sources of vairance known to lead to over-estimates
+of effect sizes~\cite{Yarkoni2021}, independent of the false positives problem
+we identified in the current paper. 
+
+% This is due to the rush to explain why 
+% group polarization occurs using weak theory~\cite{Cartwright1971,Cartwright1973} and makes
+% group polarization meta-analyses (e.g. Brown, 1986; and Isenberg, 1986)\nocite{Brown1986,Isenberg1986}
+% unreliable~\cite{Meehl1990,Meehl1997}.
 
 Group polariztion is an essential social phenomenon that could be a major driver of
 progress-halting political polarization more broadly. If echo chambers of like-minded
