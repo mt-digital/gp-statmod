@@ -2,6 +2,8 @@
 \usepackage{marvosym}
 \usepackage{setspace}
 \usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{graphicx}
 % DOCUMENT LAYOUT
 % \usepackage{geometry} 
 \usepackage[margin=1.0in]{geometry}
@@ -103,6 +105,7 @@ bookmarks, colorlinks, breaklinks,
   evidence. We believe this work will provide a sturdier analytical foundation for 
   future group-polarization research.
 \end{abstract}
+\clearpage
 
 \begin{quote}
 In our introductory social psychology course, 
@@ -121,10 +124,85 @@ following discussion with like-minded others.
 
 \section{Introduction}
 
-
-
+\begin{itemize}
+  \item 
+    \emph{Group polarization} is a process where the mean opinion of a 
+    like-minded group becomes more extreme over time~\cite{Brown1986,Brown2000}. 
+    It is therefore an important component process in
+    the broader process of increasing political polarization that can hamstring
+    governments~\cite{Mason2018UncivilAgreementBook,Klein2020}.
+  \item
+    Individuals' opinions in group polarization experiments are typically 
+    measured using an ordinal scale, such
+    as a Likert scale, where behavioral experiment participants' internal, theoretically
+    continuous, opinions are converted to one of several opinion bins indiciating
+    their degree of agreement or disagreement with some prompt statement.
+  \item
+    Recently, however, it has been shown that it is critical to use 
+    appropriate statistical methods when using experimental designs that 
+    measure continuous latent psychological variables with ordinal
+    measurements---failure to do so can result in false positive support for
+    the presence of experimental effects~\cite{Liddell2018}.
+  \item
+    In this paper, we develop a generative modeling approach for evaluating whether or
+    not published detections of group polarization are plausibly false, i.e.,
+    whether they are \emph{plausibly-false positives} (PFPs). 
+  \item
+    We found significant evidence that many published group polarization findings
+    are indeed plausibly false since we found distribution parameters that
+    generated simulated pre- and post-discussion data that a $t$-test found
+    to be from distributions with different means, although there was no difference
+    in mean, only a difference in variance. 
+  \item
+    Although a $t$-test may be fooled by simple consensus under ordinal measurements,
+    we show that a more appropriate ordered probit model of the data yield no
+    such plausibly-false positives.
+  \item
+    Our work shows the need for using appropriate statistical tests, as well as
+    the need for a consistent experimental paradigm so that meaningful meta-analyses
+    can be performed for theoretical integration and rigorous understanding of
+    the group polarization effect, should it prove to occur in future group
+    polarization studies that use proper statistics. In addition to avoiding
+    $t$-tests, future group polarization studies can be more reliable by
+    accounting for random effects arising from, e.g., socioeconomic status,
+    gender, and other individual-level factors that may bias how much and in what
+    direction a participant changes their opinions. Failure to do so can result 
+    in artificially inflated effect sizes~\cite{Yarkoni2021}.
+\end{itemize}
 
 \subsection{Group polarization}
+
+Group polarization is often induced in behavioral experiments by first answering
+an opinion prompt, grouping
+relatively like-minded individuals together to discuss the prompt, then 
+again polling opinions; the change in mean opinion towards a more extreme
+consensus than the initial mean is the amount of group polarization that has occurred
+(Figure~\ref{fig:groupPolarizationSchematic}). 
+
+While all ten studies scrutinized here use the general experimental procedure
+outlined above (Figure~\ref{fig:groupPolarizationSchematic}), each study and constituent 
+experimental condition have idosyncracies that makes the results themselves
+more opaque, and that makes comparison of different studies' findings more
+difficult. (REVIEW A FEW SIMPLE EXAMPLES). A detailed examination of each study's
+idiosyncracies is given in Table~\ref{tab:conditionsComparison}.
+
+\begin{figure}
+  \caption{Group polarization is experimentally induced by first gather
+  participant responses to an opinion prompt and grouping together like-minded
+  participants (A). Group polarization is theorized to occur when individuals
+  are put together with like-minded individuals discuss the prompt (B). Group 
+  polarization is detected by again polling all participants' opinions (C) and comparing
+  these to the initial opinions.}
+  \label{fig:groupPolarizationSchematic}
+  \centering
+  \includegraphics[width=\textwidth]{Figures/GPExperimentSketch.pdf}
+\end{figure}
+
+
+
+\spacing{1.0}
+\input{tables/conditions_table.tex}
+\spacing{1.5}
 
 \subsection{Statistical inference in opinion change}
 
@@ -132,7 +210,6 @@ following discussion with like-minded others.
 to fix it (1 sent)
 
 When 
-
 
 \begin{itemize}
   \item 
@@ -195,6 +272,8 @@ a metric scale, and so are not affected by the floor and ceiling effects that
 undermine a good number of experimental results, as we examine here. There may,
 however, be other problems, such as non-group polarization shifts and the use
 of unpaired $t$-tests when paired tests are required.
+
+
 
 \subsection{Research overview}
 
