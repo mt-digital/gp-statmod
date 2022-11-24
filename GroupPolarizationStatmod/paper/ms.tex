@@ -337,35 +337,53 @@ Based on this data
 \subsection{Latent opinions, ordinal measurements, and how simple consensus can look like
 group polarization}
 
-Our analysis relies on two important formal concepts: latent opinions and their 
-measurement on an ordinal scale. \emph{Latent opinions} are theoretical,
-unobservable, psychological, continuous-valued variables that are 
+Our model represents continuous latent opinions and their 
+measurement on an ordinal scale. \emph{Latent opinions} are 
+unobservable, psychological variables that are 
 somehow represented and stored in the brain-body, and can be reproduced with
-some accuracy when a person is prompted. \emph{Ordinal measurements} of 
-of latent opinions are ordinal-valued representations of latent opinions 
+some accuracy when a person is prompted to give their opinion. 
+\emph{Ordinal measurements} of 
+of latent opinions are discrete-valued representations of latent opinions 
 in some physical form, such as a mark on a sheet of paper or radio button on a web form, that
 indicate the polarity and strength of a person's opinion opinion in terms of
-one of a number of opinion bin values. 
+one of a number of opinion bin values. All group polarization experiments must somehow
+measure opinions, and all but a few use ordinal measurements (those few exceptions include
+using bets made during blackjack as a proxy for opinions~\cite{Blascovich1973,Blascovich1975,Blascovich1976}
+and using mock jury punitive rewards as a proxy for opinions~\cite{Schkade2000}).
 
-For example, on a 7-point ordinal scale -3 could indcate 
-``strongly disagree'', +3 could be ``strongly agree'', 0 would be psychologically 
-neutral, and intermediate values are less extreme opinions of either valence, 
-such as was used by \citeA{Moscovici1969}. Or, one might 
+% For example, on a 7-point ordinal scale -3 could indcate 
+% ``strongly disagree'', +3 could be ``strongly agree'', 0 would be psychologically 
+% neutral, and intermediate values are less extreme opinions of either valence, 
+% such as was used by \citeA{Moscovici1969}. Or, one might 
 
-We assume that participant $i$'s internal, latent psychological opinion at 
-time of reporting ($t \in \{pre, post\}$) is drawn from a normal distribution
-with mean $\mu_t$ and standard deviation $\sigma_t$,
+We assume that participant $i$ has latent opinion at time $t$ that is drawn from
+a group-level normal distribution,
 \begin{equation}
   o_{i,t} \sim \mathcal{N}(\mu_t, \sigma_t).
   \label{eq:opinionDistribution}
 \end{equation}
-\noindent
-This is the condition-level distribution of opinions at time, $t$, chosen to
-represent the common experimental design used by group polarization studies,
+\noindent 
+This distribution has mean $\mu_t$ and standard deviation $\sigma_t$.
+This form is chosen to
+reflect the common statistical analysis used by group polarization studies,
 not because it is statistically appropriate---in fact it is not, which is what
 we aim to show in this paper.
 
+It is appropriate to assume opinions are normally distributed because published
+group polarization studies use some sort of $t$-tests, or similar tests, which are designed
+to detect whether the mean of two distributions are the same or not. This imposes the
+implicit assumption that opinions themselves are normal. But as we will show, 
+metric statistical tests such as $t$-tests reliably generate false rejections
+of the null hypothesis that there is no difference between two distributions' means.
+
+(HOW SIMPLE CONSENSUS LOOKS LIKE GROUP POLARIZATION)
+
+
 \subsection{Evaluating whether a group polarization finding is plausibly false}
+
+To evaluate whether a positive group polarization observation is plausibly false,
+we develop two layers of evidence for plausible falsehood. The first layer
+tests whether we can identify $\sigmapre$ and 
 
 We used large-$N$ and generative modeling supported by $t$-tests on simulated
 data to demonstrate that many published findings are plausibly false. 
