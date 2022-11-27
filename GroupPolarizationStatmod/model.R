@@ -3,7 +3,7 @@
 ##
 
 # Probability that a participant reports opinion in bin k, i.e., between
-# theta_{k-1} and theta_k.
+# theta_{k-1} and theta_k. 
 binProb <- function(thisBin, bin1, K, latentMean, latentSD)
 {
     # Thresholds in theta vector start at bin1 + 0.5 (see Eq. 6 in L&K supplement).
@@ -11,6 +11,7 @@ binProb <- function(thisBin, bin1, K, latentMean, latentSD)
 
     # Get this by solving thisbin = (bin1 - 1) + binIdx, where binIdx starts from 1.
     binIdx <- thisBin - bin1 + 1
+    
     # But it only works if k is not the first...
     if (thisBin == bin1)
     {
@@ -21,7 +22,10 @@ binProb <- function(thisBin, bin1, K, latentMean, latentSD)
         theta_km1 <- interiorThresholds[binIdx - 1]
     }
     # ... or the last values.
-    if (thisBin == bin1 + K - 1)
+    # print(thisBin)
+    # print(bin1)
+    # print(K)
+    if (thisBin == (bin1 + K - 1))
     {
         theta_k = Inf
     }
@@ -29,6 +33,8 @@ binProb <- function(thisBin, bin1, K, latentMean, latentSD)
     {
         theta_k <- interiorThresholds[binIdx]
     }
+    # print(theta_k)
+    # print(theta_km1)
     # From Equation 2 in Liddell & Kruschke (2018), p. 340.
     return (pnorm((theta_k - latentMean) / latentSD) - 
             pnorm((theta_km1 - latentMean) / latentSD))

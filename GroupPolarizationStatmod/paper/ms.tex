@@ -1,7 +1,9 @@
 \documentclass[11pt, letterpaper]{article}
 \usepackage{marvosym}
+\usepackage{float}
 \usepackage{setspace}
 \usepackage{longtable}
+\usepackage{caption}
 \usepackage{pdflscape}
 \usepackage{graphicx}
 % DOCUMENT LAYOUT
@@ -25,6 +27,7 @@
 % \setallmainfonts(Digits,Latin){Plantagenet Cherokee}
 \setallmainfonts(Digits,Latin){Palatino}
 % \setallmainfonts(Digits,Latin){Hoefler Text}
+
 
 % HEADINGS
 \usepackage{sectsty} 
@@ -77,7 +80,7 @@ bookmarks, colorlinks, breaklinks,
 \spacing{1.5}
 
 \linenumbers
-\modulolinenumbers[5]
+\modulolinenumbers[3]
 
 \begin{abstract}
   \noindent
@@ -167,7 +170,7 @@ following discussion with like-minded others.
     accounting for random effects arising from, e.g., socioeconomic status,
     gender, and other individual-level factors that may bias how much and in what
     direction a participant changes their opinions. Failure to do so can result 
-    in artificially inflated effect sizes~\cite{Yarkoni2021}.
+    in artificially-inflated effect sizes~\cite{Yarkoni2021}.
 \end{itemize}
 
 \subsection{Group polarization}
@@ -359,7 +362,7 @@ and using mock jury punitive rewards as a proxy for opinions~\cite{Schkade2000})
 We assume that participant $i$ has latent opinion at time $t$ that is drawn from
 a group-level normal distribution,
 \begin{equation}
-  o_{i,t} \sim \mathcal{N}(\mu_t, \sigma_t).
+  o_{i,t} \sim p(o; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
   \label{eq:opinionDistribution}
 \end{equation}
 \noindent 
@@ -376,7 +379,40 @@ implicit assumption that opinions themselves are normal. But as we will show,
 metric statistical tests such as $t$-tests reliably generate false rejections
 of the null hypothesis that there is no difference between two distributions' means.
 
-(HOW SIMPLE CONSENSUS LOOKS LIKE GROUP POLARIZATION)
+\subsubsection{How simple consensus can look like group polarization}
+
+\begin{table}[h]
+  \begin{tabular}{cp{5.0in}} \toprule
+   Symbol & Description  \\ \midrule  
+   $t \in \{\mathrm{pre}, \mathrm{post}\}$ & Time, either \emph{pre}- or
+                                           \emph{post}-discussion \\
+   $k \in \{0,\ldots,K\} $ & Bin index ($k$) between 0 and total number of
+         ordinal bins, $K$ \\
+   $\mu$  &   Latent mean, assumed constant in simple consensus \\ 
+   $p(o;\mu,\sigma_t)$ & Normal latent distribution of opinions with mean
+                         $\mu$ and variance $\sigma^2$ \\
+   $p(o \in b_k; \mu, \sigma_t)$ & Ordinal density of binned opinions in bin $b_k$ 
+            (Equation~\ref{eq:binFrequency}) \\
+   $\theta_k$  & The upper threshold value for binning latent opinions into
+   bin $b_k$ \\
+   $\langle o_t \rangle$  &   Observed mean opinion at time $t$ \\
+   \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{figure}
+  \caption{\emph{Simple consensus} occurs in a group when its latent opinion
+  distribution variance decreases, but the mean does not change (A). When 
+latent opinions are measured on an ordinal scale, the mean of the distribution
+can be distorted by ceiling (or floor) effects (B). Group polarization 
+can appear to have occurred where the mean of the observed opinions appears
+to increase despite the latent mean being constant (C).}
+  \label{fig:consensusDistroIllustration}
+  \vspace{1em}
+  \centering
+    \includegraphics[width=1.0\textwidth]{ConsensusDistroIllustration/figure.pdf}
+\end{figure}
+
 
 
 \subsection{Evaluating whether a group polarization finding is plausibly false}
@@ -402,7 +438,7 @@ Formally, we write the
 probability of observing an opinion in bin $k$ at time $t$ as
 \begin{equation}
 \begin{aligned}
-  p(o = b_k;\mu_t, \sigma_t, \theta) 
+  p(o \in b_k; \mu_t, \sigma_t, \theta) 
     &= \int_{\theta_{k-1}}^{\theta_k} p(o;\mu_t, \sigma_t) do \\
     &= \Phi \left( \frac{o - \mu_t}{\sigma_t} \right)\Big|_{o=\theta_{k-1}}^{\theta_k} \\
     &= \Phi \left( \frac{\theta_k - \mu_t}{\sigma_t} \right) - 
@@ -438,7 +474,7 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
 \vspace{.5em}
 \spacing{1.0}
 % \input{plausibleFP-table.tex}
-  \begin{table}
+\begin{table}[H]
     \begin{center}
       \caption{Number and fraction of experimental conditions where group polarization was
                reported to have occurred, but plausibly did not.}
@@ -458,9 +494,7 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
 
 \spacing{1.0}
 \hspace{-1em}
-\begin{center}
 \input{t-test-table.tex}
-\end{center}
 % \input{t-test-table-custom.tex}
 \spacing{1.5}
 
