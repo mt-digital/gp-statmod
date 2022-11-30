@@ -30,11 +30,11 @@
 
 
 % HEADINGS
-\usepackage{sectsty} 
-\usepackage[normalem]{ulem} 
-\sectionfont{\upshape\Large}
-\subsectionfont{\scshape\normalsize} 
-\subsubsectionfont{\upshape\large} 
+% \usepackage{sectsty} 
+% \usepackage[normalem]{ulem} 
+% \sectionfont{\upshape\Large}
+% \subsectionfont{\scshape\normalsize} 
+% \subsubsectionfont{\upshape\large} 
 
 % PDF SETUP
 % ---- FILL IN HERE THE DOC TITLE AND AUTHOR
@@ -54,8 +54,12 @@ bookmarks, colorlinks, breaklinks,
 
 \newcommand{\sigmapre}{\sigma_\mathrm{pre}}
 \newcommand{\sigmapost}{\sigma_\mathrm{post}}
+
 \newcommand{\normalpre}{\mathcal{N}(\mu, \sigmapre)}
 \newcommand{\normalpost}{\mathcal{N}(\mu, \sigmapost)}
+
+\newcommand{\ordmeanpre}{\langle o_{\mathrm{pre}}}
+\newcommand{\ordmeanpost}{\langle o_{\mathrm{post}}}
 
 \begin{document}
 
@@ -381,21 +385,34 @@ of the null hypothesis that there is no difference between two distributions' me
 
 \subsubsection{How simple consensus can look like group polarization}
 
+Simple consensus can look like group polarization when (1) the mean latent opinion
+does not change; (2) both more and less extreme opinions move toward this 
+unchanged latent mean (i.e., opinion variance shrinks due to consensus); 
+and (3) an ordinal scale is used that bins all extreme
+latent opinions into the same extreme bin even though those means have changed,
+but opinion bins that are less extreme or of opposite polarity more accurately
+reflect the underlying change in latent opinion distribution. This process is
+illustrated in Figure~\ref{fig:consensusDistroIllustration}, where we show
+a toy example of what can occur when the pre-consensus
+opinions (upper left plot) 
+
 \begin{table}[h]
   \begin{tabular}{cp{5.0in}} \toprule
    Symbol & Description  \\ \midrule  
    $t \in \{\mathrm{pre}, \mathrm{post}\}$ & Time, either \emph{pre}- or
                                            \emph{post}-discussion \\
-   $k \in \{0,\ldots,K\} $ & Bin index ($k$) between 0 and total number of
-         ordinal bins, $K$ \\
-   $\mu$  &   Latent mean, assumed constant in simple consensus \\ 
+   $\mu$  &   Latent mean, assumed constant for simple consensus \\ 
+   $\sigma_t$ & Latent standard deviation at time $t$ \\
    $p(o;\mu,\sigma_t)$ & Normal latent distribution of opinions with mean
-                         $\mu$ and variance $\sigma^2$ \\
+                         $\mu$ and variance $\sigma_t^2$ \\
+   $k \in \{0,\ldots,K\} $ & Threshold index ($k$) between 0 and total number of
+         ordinal bins, $K$ \\
+   $b_k$ & Opinion bin $k$; note there is no $k=0$ bin. \\
+   $\theta_{k-1},~\theta_k$  & Lower, upper threshold value for binning latent opinions into
+     bin $b_k$ \\
    $p(o \in b_k; \mu, \sigma_t)$ & Ordinal density of binned opinions in bin $b_k$ 
             (Equation~\ref{eq:binFrequency}) \\
-   $\theta_k$  & The upper threshold value for binning latent opinions into
-   bin $b_k$ \\
-   $\langle o_t \rangle$  &   Observed mean opinion at time $t$ \\
+   $\langle o_t \rangle$  &   Observed mean opinion calculated from ordinal data at time $t$ \\
    \bottomrule
   \end{tabular} 
 \end{table}
@@ -413,18 +430,7 @@ to increase despite the latent mean being constant (C).}
     \includegraphics[width=1.0\textwidth]{ConsensusDistroIllustration/figure.pdf}
 \end{figure}
 
-
-
-\subsection{Evaluating whether a group polarization finding is plausibly false}
-
-To evaluate whether a positive group polarization observation is plausibly false,
-we develop two layers of evidence for plausible falsehood. The first layer
-tests whether we can identify $\sigmapre$ and 
-
-We used large-$N$ and generative modeling supported by $t$-tests on simulated
-data to demonstrate that many published findings are plausibly false. 
-
-We model measurement of $N \to \infty$ participant opinions,
+This distributional view models the measurement of $N \to \infty$ participant opinions,
 which results in a histogram of frequency of opinions
 in each bin, i.e., $o_{i,t} = b_k$. The frequency of responses in each bin is 
 the integral over the continuous normal probability density function from 
@@ -449,20 +455,60 @@ probability of observing an opinion in bin $k$ at time $t$ as
 \noindent
 where $\Phi(\frac{o - \mu}{\sigma})$ is the normalized 
 normal cumulative distribution function over opinions $o$, shifted by an amount $\mu$ with
-standard deviation $\sigma$.
+standard deviation $\sigma$. 
+
+\subsection{Evaluating whether a group polarization finding is plausibly false}
+
+We have shown in one toy example that group polarization can appear to occur
+when ordinal measures are used, without accounting for the binning process; now
+we show how to .
+
+We develop two measures for how plausible it is that a reported positive detection
+of group polarization is indeed a false positive, building our confidence 
+in the plausibility at each step. In this way, we take a modern Bayesian approach
+to scientific evidence that typically does not dichotomize ``true'' and ``false''
+into absolutes, but evaluates degrees of belief instead.
+
+The first measure we use for whether a reported detection of group polarization
+is plausibly false is whether we can find a combination of latent simple
+consensus parameters $\mu$, $\sigmapre$, and $\sigmapost$ representing latent
+distributions that, when binned (Equation~\ref{eq:binFrequency} and
+Figure~\ref{fig:consensusDistroIllustration}), result in ordinal distributions
+that have the same difference in means reported in the literature that the authors
+took to mean group polarization had occurred. Note that these calculations are
+done for the case where effectively we have $N \to \infty$; next we turn to
+the question of whether data generated from these simple consensus distributions
+generate a ``significant'' group polarization result. 
+
+The second measure of how plausible it is that a group polarization is false
+is whether ordinal data generated by binning draws from the latent distributions
+is found to be significantly different according to Welch's $t$-test.
+
+
 \subsubsection{Identify null-model parameters that yield plausibly-false positives}
 
+To find simple consensus parameters $\mu$, $\sigmapre$, and $\sigmapost$ that
+generate ordinal distributions showing group polarization, we used the above
+framework in an optimization routine that takes an initial guess for these latent
+parameters and hillclimbs to find $\sigmapre$ and $\sigmapost$ that most accurately
+generate ordinal data that appears to have had group polarization occur.
 
 
 \subsubsection{$t$-tests of generated simple-consensus data}
 
 After identifying null-model parameters that yield plausibly-false positives 
 in the $N \to \infty$ case, we generated binned samples from normal opinion 
-distributions $\normalpre$ and $\normalpost$.
+distributions $\normalpre$ and $\normalpost$. Specifically, for each experimental
+condition that passed the initial $N \to \infty$ test, we generated 1000 
+pre- and post-deliberation ordinal datasets. 
+
+We generated these datasets by...
 
 \subsection{Bayesian ordered-probit models reliably identify simple consensus}
 
-
+\mt{Is this necessary or can we just reference Liddell \& Kruschke 2018 who show
+that ordered-probit models accurately identify latent parameters when normal-distribution
+models do not?}
 
 \section{Analysis}
 
