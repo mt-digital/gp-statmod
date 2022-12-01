@@ -363,7 +363,9 @@ and using mock jury punitive rewards as a proxy for opinions~\cite{Schkade2000})
 % neutral, and intermediate values are less extreme opinions of either valence, 
 % such as was used by \citeA{Moscovici1969}. Or, one might 
 
-We assume that participant $i$ has latent opinion at time $t$ that is drawn from
+We begin by developing a formal model of ordinal measurement of latent continuous
+opinions (model variables and parameters are given in Table~\ref{tab:modelVariables}).
+First, we assume that participant $i$ has latent opinion at time $t$ that is drawn from
 a group-level normal distribution,
 \begin{equation}
   o_{i,t} \sim p(o; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
@@ -397,6 +399,8 @@ a toy example of what can occur when the pre-consensus
 opinions (upper left plot) 
 
 \begin{table}[h]
+  \caption{Variables used in the formal model of group polarization from simple consensus.}
+  \label{tab:modelVariables}
   \begin{tabular}{cp{5.0in}} \toprule
    Symbol & Description  \\ \midrule  
    $t \in \{\mathrm{pre}, \mathrm{post}\}$ & Time, either \emph{pre}- or
