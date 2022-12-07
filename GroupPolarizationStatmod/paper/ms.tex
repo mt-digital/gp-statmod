@@ -88,29 +88,30 @@ bookmarks, colorlinks, breaklinks,
 
 \begin{abstract}
   \noindent
-  Group polarization is the observed tendency of
-  like-minded groups to arrive at a more extreme consensus opinion than
-  the average opinion after discussing some topic of interest.
-  Clearly it is important to understand such a phenomenon to understand broader
-  problematic trends towards increased polariztion across society as a whole.
-  Unfortunately, recent analyses have demonstrated that this measurement and
-  analysis approach can result in false positive detections group polarization
-  from failing to account for floor/ceiling effects induced when using ordinal scales to
-  measure continuously-distributed latent psychological variables. 
-  Here we demonstrate that many high profile detections
-  of group polarization are plausibly false
-  due to these floor/ceiling effects using generative modeling seeded by 
-  reported group polarization values and parameters. After we identify which
-  reported detections of group polarization are plausibly false detections, we further
-  investigate whether the latent constant mean opinion and pre- and post-discussion
-  opinion variances can fool the statistical tests used in each study to 
-  generate false positives. Finally, we evaluate whether a more appropriate
-  Bayesian cumulative normal statistical model can more accurately distinguish
-  group polarization from simple consensus. Group polarization continues to 
-  pose a problem for psychological theory with an ever-expanding set of potential theoretical
-  explanations. A search for explanations is pointless, however, without sound
-  evidence. We believe this work will provide a sturdier analytical foundation for 
-  future group-polarization research.
+  Psychology is beset by three crises: the reproducibility crisis, the
+  generalizability crisis, and the theory crisis. New verbal theories for various
+  phenomena are constantly being developed orthogonal to other theories, all based on
+  mostly unreproducible analyses; even if a positive result is in some sense ``true''
+  it may not account for all the variance present in a set of observations---studies
+  thus fail to generalize because their results do not account for this variance.
+  There is another related problem: a phenomenon may be ``reproducible'' only
+  because studies of the phenomenon systematically misuse statistics in such a way
+  that induces false positives for each succeeding ``replication.'' Here we show that
+  replicated detections of group polarization are often plausibly false due to
+  treating ordinal measurements of opinions, e.g., on a Likert-type scale, as drawn
+  directly from an underlying continuous latent opinion distribution, which masks
+  extreme latent opinions. Our intensive review of sixty experimental conditions
+  across ten foundational group polarization papers revealed that 95\% of the
+  conditions generated plausibly false positive results. To show this, we developed a
+  novel generative model that provides two levels of evidence that an historical
+  published empirical finding of group polarization is plausibly false.  Our model
+  can be used to evaluate additional studies in group polarization and beyond, even
+  if the reported data and significant metrics are incompletely reported, and the
+  original raw data has been lost to time.  This may be just the tip of the
+  plausibly-false-positives-in-psychology iceberg, both for group polarization
+  studies and for the legion psychological results that model ordinal observations of
+  opinions, beliefs, emotions, or any other latent psychological variable that is
+  theoretically continuous, but measured using an ordinal scale.  
 \end{abstract}
 \clearpage
 
@@ -194,12 +195,11 @@ difficult. (REVIEW A FEW SIMPLE EXAMPLES). A detailed examination of each study'
 idiosyncracies is given in Table~\ref{tab:conditionsComparison}.
 
 \begin{figure}
-  \caption{Group polarization is experimentally induced by first gather
-  participant responses to an opinion prompt and grouping together like-minded
-  participants (A). Group polarization is theorized to occur when individuals
-  are put together with like-minded individuals discuss the prompt (B). Group 
-  polarization is detected by again polling all participants' opinions (C) and comparing
-  these to the initial opinions.}
+  \caption{Group polarization is experimentally induced by first gathering
+  participant responses to an opinion prompt (A). Then groups of like-minded 
+  individuals discuss the prompt (B). Group 
+  polarization occurs if the mean post-discussion opinion is more extreme 
+  than the mean pre-discussion opinion (C).}
   \label{fig:groupPolarizationSchematic}
   \centering
   \includegraphics[width=\textwidth]{Figures/GPExperimentSketch.pdf}
@@ -306,17 +306,17 @@ plausibly false detections, a Bayesian thresholded-normal statistical model
 will accurately identify simple consensus instead of falsely detecting group
 polarization.
 
-\section{Model and Data}
+\section{Model}
 
 Our model represnts the generative process of finding different forms of group consensus
 in group polarization experiments, and the process of measuring that consensus using
-an ordinal measurement scale, e.g.\ a Likert-type scale. This model considers two
+an ordinal measurement scale, e.g.\ a Likert-type scale. This model operationalizes two
 relevant forms of consensus: \emph{simple consensus} and \emph{group polarization}.
-Either process is \emph{consensus}, if we define consensus as a reduction
-in opinion variance over time.  
-Group polarization experiments are designed to result group consensus
-since they group together like-minded individuals to see if they become more
-extreme after discussion~\cite{Turner2018}.
+\mt{Need to explain in Intro why consensus should occur along with group
+polarization} 
+% Group polarization experiments are designed to result group consensus
+% since they group together like-minded individuals to see if they become more
+% extreme after discussion~\cite{Turner2018}.
 
 We collected group polarization data from ten empirical studies with sixty constituent
 experimental conditions across all studies. We recorded the reported opinion shift and pre- and
@@ -344,24 +344,6 @@ Based on this data
 \subsection{Latent opinions, ordinal measurements, and how simple consensus can look like
 group polarization}
 
-Our model represents continuous latent opinions and their 
-measurement on an ordinal scale. \emph{Latent opinions} are 
-unobservable, psychological variables that are 
-somehow represented and stored in the brain-body, and can be reproduced with
-some accuracy when a person is prompted to give their opinion. 
-\emph{Ordinal measurements} of 
-of latent opinions are discrete-valued representations of latent opinions 
-in some physical form, such as a mark on a sheet of paper or radio button on a web form, that
-indicate the polarity and strength of a person's opinion opinion in terms of
-one of a number of opinion bin values. All group polarization experiments must somehow
-measure opinions, and all but a few use ordinal measurements (those few exceptions include
-using bets made during blackjack as a proxy for opinions~\cite{Blascovich1973,Blascovich1975,Blascovich1976}
-and using mock jury punitive rewards as a proxy for opinions~\cite{Schkade2000}).
-
-% For example, on a 7-point ordinal scale -3 could indcate 
-% ``strongly disagree'', +3 could be ``strongly agree'', 0 would be psychologically 
-% neutral, and intermediate values are less extreme opinions of either valence, 
-% such as was used by \citeA{Moscovici1969}. Or, one might 
 
 We begin by developing a formal model of ordinal measurement of latent continuous
 opinions (model variables and parameters are given in Table~\ref{tab:modelVariables}).

@@ -63,7 +63,7 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, xlim = c(-6.0, 6.0),
 
 plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2, 
                                      max_bin = 2, bins = -2:2,
-                                     these_colors = c("lightpink", "lightblue", 
+                                     bin_colors = c("lightpink", "lightblue", 
                                                       "#f7ae3d", "lightgreen", 
                                                       "#F6CFFF"),
                                      save_path = "test_ordinal_pdf.pdf") {
@@ -90,7 +90,7 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
   print(paste("Mean observed for sd = ", sd, ": ", mean_observed, sep = ""))
   
   p <- ggplot(data=ord_dist_df, aes(x=OpinionBin, y=Density)) +
-         geom_bar(stat = "identity", fill = these_colors) + 
+         geom_bar(stat = "identity", fill = bin_colors) + 
          geom_vline(xintercept = mean_observed, linetype="dashed") +
          xlab("Binned ordinal opinion") + ylab("Probability density\n\n") +
          mytheme
