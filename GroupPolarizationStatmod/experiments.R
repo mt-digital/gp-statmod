@@ -50,7 +50,8 @@ if ( nCores > 4 )
 fileNameRoot = "JAGSOutput-"
 
 makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv", 
-                                 output.csv = "data/BayesianAnalysis.csv")
+                                 output.csv = "data/BayesianAnalysis.csv",
+                                 test = FALSE)
 {
     studiesDf <- read.csv(studies.data.csv)
     
@@ -76,9 +77,14 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
                            "LatentMeanPostPosteriorMean" = numeric(0),  
                            "LatentMeanPostPosteriorSD" = numeric(0)
                            )
-
-    for (rowIdx in 1:nrow(studiesDf))
-    # for (rowIdx in 1:3)
+    if (test) 
+    {
+      lim <- nrow(studiesDf)  
+    } else {
+      lim <- 3
+    }
+    # for (rowIdx in 1:nrow(studiesDf))
+    for (rowIdx in 1:lim)
     {
         row <- studiesDf[rowIdx, ]
         if (row$Include && row$Plausible && row$MinBinValue > 0)
