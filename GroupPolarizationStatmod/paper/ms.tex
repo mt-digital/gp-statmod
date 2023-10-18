@@ -66,14 +66,16 @@ bookmarks, colorlinks, breaklinks,
 \title{Many claims of group polarization are plausibly false due to inappropriate
     statistics}
 % \shorttitle{Group polarization or simple consensus?}
-\author[1,2]{{Matthew A.~Turner}}
-\affil[1]{Department of Earth System Science, Stanford University}
-\affil[2]{Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
+% \author[1,2]{{Matthew A.~Turner}}
+\author[1]{{Matthew A.~Turner}}
+% \affil[1]{Department of Earth System Science, Stanford University}
+\affil[1]{Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
 
-\author[3,4,5]{{Paul E.~Smaldino}}
-\affil[3]{Cognitive and Information Sciences, University of California, Merced}
-\affil[4]{Center for Advanced Study in the Behavioral Sciences, Stanford University}
-\affil[5]{Santa Fe Institute}
+% \author[3,4,5]{{Paul E.~Smaldino}}
+\author[2,3]{{Paul E.~Smaldino}}
+\affil[2]{Cognitive and Information Sciences, University of California, Merced}
+% \affil[4]{Center for Advanced Study in the Behavioral Sciences, Stanford University}
+\affil[3]{Santa Fe Institute}
 
 
 
@@ -84,34 +86,52 @@ bookmarks, colorlinks, breaklinks,
 \spacing{1.5}
 
 \linenumbers
-\modulolinenumbers[3]
+% \modulolinenumbers[3]
 
 \begin{abstract}
   \noindent
-  Psychology is beset by three crises: the reproducibility crisis, the
-  generalizability crisis, and the theory crisis. New verbal theories for various
-  phenomena are constantly being developed orthogonal to other theories, all based on
-  mostly unreproducible analyses; even if a positive result is in some sense ``true''
-  it may not account for all the variance present in a set of observations---studies
-  thus fail to generalize because their results do not account for this variance.
-  There is another related problem: a phenomenon may be ``reproducible'' only
-  because studies of the phenomenon systematically misuse statistics in such a way
-  that induces false positives for each succeeding ``replication.'' Here we show that
-  replicated detections of group polarization are often plausibly false due to
-  treating ordinal measurements of opinions, e.g., on a Likert-type scale, as drawn
-  directly from an underlying continuous latent opinion distribution, which masks
-  extreme latent opinions. Our intensive review of sixty experimental conditions
-  across ten foundational group polarization papers revealed that 95\% of the
-  conditions generated plausibly false positive results. To show this, we developed a
-  novel generative model that provides two levels of evidence that an historical
-  published empirical finding of group polarization is plausibly false.  Our model
-  can be used to evaluate additional studies in group polarization and beyond, even
-  if the reported data and significant metrics are incompletely reported, and the
-  original raw data has been lost to time.  This may be just the tip of the
-  plausibly-false-positives-in-psychology iceberg, both for group polarization
-  studies and for the legion psychological results that model ordinal observations of
-  opinions, beliefs, emotions, or any other latent psychological variable that is
-  theoretically continuous, but measured using an ordinal scale.  
+  % Psychology is beset by three crises: the reproducibility crisis, the
+  % generalizability crisis, and the theory crisis. New verbal theories for various
+  % phenomena are constantly being developed orthogonal to other theories, all based on
+  % mostly unreproducible analyses; even if a positive result is in some sense ``true''
+  % it may not account for all the variance present in a set of observations---studies
+  % thus fail to generalize because their results do not account for this variance.
+  % There is another related problem: a phenomenon may be ``reproducible'' only
+  % because studies of the phenomenon systematically misuse statistics in such a way
+  % that induces false positives for each succeeding ``replication.'' 
+  \emph{Group polarization} refers to the observation that like-minded novel groups tend to
+  become more extreme in their opinions after discussion as group members found consensus.
+  \emph{Consensus} here refers to decreasing opinion variance; we further define
+  \emph{simple consensus} as a process where group opinion variance decreases but
+  the mean opinion does not change.
+  Here we show that many published experimental detections of group polarization are explained
+  equally rigorously as \emph{simple consensus}. 
+  The reports we analyze assumed in their statistical analyses 
+  that both latent psychological opinions \emph{and} the ordinal 
+  reported opinions (e.g., on a Likert-type scale) are continuous. We use
+  a generative model to demonstrate that 95\% of sixty experimental conditions
+  across ten foundational group polarization papers report plausibly false detections of
+  group polarization. We show that simulated data from these plausibly false
+  cases often fools a $t$-test into reporting significant group polarizaiton
+  effects, but a Bayesian implementation of the more appropriate ordered-probit
+  model reliably identifies these data as
+  representing simple consensus, not group polarization.
+  Our results demonstrate the need for a new wave of group polarization research
+  that uses rigorous statistical methods appropriate for the study design. 
+  Our approach can be used beyond group polarization
+  research to analyze results from any experimental paradigm that may use statistical models that
+  are poorly matched to the study design. Replications are worthless if the statistics are wrong.
+
+  % To show this, we developed a
+  % novel generative model that provides two levels of evidence that an historical
+  % published empirical finding of group polarization is plausibly false.  Our model
+  % can be used to evaluate additional studies in group polarization and beyond, even
+  % if the reported data and significant metrics are incompletely reported, and the
+  % original raw data has been lost to time.  This may be just the tip of the
+  % plausibly-false-positives-in-psychology iceberg, both for group polarization
+  % studies and for the legion psychological results that model ordinal observations of
+  % opinions, beliefs, emotions, or any other latent psychological variable that is
+  % theoretically continuous, but measured using an ordinal scale.  
 \end{abstract}
 \clearpage
 

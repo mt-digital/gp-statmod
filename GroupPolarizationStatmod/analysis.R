@@ -155,7 +155,7 @@ latexifyTTestExperiment <- function(tTestTablePath = "data/output/TtestSummaryTa
     
     tTestTable <- tTestTable[, col_order]
     
-    tTestTable <- tTestTable %>% rename(FPRate = FractionSignificant, 
+    tTestTable <- tTestTable %>% rename(FPRate = FractionSignificant,
                                         Est.FPRate = ExpectedPower)
     
     ttestTable_latex <- 
