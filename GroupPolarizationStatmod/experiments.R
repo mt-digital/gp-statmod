@@ -29,6 +29,9 @@ try( runjags.options( inits.warning=FALSE , rng.warning=FALSE ) )
 
 # library(tidyverse)
 library(dplyr)
+library(tibble)
+
+library(uuid)
 
 # set default number of chains and parallelness for MCMC:
 library(parallel) # for detectCores().
@@ -49,6 +52,15 @@ if ( nCores > 4 )
 }  
 
 fileNameRoot = "JAGSOutput-"
+
+
+singleBayesianFitTrial <- function(output.dir = "data/probit_fits", test = FALSE) 
+{
+    trial_file_name <- paste(UUIDgenerate(), ".csv", sep="")
+    full_path <- paste(output.dir, trial_file_name, sep="/")
+    makeBayesianFitTable(output.csv = full_path, test = test)
+}
+
 
 makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv", 
                                  output.csv = "data/BayesianAnalysis.csv",
@@ -78,7 +90,7 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
                            "LatentMeanPostPosteriorMean" = numeric(0),  
                            "LatentMeanPostPosteriorSD" = numeric(0)
                            )
-    if (test) 
+    if (!test) 
     {
       lim <- nrow(studiesDf)  
     } else {
@@ -88,7 +100,8 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
     for (rowIdx in 1:lim)
     {
         row <- studiesDf[rowIdx, ]
-        if (row$Include && row$Plausible && row$MinBinValue > 0)
+        #if (row$Include && row$Plausible && row$MinBinValue > 0)
+        if (row$Include && row$Plausible)  # && row$MinBinValue > 0)
         {
             N <- row$N; firstBinValue <- row$MinBinValue; 
             nBins <- row$MaxBinValue - row$MinBinValue + 1; 
@@ -96,6 +109,15 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
             latentSdPre <- row$LatentSDPre; latentSdPost <- row$LatentSDPost;
             observedMeanPre <- row$ObservedMeanPre; 
             observedMeanPost <- row$ObservedMeanPost;
+
+            if (row$MinBinValue <= 0)
+            {
+                firstBinShift <- 1 - firstBinValue
+                firstBinValue <- 1
+                latentMean <- latentMean + firstBinShift
+                observedMeanPre <- observedMeanPre + firstBinShift
+                observedMeanPost <- observedMeanPost + firstBinShift
+            }
 
             cat(paste("\n\n**************************************************\n", 
                         "Fitting Bayesian Ordered Probit for ", row$ArticleTag,
@@ -142,6 +164,7 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
         }
     }
 
+    write.csv(outputDf, output.csv)
     return (outputDf)
 }
 
