@@ -27,7 +27,8 @@ try( library(rjags) )
 try( library(runjags) )
 try( runjags.options( inits.warning=FALSE , rng.warning=FALSE ) )
 
-library(tidyverse)
+# library(tidyverse)
+library(dplyr)
 
 # set default number of chains and parallelness for MCMC:
 library(parallel) # for detectCores().
@@ -110,9 +111,7 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
             suPost <- summary(
                 calculateBayesian(N, firstBinValue, nBins, latentMean, latentSdPost)
             )
-                # },
-                # error = function(e) { next }
-            # )
+
             muPrePost = suPre["mu",]
             muPostPost = suPost["mu",]
 
@@ -162,7 +161,7 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
     
     ordRunJagsOut <- run.jags(method="parallel", 
                               model="singleOrdinalModel.jags", 
-                              monitor=parameters, 
+                              monitor=parameters,
                               data=ordDataList,  
                               n.chains=nChains,
                               adapt=adaptSteps,
@@ -171,6 +170,7 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
                               thin=thinSteps,
                               summarise=FALSE,
                               plots=FALSE)
+    
     ordCodaSamples = as.mcmc.list(ordRunJagsOut)
     # resulting codaSamples object has these indices: 
     #   codaSamples[[ chainIdx ]][ stepIdx , paramIdx ]
@@ -188,10 +188,24 @@ tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre,
   simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
 
   simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
-
-  return (t.test(simObsPre, simObsPost, paired = paired, var.equal = var.equal))
+  
+  t_result <- t.test(simObsPre, simObsPost, paired = paired, var.equal = var.equal)
+  
+  pre_mean_estimate <- t_result$estimate[[1]] 
+  post_mean_estimate <- t_result$estimate[[2]] 
+  
+  return (cohens_d(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd))
 }
 
+
+cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
+  
+  numerator <- pre_mean_estimate - post_mean_estimate
+  
+  denominator = sqrt((pre_sd**2 + post_sd**2) / 2.0)
+  
+  return (numerator / denominator)
+}
 
 # orderedProbitExperiment <- function(N, firstBinValue, nBins, latentMean,
 #                                         latentSdPre, latentSdPost, paired = TRUE,
