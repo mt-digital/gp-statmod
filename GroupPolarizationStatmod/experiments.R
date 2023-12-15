@@ -205,17 +205,23 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 }
 
 
-tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre, 
+# Uses R's t.test function to fit a linear model to estimate pre- and post-
+# deliberation means in a simple consensus context where there is only one
+# latent mean.
+simulate_metric_cohens_d <- function(N, firstBinValue, nBins, latentMean, latentSdPre, 
                             latentSdPost, paired = FALSE, var.equal = FALSE)
 {
-  simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
+  sim_obs_pre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
 
-  simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
+  sim_obs_post <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
   
-  t_result <- t.test(simObsPre, simObsPost, paired = paired, var.equal = var.equal)
+  t_result <- t.test(sim_obs_pre, sim_obs_post, paired = paired, var.equal = var.equal)
   
   pre_mean_estimate <- t_result$estimate[[1]] 
   post_mean_estimate <- t_result$estimate[[2]] 
+  
+  pre_sd <- sd(sim_obs_pre)
+  post_sd <- sd(sim_obs_post)
   
   return (cohens_d(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd))
 }
@@ -223,7 +229,7 @@ tTestExperiment <- function(N, firstBinValue, nBins, latentMean, latentSdPre,
 
 cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
   
-  numerator <- pre_mean_estimate - post_mean_estimate
+  numerator <- post_mean_estimate - pre_mean_estimate
   
   denominator = sqrt((pre_sd**2 + post_sd**2) / 2.0)
   
@@ -429,68 +435,6 @@ latentMeanRanges <- function(caseStudyDataFile = "caseStudies.csv",
     # Save processed dataframe to disk.
     write.csv(csData, "caseStudiesProcessed.csv")
 }
-
-
-##
-# Arguments:
-#     case (data.frame row): Single experimental condition case from case
-#                            studies.
-#
-# stepThroughSolutions <- function(case, stepDir = "up", step = step, guess = guess)
-# {
-#     latentMean <- case$KnownSuccessfulMean
-#     bestMean <- latentMean
-
-#     kVec <- case$minBinValue:case$maxBinValue
-
-#     # Solve for pre- and post-SDs using hillclimbing.
-#     latentPreSDResult <- solveForLatentSD(
-#         kVec, latentMean, cs$ObservedMeanPre, guess
-#     )
-#     latentPostSDResult <- solveForLatentSD(
-#         kVec, latentMean, cs$ObservedMeanPost, guess
-#     )
-
-#     # Step latent mean up from known solution, tracking best solution.
-#     successful <- TRUE
-#     # Want to make sure the first SSE is less than the init val, so set to Inf.
-#     currentSSE <- Inf
-#     while (successful) 
-#     {
-#         # Append successful latent mean to list.
-#         successfulMeans <- append(successfulMeans, latentMean)
-
-#         # See if the SSE of this solution is 
-#         currentSSE <- SSE(latentPreSDResult, latentPostSDResult)
-#         if (currentSSE < bestSSE)
-#         {
-#             bestSSE <- currentSSE
-#             bestMean <- latentMean
-#         }
-
-#         # Increment latentMean for the next loop if it happens.
-#         if (stepDir == "up")
-#             latentMean <- latentMean + step
-#         else if (stepDir == "down")
-#             latentMean <- latentMean - step
-#         else
-#             stop("Provided stepDir must be 'up' or 'down'")
-
-#         # Solve for pre- and post-SDs using hillclimbing.
-#         latentPreSDResult <- solveForLatentSD(
-#             kVec, latentMean, cs$ObservedMeanPre, guess
-#         )
-#         latentPostSDResult <- solveForLatentSD(
-#             kVec, latentMean, cs$ObservedMeanPost, guess
-#         )
-        
-#         # See if results are within tol.
-#         successful <- hillclimbSuccess(latentPreSDResult, 
-#                                        latentPostSDResult)
-#     }
-
-#     return (c(successfulMeans, bestMean, bestSSE))
-# }
 
 
 function(latentPreSDResult, latentPostSDResult)
