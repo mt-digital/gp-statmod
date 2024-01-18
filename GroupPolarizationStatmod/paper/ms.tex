@@ -498,7 +498,7 @@ parameters and hillclimbs to find $\sigmapre$ and $\sigmapost$ that most accurat
 generate ordinal data that appears to have had group polarization occur.
 
 
-\subsubsection{$t$-tests of generated simple-consensus data}
+\subsubsection{Metric model inference of Cohen's $d$ for simulated simple-consensus data}
 
 After identifying null-model parameters that yield plausibly-false positives 
 in the $N \to \infty$ case, we generated binned samples from normal opinion 
@@ -506,13 +506,17 @@ distributions $\normalpre$ and $\normalpost$. Specifically, for each experimenta
 condition that passed the initial $N \to \infty$ test, we generated 1000 
 pre- and post-deliberation ordinal datasets. 
 
-We generated these datasets by...
+We generated these simulated data using the latent mean, pre-deliberation 
+standard deviation, and post-deliberation standard deviations as parameters of
+normal distributions of pre- and post-deliberation opinions. 
 
-\subsection{Bayesian ordered-probit models reliably identify simple consensus}
+\subsection{Bayesian ordered-probit models inference of Cohen's $d$ for simulated
+simple-consensus data}
 
-\mt{Is this necessary or can we just reference Liddell \& Kruschke 2018 who show
-that ordered-probit models accurately identify latent parameters when normal-distribution
-models do not?}
+Non-metric ordered probit models, which account for the data collection 
+process, theoretically should be better able to correctly
+distinguish simple consensus compared to metric models. Therefore, we also fit
+the following ordered probit model to simulated group polarization data. 
 
 \section{Analysis}
 
@@ -536,10 +540,7 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
 
 
 
-\subsection{Do $t$-tests accurately detect simple consensus?}
-
-
-
+\subsection{Metric linear models fail to identify simple consensus}
 
 
 \spacing{1.0}
@@ -548,13 +549,17 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
 % \input{t-test-table-custom.tex}
 \spacing{1.5}
 
-\subsection{Do Bayesian ordered-probit models accurately detect simple consensus?}
+\subsection{Ordered-probit models also fail?}
 
 We found that in many cases Bayesian ordered-probit models avoid falsely identifying simple
 consensus as group polarization. This supports the claim that it is the choice of statistical
 procedure, including the failure to account for the ordinal nature of, and variance within,
 opinion measuremenets in group polarization experiments that leads to false
 positives, not anything intrinsic to the phenomenon of group polarization.
+
+
+\subsection{More data enables ordered probit models, but not metric models, to reliably
+  identify simple consensus}
 
 
 \section{Discussion}

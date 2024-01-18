@@ -2,6 +2,9 @@ library(dplyr)
 library(tidystats)
 library(knitr)
 library(kableExtra)
+library(foreach)
+library(parallel)
+library(doParallel)
 
 source("experiments.R")
 
@@ -38,8 +41,8 @@ makePlausibleFPTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.c
 #    treatments yielding plausibly false positive results.
 #  limit (int): Limit the number of treatments to test for initial development.
 #
-makeTtestSimulationsTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv",
-                                      outputPath = "data/output/TtestFitTable.csv",
+make_metric_cohens_d_table <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv",
+                                      outputPath = "data/output/cohens_sample_test.csv",
                                       diagnosticSavePath = "data/diagnostic/tTestFits.RDS",
                                       ntrials = 2, limit = 2)
 {
@@ -61,14 +64,28 @@ makeTtestSimulationsTable <- function(studiesAnalysisDfPath = "data/StudiesAnaly
   resultsDf <- data.frame(ArticleTag = c(), 
                           TreatmentTag = c(),
                           TrialIndex = c(),
-                          tTestPvalue = c(),
+                          Cohens_d = c(),
                           ExpectedPower = c())
   
-  allTestsDiagnostic <- list()
-  for (rowIdx in 1:nrow(studiesDf))
+  results_rows <- rep(data.frame(ArticleTag = c(), 
+                                 TreatmentTag = c(),
+                                 TrialIndex = c(),
+                                 LatentMean = c(), 
+                                 LatentSDPre = c(),
+                                 LatentSDPost = c(),
+                                 ObservedShift = c(),
+                                 Cohens_d = c(),
+                                 ExpectedPower = c()),
+                      nrow(studiesDf) * ntrials)
+  
+  # allTestsDiagnostic <- list()
+  my_cluster <- makeCluster(detectCores() - 1, type = "FORK")
+  registerDoParallel(my_cluster)
+  
+result <- foreach (studiesRowIdx = 1:nrow(studiesDf)) %dopar% 
   {
     # Get treatment row of interest.
-    row <- studiesDf[rowIdx, ]
+    row <- studiesDf[studiesRowIdx, ]
     
     # Calculate number of bins from min and max opinion bin value.
     nBins <- row$MaxBinValue - row$MinBinValue + 1
@@ -76,39 +93,40 @@ makeTtestSimulationsTable <- function(studiesAnalysisDfPath = "data/StudiesAnaly
     # Assemble trials dataframe.
     trialsDf <- data.frame(ArticleTag = c(), TreatmentTag = c(), 
                            TrialIndex = c(), LatentMean = c(), LatentSDPre = c(),
-                           LatentSDPost = c(), tTestPvalue = c(), ObservedShift = c(),
+                           LatentSDPost = c(), Cohens_d = c(), ObservedShift = c(),
                            ExpectedPower = c())
     
     expectedPower = power.t.test(delta = row$ObservedShift, n = row$N, 
                                  sd = (row$LatentSDPost + row$LatentSDPre) / 2.0,
                                  sig.level = 0.1)$power
-                                 
-    for (trialIdx in 1:ntrials)
+    print("HERE")
+    threadlocal_result_rows <- vector(length = ntrials, mode = "list")
+    for (trial_idx in 1:ntrials)
     {
       # Run t-test ntrials experiments for treatment row and trial index.
-      tTestResult <- tTestExperiment(row$N, row$MinBinValue, nBins, 
-                                     row$LatentMean, row$LatentSDPre, 
-                                     row$LatentSDPost)
-      # return (tTestResult$p.value)
-      trial_row = data.frame(ArticleTag = row$ArticleTag, TreatmentTag = row$TreatmentTag,
-                             TrialIndex = trialIdx, LatentMean = row$LatentMean,
-                             ObservedShift = row$ObservedShift,
-                             LatentSDPre = row$LatentSDPre, LatentSDPost = row$LatentSDPost,
-                             tTestPvalue = tTestResult$p.value,
-                             ExpectedPower = expectedPower)
-      
-      resultsDf <- bind_rows(resultsDf, trial_row)
-      
-      # Create a test ID for this treatment and add the test output to diagnostic set.
-      testId <- paste(row$ArticleTag, row$TreatmentTag, trialIdx, sep = "_")
-      allTestsDiagnostic <- allTestsDiagnostic %>% add_stats(tTestResult, identifier = testId)
+      this_cohens_d <- simulate_metric_cohens_d(row$N, row$MinBinValue, nBins, 
+                                                row$LatentMean, row$LatentSDPre, 
+                                                row$LatentSDPost)
+
+      threadlocal_result_rows[[ trial_idx ]] <- 
+        data.frame(ArticleTag = row$ArticleTag, 
+                   TreatmentTag = row$TreatmentTag,
+                   TrialIndex = trial_idx, 
+                   LatentMean = row$LatentMean,
+                   ObservedShift = row$ObservedShift,
+                   LatentSDPre = row$LatentSDPre, 
+                   LatentSDPost = row$LatentSDPost,
+                   Cohens_d = this_cohens_d,
+                   ExpectedPower = expectedPower)
     }
+    
+    bind_rows(threadlocal_result_rows)
   }
+  stopCluster(my_cluster)
   
-  write.csv(resultsDf, outputPath)
-  saveRDS(allTestsDiagnostic, file = diagnosticSavePath)
+  results_df <- bind_rows(result)
   
-  # return (resultsDf)
+  write.csv(results_df, outputPath)
 }
 
 summarizeTTestFitTable <- function(fitTablePath = "data/output/TtestFitTable.csv",
