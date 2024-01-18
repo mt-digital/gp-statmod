@@ -44,7 +44,7 @@ makePlausibleFPTable <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.c
 make_metric_cohens_d_table <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv",
                                       outputPath = "data/output/cohens_sample_test.csv",
                                       diagnosticSavePath = "data/diagnostic/tTestFits.RDS",
-                                      ntrials = 2, limit = 2)
+                                      ntrials = 2, limit = 2, N_multiplier = 1)
 {
   # Load analysis of studies from web interface stored as CSV.
   studiesDf <- read.csv(studiesAnalysisDfPath)
@@ -82,7 +82,7 @@ make_metric_cohens_d_table <- function(studiesAnalysisDfPath = "data/StudiesAnal
   my_cluster <- makeCluster(detectCores() - 1, type = "FORK")
   registerDoParallel(my_cluster)
   
-result <- foreach (studiesRowIdx = 1:nrow(studiesDf)) %dopar% 
+  result <- foreach (studiesRowIdx = 1:nrow(studiesDf)) %dopar% 
   {
     # Get treatment row of interest.
     row <- studiesDf[studiesRowIdx, ]
@@ -95,8 +95,8 @@ result <- foreach (studiesRowIdx = 1:nrow(studiesDf)) %dopar%
                            TrialIndex = c(), LatentMean = c(), LatentSDPre = c(),
                            LatentSDPost = c(), Cohens_d = c(), ObservedShift = c(),
                            ExpectedPower = c())
-    
-    expectedPower = power.t.test(delta = row$ObservedShift, n = row$N, 
+    N = as.integer(row$N * N_multiplier)
+    expectedPower = power.t.test(delta = row$ObservedShift, n = N, 
                                  sd = (row$LatentSDPost + row$LatentSDPre) / 2.0,
                                  sig.level = 0.1)$power
     print("HERE")
@@ -104,9 +104,9 @@ result <- foreach (studiesRowIdx = 1:nrow(studiesDf)) %dopar%
     for (trial_idx in 1:ntrials)
     {
       # Run t-test ntrials experiments for treatment row and trial index.
-      this_cohens_d <- simulate_metric_cohens_d(row$N, row$MinBinValue, nBins, 
-                                                row$LatentMean, row$LatentSDPre, 
-                                                row$LatentSDPost)
+      this_cohens_d <- simulate_metric_cohens_d(
+        N, row$MinBinValue, nBins, row$LatentMean, row$LatentSDPre, row$LatentSDPost
+      )
 
       threadlocal_result_rows[[ trial_idx ]] <- 
         data.frame(ArticleTag = row$ArticleTag, 

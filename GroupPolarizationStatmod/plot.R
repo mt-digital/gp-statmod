@@ -62,3 +62,37 @@ plotFreq <- function(inputDf, fittedFreq, nBins)
              adj=c(0.5,0.5), padj=c(-0.5,-0.5))
     }
 }
+
+
+plot_metric_cohens <- function(metric_cohens_csv = "data/output/metric_cohens_d.csv",
+                               output_file = "figures/metric_cohens.pdf") {
+  
+  read_csv(metric_cohens_csv) %>% 
+    unite(ExperimentID, ArticleTag, TreatmentTag) %>% 
+    ggplot(mapping = aes(x = Cohens_d, y = ExperimentID)) + 
+      geom_vline(xintercept = 0, color = "red") + 
+      geom_vline(xintercept = c(-1, 1), color="red", linetype="dotted") + 
+      geom_boxplot() +
+      xlim(-2.0, 2.0)
+  
+  ggsave(output_file)
+}
+
+
+plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
+                                output_file = "figures/ordinal_cohens.pdf") {
+  
+  df <- dir_ls(ordinal_data_dir, glob = "*.csv") %>%
+    read_csv() %>% unite(ExperimentID, ArticleTag, TreatmentTag)
+  
+  df$Cohens_d <- cohens_d(df$LatentMeanPrePosteriorMean, df$LatentMeanPostPosteriorMean,
+                          df$LatentMeanPrePosteriorSD, df$LatentMeanPostPosteriorSD)
+  
+  ggplot(df, mapping = aes(x = Cohens_d, y = ExperimentID)) + 
+    geom_vline(xintercept = 0, color = "red") + 
+    geom_vline(xintercept = c(-1, 1), color="red", linetype="dotted") + 
+    geom_boxplot() #+
+    # xlim(-2.0, 2.0)
+  
+  ggsave(output_file)
+}

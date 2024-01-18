@@ -215,11 +215,16 @@ difficult. (REVIEW A FEW SIMPLE EXAMPLES). A detailed examination of each study'
 idiosyncracies is given in Table~\ref{tab:conditionsComparison}.
 
 \begin{figure}
-  \caption{Group polarization is experimentally induced by first gathering
-  participant responses to an opinion prompt (A). Then groups of like-minded 
-  individuals discuss the prompt (B). Group 
-  polarization occurs if the mean post-discussion opinion is more extreme 
-  than the mean pre-discussion opinion (C).}
+  \caption{Group polarization experiments trials in the ten studies
+    analyzed here proceed in three steps: 
+    (A) \textbf{Pre-deliberation.} Participant opinions are measured using an 
+    ordinal scale. 
+    (B) \textbf{Deliberation.} Groups discuss their opinions on the prompt. 
+    (C) \textbf{Post-deliberation.} Participant opinions are measured again.
+    Group polarization in one trial is said to occur if 
+    the mean post-deliberation opinion is greater than the pre-deliberation 
+    opinion.
+}
   \label{fig:groupPolarizationSchematic}
   \centering
   \includegraphics[width=\textwidth]{Figures/GPExperimentSketch.pdf}
@@ -227,9 +232,9 @@ idiosyncracies is given in Table~\ref{tab:conditionsComparison}.
 
 
 
-\spacing{1.0}
-\input{tables/conditions_table.tex}
-\spacing{1.5}
+% \spacing{1.0}
+% \input{tables/conditions_table.tex}
+% \spacing{1.5}
 
 \subsection{Statistical inference in opinion change}
 
@@ -542,14 +547,18 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
 
 
 
-\subsection{Metric linear models fail to identify simple consensus}
+\subsection{Metric linear models often fail to identify simple consensus}
 
 
-\spacing{1.0}
-\hspace{-1em}
-\input{t-test-table.tex}
-% \input{t-test-table-custom.tex}
-\spacing{1.5}
+Here we evaluate if metric linear models inferred group polarization from
+simulated simple consensus data using parameters identified above. Those
+parameters specified continous pre- and post-deliberation 
+
+% \spacing{1.0}
+% \hspace{-1em}
+% \input{t-test-table.tex}
+% % \input{t-test-table-custom.tex}
+% \spacing{1.5}
 
 \subsection{Ordered-probit models also fail?}
 
@@ -562,6 +571,9 @@ positives, not anything intrinsic to the phenomenon of group polarization.
 
 \subsection{More data enables ordered probit models, but not metric models, to reliably
   identify simple consensus}
+
+  \mt{Idea: increase $N$ for simulations and see effect on distribution of Cohen's $d$
+  for both metric and ordinal models}
 
 
 \section{Discussion}
