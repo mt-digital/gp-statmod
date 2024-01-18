@@ -99,28 +99,26 @@ bookmarks, colorlinks, breaklinks,
   % There is another related problem: a phenomenon may be ``reproducible'' only
   % because studies of the phenomenon systematically misuse statistics in such a way
   % that induces false positives for each succeeding ``replication.'' 
-  \emph{Group polarization} refers to the observation that like-minded novel groups tend to
-  become more extreme in their opinions after discussion as group members found consensus.
-  \emph{Consensus} here refers to decreasing opinion variance; we further define
-  \emph{simple consensus} as a process where group opinion variance decreases but
-  the mean opinion does not change.
-  Here we show that many published experimental detections of group polarization are explained
-  equally rigorously as \emph{simple consensus}. 
-  The reports we analyze assumed in their statistical analyses 
-  that both latent psychological opinions \emph{and} the ordinal 
-  reported opinions (e.g., on a Likert-type scale) are continuous. We use
-  a generative model to demonstrate that 95\% of sixty experimental conditions
-  across ten foundational group polarization papers report plausibly false detections of
-  group polarization. We show that simulated data from these plausibly false
-  cases often fools a $t$-test into reporting significant group polarizaiton
-  effects, but a Bayesian implementation of the more appropriate ordered-probit
-  model reliably identifies these data as
-  representing simple consensus, not group polarization.
-  Our results demonstrate the need for a new wave of group polarization research
-  that uses rigorous statistical methods appropriate for the study design. 
-  Our approach can be used beyond group polarization
-  research to analyze results from any experimental paradigm that may use statistical models that
-  are poorly matched to the study design. Replications are worthless if the statistics are wrong.
+  \emph{Group polarization} is a theoretical process where like-minded novel group members 
+  become more extreme in their opinions after group discussion, but also find \emph{consensus}, reducing 
+  group-level opinion variance.
+  \emph{Simple consensus} may occur instead, where opinion variance decreases but
+  the mean group opinion does not change.
+  Here we show that many published detections of group polarization are explained
+  equally rigorously as simple consensus.
+  This is the case because experimenters failed
+  to account for the measurement of continous-valued psychological opinions 
+  as ordinal-valued reported opinions, e.g., on a Likert-type scale. 
+  This creates ceiling effects that mask whether extreme opinions become less extreme.
+  We developed a generative model to demonstrate that 95\% of sixty experimental conditions
+  across ten group polarization papers report plausibly false detections of
+  group polarization. Our approach can be used to evaluate whether other detections of
+  group polarization may be plausibly false---our approach could be applied beyond
+  group polarization as well. This work also provides a
+  framework for new group polarization studies that could
+  share a common, rigorous, and interoperable study design to multiply our knowledge
+  of this potentially important group process, avoiding the historically fragmented
+  approach using disparate, incommensurate study designs.
 
   % To show this, we developed a
   % novel generative model that provides two levels of evidence that an historical
