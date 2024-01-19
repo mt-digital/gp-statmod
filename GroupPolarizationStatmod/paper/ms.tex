@@ -4,6 +4,7 @@
 \usepackage{setspace}
 \usepackage{longtable}
 \usepackage{caption}
+\usepackage{subcaption}
 \usepackage{pdflscape}
 \usepackage{graphicx}
 % DOCUMENT LAYOUT
@@ -90,15 +91,6 @@ bookmarks, colorlinks, breaklinks,
 
 \begin{abstract}
   \noindent
-  % Psychology is beset by three crises: the reproducibility crisis, the
-  % generalizability crisis, and the theory crisis. New verbal theories for various
-  % phenomena are constantly being developed orthogonal to other theories, all based on
-  % mostly unreproducible analyses; even if a positive result is in some sense ``true''
-  % it may not account for all the variance present in a set of observations---studies
-  % thus fail to generalize because their results do not account for this variance.
-  % There is another related problem: a phenomenon may be ``reproducible'' only
-  % because studies of the phenomenon systematically misuse statistics in such a way
-  % that induces false positives for each succeeding ``replication.'' 
   \emph{Group polarization} is a theoretical process where like-minded novel group members 
   become more extreme in their opinions after group discussion, but also find \emph{consensus}, reducing 
   group-level opinion variance.
@@ -109,8 +101,9 @@ bookmarks, colorlinks, breaklinks,
   This is the case because experimenters failed
   to account for the measurement of continous-valued psychological opinions 
   as ordinal-valued reported opinions, e.g., on a Likert-type scale. 
-  This creates ceiling effects that mask whether extreme opinions become less extreme.
-  We developed a generative model to demonstrate that 95\% of sixty experimental conditions
+  This creates a ceiling effect that masks extreme opinions becoming less extreme.
+  We developed a generative model to 
+  demonstrate that 95\% of sixty experimental conditions
   across ten group polarization papers report plausibly false detections of
   group polarization. Our approach can be used to evaluate whether other detections of
   group polarization may be plausibly false---our approach could be applied beyond
@@ -119,18 +112,8 @@ bookmarks, colorlinks, breaklinks,
   share a common, rigorous, and interoperable study design to multiply our knowledge
   of this potentially important group process, avoiding the historically fragmented
   approach using disparate, incommensurate study designs.
-
-  % To show this, we developed a
-  % novel generative model that provides two levels of evidence that an historical
-  % published empirical finding of group polarization is plausibly false.  Our model
-  % can be used to evaluate additional studies in group polarization and beyond, even
-  % if the reported data and significant metrics are incompletely reported, and the
-  % original raw data has been lost to time.  This may be just the tip of the
-  % plausibly-false-positives-in-psychology iceberg, both for group polarization
-  % studies and for the legion psychological results that model ordinal observations of
-  % opinions, beliefs, emotions, or any other latent psychological variable that is
-  % theoretically continuous, but measured using an ordinal scale.  
 \end{abstract}
+
 \clearpage
 
 \begin{quote}
@@ -414,8 +397,8 @@ opinions (upper left plot)
    $\sigma_t$ & Latent standard deviation at time $t$ \\
    $p(o;\mu,\sigma_t)$ & Normal latent distribution of opinions with mean
                          $\mu$ and variance $\sigma_t^2$ \\
-   $k \in \{0,\ldots,K\} $ & Threshold index ($k$) between 0 and total number of
-         ordinal bins, $K$ \\
+   $k \in \{0,\ldots,B\} $ & Threshold index ($k$) between 0 and total number of
+         ordinal bins, $B$ \\
    $b_k$ & Opinion bin $k$; note there is no $k=0$ bin. \\
    $\theta_{k-1},~\theta_k$  & Lower, upper threshold value for binning latent opinions into
      bin $b_k$ \\
@@ -547,16 +530,35 @@ plausibly false positives (Table~\ref{tab:XXXXX}).
 
 \subsection{Metric linear models often fail to identify simple consensus}
 
+Here we evaluate if metric linear models inferred group polarization from simulated
+simple consensus data using parameters identified above. Those parameters specified
+continous pre- and post-deliberation means and variance of normal opinion
+distributions that represent simple consensus but yields
+pre- and post-deliberation ordinal distributions with different, group-polarized
+means. This parameter-finding process implicitly assumes $N\to\infty$ participants.
 
-Here we evaluate if metric linear models inferred group polarization from
-simulated simple consensus data using parameters identified above. Those
-parameters specified continous pre- and post-deliberation 
+It is therefore necessary to evaluate whether the simple consensus parameters so 
+identified in the previous step yield simulated data that also appear to be
+group-polarized when measured on an ordinal scale. We draw $N$ samples from the
+pre- and post-deliberation normal distributions and bin them into one of 
+$B$ ordinal values. $N$ and $B$ are set specifically for each of the 
+60 experimental conditions analyzed here. We then fit a linear model to the 
+simulated observed pre- and post-deliberation data to infer whether the mean
+shifted, indicating group polarization. We measure the pre- and
+post-deliberation standard deviations as well. Then we calculate Cohen's $d$
+to quantify the effect size for each simulation. A suite of simulations are
+necessary since there might be significant variance in $d$ for different
+generations of simulated pre- and post-deliberation observations. Therefore we
+perform 1000 trials for each experimental condition and inspect the resulting
+distributions of $d$ across trials in a boxplot.
 
-% \spacing{1.0}
-% \hspace{-1em}
-% \input{t-test-table.tex}
-% % \input{t-test-table-custom.tex}
-% \spacing{1.5}
+
+
+\vspace{0.5em}
+\begin{center}
+{[ FIGURE \ref{fig:MetricBoxplot_N} ABOUT HERE ]} \\
+\end{center}
+
 
 \subsection{Ordered-probit models also fail?}
 
@@ -585,6 +587,8 @@ Due to a lack of data sharing in general, and often from decades-old papers, and
 failure of group polarization work to provide opinion variance information, 
 it is impossible to know whether an historical detection of group polarization
 is a true or false positive. 
+
+We did make some simplifying assumptions that could affect model outcomes. 
 
 This problem is made all the worse by the lack of a consistent experimental design for group
 polarization experiments. This makes it impossible to systematically account for
@@ -621,7 +625,46 @@ rigor is the only way to a reliable understanding of group polarization.
 
 \appendix
 
-\section{Notes on studies}
+\section*{Figures}
+
+\begin{figure}
+  \caption{
+    Boxplots visualizing the distribution of Cohen's $d$ values (x-axis in
+    A and B) inferred through a metric linear model over 1000 simulation 
+    trials for each experimental condition (y-axis in A and B). All conditions
+    have many trials that result in non-zero Cohen's $d$ values with number of
+    simulated participants, $N$, set to their empirical values reported in the
+    associated journal article (A). However, when the number of simulated
+    participants is increased to $10N$, there are several conditions that 
+    indeed yield distributions closer to $d = 0$ as expected, however some
+    conditions have $d$ distributions centered on a nonzero mean with little to
+    no overlap with $d=0$; variance in $d$ decreases as expected
+    across experimental conditions (B).
+  }  
+  \label{fig:MetricBoxplot}
+  \centering
+  \begin{subfigure}[]{0.9\textwidth}
+    % \hspace{-7.5em} 
+    \centering
+    \textsf{\large \textbf{A}, empirical $N$} \\
+    \includegraphics[width=\textwidth]{Figures/boxplots/metric_cohens.pdf}
+    \label{fig:MetricBoxplot_N}
+  \end{subfigure} \\
+\end{figure}
+\begin{figure}\ContinuedFloat
+  \begin{subfigure}[]{0.9\textwidth}
+    % \hspace{-5.5em} 
+    \centering
+    \textsf{\large \textbf{B}, 10 $\times$ empirical $N$} \\
+    \includegraphics[width=\textwidth]{Figures/boxplots/10N_metric_cohens.pdf}
+    \label{fig:MetricBoxplot_10N}
+  \end{subfigure}
+\end{figure}
+
+
+\clearpage
+
+\section*{Notes on studies}
 
 Different group polarization studies have different goals, and measure shifts
 in a variety of ways, using different (or no) statistical tests to confirm
