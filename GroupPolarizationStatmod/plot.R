@@ -1,6 +1,13 @@
 ##
 # Some methods for plotting results from statmods.
 #
+
+require(fs)
+require(tidyverse)
+
+source("experiments.R")
+
+
 LIKERT_SCALE_DENS_MAX <- 0.7
 
 ##

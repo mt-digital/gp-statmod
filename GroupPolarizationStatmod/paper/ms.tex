@@ -1,793 +1,233 @@
-\documentclass[11pt, letterpaper]{article}
-\usepackage{marvosym}
-\usepackage{float}
-\usepackage{setspace}
-\usepackage{longtable}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{pdflscape}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  abstract]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1.1in,letterpaper]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx}
-% DOCUMENT LAYOUT
-% \usepackage{geometry} 
-\usepackage[margin=1.0in]{geometry}
-\usepackage{lineno}
-\usepackage[usenames,dvipsnames]{xcolor}
-\definecolor{myorange}{RGB}{240, 96, 0}
-\newcommand{\mt}[1]{{\textcolor{myorange} {({\tiny MT:} #1)}}}
-% \geometry{letterpaper, textwidth=5.5in, textheight=8.5in, marginparsep=7pt, marginparwidth=.6in}
-% \setlength\parindent{0in}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 
-\definecolor{linenocolor}{gray}{0.6}
-\renewcommand\thelinenumber{\color{linenocolor}\arabic{linenumber}}
-% \calclayout %centers text on page.
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[sorting=none, style=numeric-comp]{biblatex}
+\addbibresource{../library.bib}
+\usepackage{bookmark}
 
-\usepackage{amsmath}
-\usepackage{mathspec}
-% \setallmainfonts(Digits,Latin){STIX Two Text}
-% \setallmainfonts(Digits,Latin){Baskerville}
-% \setallmainfonts(Digits,Latin){Plantagenet Cherokee}
-\setallmainfonts(Digits,Latin){Palatino}
-% \setallmainfonts(Digits,Latin){Hoefler Text}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Prominent claims of group polarization are plausibly false with lessons for studying psychological dynamics},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
 
-
-% HEADINGS
-% \usepackage{sectsty} 
-% \usepackage[normalem]{ulem} 
-% \sectionfont{\upshape\Large}
-% \subsectionfont{\scshape\normalsize} 
-% \subsubsectionfont{\upshape\large} 
-
-% PDF SETUP
-% ---- FILL IN HERE THE DOC TITLE AND AUTHOR
-\usepackage[%dvipdfm, 
-bookmarks, colorlinks, breaklinks, 
-% ---- FILL IN HERE THE TITLE AND AUTHOR
-	pdftitle={Many claims of group polarization are plausibly false due to inappropriate
-    statistics},
-	pdfauthor={Matthew A. Turner},
-	pdfproducer={https://mt.digital}
-]{hyperref}  
-\hypersetup{linkcolor=blue,citecolor=blue,filecolor=black,urlcolor=MidnightBlue} 
-
-\usepackage{apacite}
-\usepackage{booktabs}
-\usepackage{authblk}
-
-\newcommand{\sigmapre}{\sigma_\mathrm{pre}}
-\newcommand{\sigmapost}{\sigma_\mathrm{post}}
-
-\newcommand{\normalpre}{\mathcal{N}(\mu, \sigmapre)}
-\newcommand{\normalpost}{\mathcal{N}(\mu, \sigmapost)}
-
-\newcommand{\ordmeanpre}{\langle o_{\mathrm{pre}}}
-\newcommand{\ordmeanpost}{\langle o_{\mathrm{post}}}
+\title{Prominent claims of group polarization are plausibly false with
+lessons for studying psychological dynamics}
+\author{Matthew Adam Turner \and Paul E. Smaldino}
+\date{}
 
 \begin{document}
-
-\title{Many claims of group polarization are plausibly false due to inappropriate
-    statistics}
-% \shorttitle{Group polarization or simple consensus?}
-% \author[1,2]{{Matthew A.~Turner}}
-\author[1]{{Matthew A.~Turner}}
-% \affil[1]{Department of Earth System Science, Stanford University}
-\affil[1]{Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
-
-% \author[3,4,5]{{Paul E.~Smaldino}}
-\author[2,3]{{Paul E.~Smaldino}}
-\affil[2]{Cognitive and Information Sciences, University of California, Merced}
-% \affil[4]{Center for Advanced Study in the Behavioral Sciences, Stanford University}
-\affil[3]{Santa Fe Institute}
-
-
-
 \maketitle
-% \setlength{\parindent}{15pt}
-% \maketitle
-
-\spacing{1.5}
-
-\linenumbers
-% \modulolinenumbers[3]
-
 \begin{abstract}
-  \noindent
-  \emph{Group polarization} is a theoretical process where like-minded novel group members 
-  become more extreme in their opinions after group discussion, but also find \emph{consensus}, reducing 
-  group-level opinion variance.
-  \emph{Simple consensus} may occur instead, where opinion variance decreases but
-  the mean group opinion does not change.
-  Here we show that many published detections of group polarization are explained
-  equally rigorously as simple consensus.
-  This is the case because experimenters failed
-  to account for the measurement of continous-valued psychological opinions 
-  as ordinal-valued reported opinions, e.g., on a Likert-type scale. 
-  This creates a ceiling effect that masks extreme opinions becoming less extreme.
-  We developed a generative model to 
-  demonstrate that 95\% of sixty experimental conditions
-  across ten group polarization papers report plausibly false detections of
-  group polarization. Our approach can be used to evaluate whether other detections of
-  group polarization may be plausibly false---our approach could be applied beyond
-  group polarization as well. This work also provides a
-  framework for new group polarization studies that could
-  share a common, rigorous, and interoperable study design to multiply our knowledge
-  of this potentially important group process, avoiding the historically fragmented
-  approach using disparate, incommensurate study designs.
+This is the abstract
 \end{abstract}
 
-\clearpage
-
-\begin{quote}
-In our introductory social psychology course, 
-we have for many years used the [group polarization experimental paradigm] as
-a laboratory exercise. The exercise works beautifully, but one must be
-careful to forewarn a class that [group polarization] does not occur with every 
-group\ldots and that the effect is not large. 
-\par\raggedleft\cite[p. 205]{Brown1986}
-\end{quote}
-
-\begin{quote}
-One of the most robust findings in social psychology is that of attitude polarization 
-following discussion with like-minded others.
-\par\raggedleft\cite[p. 267]{Cooper2001}
-\end{quote}
-
-\section{Introduction}
-
-\begin{itemize}
-  \item 
-    \emph{Group polarization} is a process where the mean opinion of a 
-    like-minded group becomes more extreme over time~\cite{Brown1986,Brown2000}. 
-    It is therefore an important component process in
-    the broader process of increasing political polarization that can hamstring
-    governments~\cite{Mason2018UncivilAgreementBook,Klein2020}.
-  \item
-    Individuals' opinions in group polarization experiments are typically 
-    measured using an ordinal scale, such
-    as a Likert scale, where behavioral experiment participants' internal, theoretically
-    continuous, opinions are converted to one of several opinion bins indiciating
-    their degree of agreement or disagreement with some prompt statement.
-  \item
-    Recently, however, it has been shown that it is critical to use 
-    appropriate statistical methods when using experimental designs that 
-    measure continuous latent psychological variables with ordinal
-    measurements---failure to do so can result in false positive support for
-    the presence of experimental effects~\cite{Liddell2018}.
-  \item
-    In this paper, we develop a generative modeling approach for evaluating whether or
-    not published detections of group polarization are plausibly false, i.e.,
-    whether they are \emph{plausibly-false positives} (PFPs). 
-  \item
-    We found significant evidence that many published group polarization findings
-    are indeed plausibly false since we found distribution parameters that
-    generated simulated pre- and post-discussion data that a $t$-test found
-    to be from distributions with different means, although there was no difference
-    in mean, only a difference in variance. 
-  \item
-    Although a $t$-test may be fooled by simple consensus under ordinal measurements,
-    we show that a more appropriate ordered probit model of the data yield no
-    such plausibly-false positives.
-  \item
-    Our work shows the need for using appropriate statistical tests, as well as
-    the need for a consistent experimental paradigm so that meaningful meta-analyses
-    can be performed for theoretical integration and rigorous understanding of
-    the group polarization effect, should it prove to occur in future group
-    polarization studies that use proper statistics. In addition to avoiding
-    $t$-tests, future group polarization studies can be more reliable by
-    accounting for random effects arising from, e.g., socioeconomic status,
-    gender, and other individual-level factors that may bias how much and in what
-    direction a participant changes their opinions. Failure to do so can result 
-    in artificially-inflated effect sizes~\cite{Yarkoni2021}.
-\end{itemize}
-
-\subsection{Group polarization}
-
-Group polarization is often induced in behavioral experiments by first answering
-an opinion prompt, grouping
-relatively like-minded individuals together to discuss the prompt, then 
-again polling opinions; the change in mean opinion towards a more extreme
-consensus than the initial mean is the amount of group polarization that has occurred
-(Figure~\ref{fig:groupPolarizationSchematic}). 
-
-While all ten studies scrutinized here use the general experimental procedure
-outlined above (Figure~\ref{fig:groupPolarizationSchematic}), each study and constituent 
-experimental condition have idosyncracies that makes the results themselves
-more opaque, and that makes comparison of different studies' findings more
-difficult. (REVIEW A FEW SIMPLE EXAMPLES). A detailed examination of each study's
-idiosyncracies is given in Table~\ref{tab:conditionsComparison}.
-
-\begin{figure}
-  \caption{Group polarization experiments trials in the ten studies
-    analyzed here proceed in three steps: 
-    (A) \textbf{Pre-deliberation.} Participant opinions are measured using an 
-    ordinal scale. 
-    (B) \textbf{Deliberation.} Groups discuss their opinions on the prompt. 
-    (C) \textbf{Post-deliberation.} Participant opinions are measured again.
-    Group polarization in one trial is said to occur if 
-    the mean post-deliberation opinion is greater than the pre-deliberation 
-    opinion.
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
 }
-  \label{fig:groupPolarizationSchematic}
-  \centering
-  \includegraphics[width=\textwidth]{Figures/GPExperimentSketch.pdf}
-\end{figure}
+\section{Quarto}\label{quarto}
 
+Quarto enables you to weave together content and executable code into a
+finished document. To learn more about Quarto see
+\url{https://quarto.org}.
 
+\section{Running Code}\label{running-code}
 
-% \spacing{1.0}
-% \input{tables/conditions_table.tex}
-% \spacing{1.5}
+When you click the \textbf{Render} button a document will be generated
+that includes both content and the output of embedded code. You can
+embed code like this:
 
-\subsection{Statistical inference in opinion change}
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \SpecialCharTok{+} \DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
 
-2-3 par: the right way; what GP studies do; why it's a problem (N-1 sents) and how
-to fix it (1 sent)
+\begin{verbatim}
+[1] 2
+\end{verbatim}
 
-When 
+You can add options to executable code like this
 
-\begin{itemize}
-  \item 
-    Group polarization studies use null-hypothesis testing that implicitly
-    assume (1) \emph{opinions} (or other equivalent latent psychological variables
-    such as \emph{attitudes} or \emph{beliefs}) are continuously-valued, and
-    (2) 
-  \item
-    The exact null-hypothesis testing procedure varies between studies $t$-tests, ANOVA, etc. 
-\end{itemize}
+\begin{verbatim}
+[1] 4
+\end{verbatim}
 
-Recently, problems with using have been made clear~\cite{Liddell2018}.
-The way to fix this problem going forward is to use a thresholded-normal 
-statistical model for group polarization data, or other related statistical 
-model that accounts for opinion binning~\cite[Ch. 23]{Liddell2018,KruschkeDBDA}.
+The \texttt{echo:\ false} option disables the printing of code (only
+output is displayed).
 
-\subsection{Study selection and overview}
 
-Studies were selected to be either influential papers, based on citations or
-author prominence, that test either examine
-group polarization in political opinions, and to be representative of investigations
-of four primary group polarization explanations extant in the literature.
-At the time of paper selection we did not examine the statistical methods in detail beyond
-checking that they indeed used 
+\printbibliography[title=References]
 
-Because of the difficulties casting individual research articles into our modeling
-framework, and the central task of creating the model and analyzing this first
-batch of studies with it, we limit our analysis to 10 studies. It is problem
-enough that these 10 prominent studies have the problems we demonstrate they
-plausibly do. Problems among these 10 suggest the problem may be more wide spread. 
-When we do more analyses
-they will be aided by improved data management systems for applying this model to 
-additional studies (eventually outside of group polarization).
-
-Statistical problems among these studies are not limited to a mismatch between
-measurement and statistical procedures, which requires the detailed treatment
-we provide in this paper. Other problems are more pedestrian.
-One major issue shared by several studies
-is the use of unpaired $t$-tests to detect group polarization. Since the same
-group has their opinions measured twice over time, the opinions are correlated
-and so a paired $t$-test would be required for test assumptions to be met 
-(assuming all other paired $t$-test assumptions were met, 
-which of course they are not, which is why our paper here is necessary).
-In some cases the reported shifts were ``significant'', 
-but not truly ``group polarization'' shifts, i.e., 
-shifts from initially biased group opinions
-to more extreme group opinions biased in the same direction; instead shifts 
-were from a neutral initial group opinion to a biased group opinion 
-(as in, e.g.,~\citeA{Abrams1990} Uncategorized2), or from
-an opinion biased in one direction (as in, e.g.,~\citeA{Abrams1990} Categorized1,
-Categorized2, AND OTHERS???). In some results of \citeA{Freidkin1999a}, 
-shift values are reported with their
-standard deviations---but the shift standard deviations are greater than the
-shifts themselves, indiciating that zero shift is included in the observed
-shift confidence interval. This is \emph{prima facie} a negative result that
-should not have been counted as evidence of group polarization. 
-
-Some group polarization studies do not measure continuous latent opinions using
-a metric scale, and so are not affected by the floor and ceiling effects that
-undermine a good number of experimental results, as we examine here. There may,
-however, be other problems, such as non-group polarization shifts and the use
-of unpaired $t$-tests when paired tests are required.
-
-
-
-\subsection{Research overview}
-
-In this paper we analyze whether published statistical detections of group 
-polarization obtained through null-hypothesis statistical tests
-are plausibly false because they can be explained equally well by simple consensus
-where the mean group opinion does not change over time, but opinion variance does.
-This analysis requires several preliminary steps. 
-First we formally develop our generative model of simple consensus and group 
-polarization in terms of changes in group opinion mean and variance from 
-pre- to post-deliberation. Then we developed a search algorithm for identifying 
-which, if any, simple consensus scenarios with 
-constant latent mean and pre- and post-deliberation opinion variances 
-could generate published observations of group polarization. To apply this model
-and algorithm to published results, we developed an interactive web application
-for data input and to test which different potential simple consensus scenarios 
-could generate group polarization opinion shifts. After identifying plausibly false
-detections of group polarization we examine whether the identified simple
-consensus scenario (parameters?) can indeed generate data to fool the 
-paper's null-hypothesis tests into thinking the data actually support the inference
-that simple consensus did not occur. Finally, we examine whether, in these same
-plausibly false detections, a Bayesian thresholded-normal statistical model
-will accurately identify simple consensus instead of falsely detecting group
-polarization.
-
-\section{Model}
-
-Our model represnts the generative process of finding different forms of group consensus
-in group polarization experiments, and the process of measuring that consensus using
-an ordinal measurement scale, e.g.\ a Likert-type scale. This model operationalizes two
-relevant forms of consensus: \emph{simple consensus} and \emph{group polarization}.
-\mt{Need to explain in Intro why consensus should occur along with group
-polarization} 
-% Group polarization experiments are designed to result group consensus
-% since they group together like-minded individuals to see if they become more
-% extreme after discussion~\cite{Turner2018}.
-
-We collected group polarization data from ten empirical studies with sixty constituent
-experimental conditions across all studies. We recorded the reported opinion shift and pre- and
-post-deliberation mean opinions, and the number of participants
-in each condition, as long as this data was available---\citeA{Burnstein1975} 
-did not report pre- and post-deliberation
-means, only the shift in means. We did not include experimental treatments that did not 
-yield a positive detection of group polarization since we are only estimating
-the rate of plausible false positive detections of group polarization. 
-
-Based on this data
-
-% In two cases, reported opinion and shift values were converted from an ordinal
-% scale to a percentage scale, specifically \citeA{Friedkin1999a} and \citeA{Krizan2007}.
-% The authors in these papers did report the original ordinal measurement scale,
-% so we converted the means back to the orignial measurement scale.
-% In a few cases from \citeA{Friedkin1999a} we did not need to apply our 
-% model to the reported data because we could determine a reported opinion shift was 
-% \emph{prima facie} false since reported opinion shift magnitudes
-% were smaller than the standard deviation in shifts (see Table 1, p. 868, \emph{ibid}),
-% despite Friedkin's claim that regressions (not clearly defined) on all shifts 
-% yielded $p < 0.05$~\cite{Kruschke2018c}.
-
-
-\subsection{Latent opinions, ordinal measurements, and how simple consensus can look like
-group polarization}
-
-
-We begin by developing a formal model of ordinal measurement of latent continuous
-opinions (model variables and parameters are given in Table~\ref{tab:modelVariables}).
-First, we assume that participant $i$ has latent opinion at time $t$ that is drawn from
-a group-level normal distribution,
-\begin{equation}
-  o_{i,t} \sim p(o; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
-  \label{eq:opinionDistribution}
-\end{equation}
-\noindent 
-This distribution has mean $\mu_t$ and standard deviation $\sigma_t$.
-This form is chosen to
-reflect the common statistical analysis used by group polarization studies,
-not because it is statistically appropriate---in fact it is not, which is what
-we aim to show in this paper.
-
-It is appropriate to assume opinions are normally distributed because published
-group polarization studies use some sort of $t$-tests, or similar tests, which are designed
-to detect whether the mean of two distributions are the same or not. This imposes the
-implicit assumption that opinions themselves are normal. But as we will show, 
-metric statistical tests such as $t$-tests reliably generate false rejections
-of the null hypothesis that there is no difference between two distributions' means.
-
-\subsubsection{How simple consensus can look like group polarization}
-
-Simple consensus can look like group polarization when (1) the mean latent opinion
-does not change; (2) both more and less extreme opinions move toward this 
-unchanged latent mean (i.e., opinion variance shrinks due to consensus); 
-and (3) an ordinal scale is used that bins all extreme
-latent opinions into the same extreme bin even though those means have changed,
-but opinion bins that are less extreme or of opposite polarity more accurately
-reflect the underlying change in latent opinion distribution. This process is
-illustrated in Figure~\ref{fig:consensusDistroIllustration}, where we show
-a toy example of what can occur when the pre-consensus
-opinions (upper left plot) 
-
-\begin{table}[h]
-  \caption{Variables used in the formal model of group polarization from simple consensus.}
-  \label{tab:modelVariables}
-  \begin{tabular}{cp{5.0in}} \toprule
-   Symbol & Description  \\ \midrule  
-   $t \in \{\mathrm{pre}, \mathrm{post}\}$ & Time, either \emph{pre}- or
-                                           \emph{post}-discussion \\
-   $\mu$  &   Latent mean, assumed constant for simple consensus \\ 
-   $\sigma_t$ & Latent standard deviation at time $t$ \\
-   $p(o;\mu,\sigma_t)$ & Normal latent distribution of opinions with mean
-                         $\mu$ and variance $\sigma_t^2$ \\
-   $k \in \{0,\ldots,B\} $ & Threshold index ($k$) between 0 and total number of
-         ordinal bins, $B$ \\
-   $b_k$ & Opinion bin $k$; note there is no $k=0$ bin. \\
-   $\theta_{k-1},~\theta_k$  & Lower, upper threshold value for binning latent opinions into
-     bin $b_k$ \\
-   $p(o \in b_k; \mu, \sigma_t)$ & Ordinal density of binned opinions in bin $b_k$ 
-            (Equation~\ref{eq:binFrequency}) \\
-   $\langle o_t \rangle$  &   Observed mean opinion calculated from ordinal data at time $t$ \\
-   \bottomrule
-  \end{tabular} 
-\end{table}
-
-\begin{figure}
-  \caption{\emph{Simple consensus} occurs in a group when its latent opinion
-  distribution variance decreases, but the mean does not change (A). When 
-latent opinions are measured on an ordinal scale, the mean of the distribution
-can be distorted by ceiling (or floor) effects (B). Group polarization 
-can appear to have occurred where the mean of the observed opinions appears
-to increase despite the latent mean being constant (C).}
-  \label{fig:consensusDistroIllustration}
-  \vspace{1em}
-  \centering
-    \includegraphics[width=1.0\textwidth]{ConsensusDistroIllustration/figure.pdf}
-\end{figure}
-
-This distributional view models the measurement of $N \to \infty$ participant opinions,
-which results in a histogram of frequency of opinions
-in each bin, i.e., $o_{i,t} = b_k$. The frequency of responses in each bin is 
-the integral over the continuous normal probability density function from 
-one bin threshold to another. This transforms the probability density 
-function from $p(o_{i,t};~\mu_t, \sigma_t)$ to the probability
-of observing a reported opinion of each bin value. 
-The probability of observing an opinion in bin
-$b_k$ is calculated by integrating the normal probability density 
-function over the range of $\theta_{k-1}$ to $\theta_{k}$. 
-Formally, we write the 
-probability of observing an opinion in bin $k$ at time $t$ as
-\begin{equation}
-\begin{aligned}
-  p(o \in b_k; \mu_t, \sigma_t, \theta) 
-    &= \int_{\theta_{k-1}}^{\theta_k} p(o;\mu_t, \sigma_t) do \\
-    &= \Phi \left( \frac{o - \mu_t}{\sigma_t} \right)\Big|_{o=\theta_{k-1}}^{\theta_k} \\
-    &= \Phi \left( \frac{\theta_k - \mu_t}{\sigma_t} \right) - 
-       \Phi \left( \frac{\theta_{k-1} - \mu_t}{\sigma_t} \right)
-\end{aligned}
-\label{eq:binFrequency}
-\end{equation}
-\noindent
-where $\Phi(\frac{o - \mu}{\sigma})$ is the normalized 
-normal cumulative distribution function over opinions $o$, shifted by an amount $\mu$ with
-standard deviation $\sigma$. 
-
-\subsection{Evaluating whether a group polarization finding is plausibly false}
-
-We have shown in one toy example that group polarization can appear to occur
-when ordinal measures are used, without accounting for the binning process; now
-we show how to .
-
-We develop two measures for how plausible it is that a reported positive detection
-of group polarization is indeed a false positive, building our confidence 
-in the plausibility at each step. In this way, we take a modern Bayesian approach
-to scientific evidence that typically does not dichotomize ``true'' and ``false''
-into absolutes, but evaluates degrees of belief instead.
-
-The first measure we use for whether a reported detection of group polarization
-is plausibly false is whether we can find a combination of latent simple
-consensus parameters $\mu$, $\sigmapre$, and $\sigmapost$ representing latent
-distributions that, when binned (Equation~\ref{eq:binFrequency} and
-Figure~\ref{fig:consensusDistroIllustration}), result in ordinal distributions
-that have the same difference in means reported in the literature that the authors
-took to mean group polarization had occurred. Note that these calculations are
-done for the case where effectively we have $N \to \infty$; next we turn to
-the question of whether data generated from these simple consensus distributions
-generate a ``significant'' group polarization result. 
-
-The second measure of how plausible it is that a group polarization is false
-is whether ordinal data generated by binning draws from the latent distributions
-is found to be significantly different according to Welch's $t$-test.
-
-
-\subsubsection{Identify null-model parameters that yield plausibly-false positives}
-
-To find simple consensus parameters $\mu$, $\sigmapre$, and $\sigmapost$ that
-generate ordinal distributions showing group polarization, we used the above
-framework in an optimization routine that takes an initial guess for these latent
-parameters and hillclimbs to find $\sigmapre$ and $\sigmapost$ that most accurately
-generate ordinal data that appears to have had group polarization occur.
-
-
-\subsubsection{Metric model inference of Cohen's $d$ for simulated simple-consensus data}
-
-After identifying null-model parameters that yield plausibly-false positives 
-in the $N \to \infty$ case, we generated binned samples from normal opinion 
-distributions $\normalpre$ and $\normalpost$. Specifically, for each experimental
-condition that passed the initial $N \to \infty$ test, we generated 1000 
-pre- and post-deliberation ordinal datasets. 
-
-We generated these simulated data using the latent mean, pre-deliberation 
-standard deviation, and post-deliberation standard deviations as parameters of
-normal distributions of pre- and post-deliberation opinions. 
-
-\subsection{Bayesian ordered-probit models inference of Cohen's $d$ for simulated
-simple-consensus data}
-
-Non-metric ordered probit models, which account for the data collection 
-process, theoretically should be better able to correctly
-distinguish simple consensus compared to metric models. Therefore, we also fit
-the following ordered probit model to simulated group polarization data. 
-
-\section{Analysis}
-
-\subsection{Plausible parameters for false positives}
-
-We found that X\% of group polarization detections across all studies were 
-plausibly false positives (Table~\ref{tab:XXXXX}).
-
-\vspace{.5em}
-\spacing{1.0}
-% \input{plausibleFP-table.tex}
-\begin{table}[H]
-    \begin{center}
-      \caption{Number and fraction of experimental conditions where group polarization was
-               reported to have occurred, but plausibly did not.}
-      \vspace{.5em}
-      \input{plausibleFP-table-custom.tex}
-    \end{center}
-  \end{table}
-\spacing{1.5}
-
-
-
-\subsection{Metric linear models often fail to identify simple consensus}
-
-Here we evaluate if metric linear models inferred group polarization from simulated
-simple consensus data using parameters identified above. Those parameters specified
-continous pre- and post-deliberation means and variance of normal opinion
-distributions that represent simple consensus but yields
-pre- and post-deliberation ordinal distributions with different, group-polarized
-means. This parameter-finding process implicitly assumes $N\to\infty$ participants.
-
-It is therefore necessary to evaluate whether the simple consensus parameters so 
-identified in the previous step yield simulated data that also appear to be
-group-polarized when measured on an ordinal scale. We draw $N$ samples from the
-pre- and post-deliberation normal distributions and bin them into one of 
-$B$ ordinal values. $N$ and $B$ are set specifically for each of the 
-60 experimental conditions analyzed here. We then fit a linear model to the 
-simulated observed pre- and post-deliberation data to infer whether the mean
-shifted, indicating group polarization. We measure the pre- and
-post-deliberation standard deviations as well. Then we calculate Cohen's $d$
-to quantify the effect size for each simulation. A suite of simulations are
-necessary since there might be significant variance in $d$ for different
-generations of simulated pre- and post-deliberation observations. Therefore we
-perform 1000 trials for each experimental condition and inspect the resulting
-distributions of $d$ across trials in a boxplot.
-
-
-
-\vspace{0.5em}
-\begin{center}
-{[ FIGURE \ref{fig:MetricBoxplot_N} ABOUT HERE ]} \\
-\end{center}
-
-
-\subsection{Ordered-probit models also fail?}
-
-We found that in many cases Bayesian ordered-probit models avoid falsely identifying simple
-consensus as group polarization. This supports the claim that it is the choice of statistical
-procedure, including the failure to account for the ordinal nature of, and variance within,
-opinion measuremenets in group polarization experiments that leads to false
-positives, not anything intrinsic to the phenomenon of group polarization.
-
-
-\subsection{More data enables ordered probit models, but not metric models, to reliably
-  identify simple consensus}
-
-  \mt{Idea: increase $N$ for simulations and see effect on distribution of Cohen's $d$
-  for both metric and ordinal models}
-
-
-\section{Discussion}
-
-We showed that many prominent detections of group polarization are plausibly
-false, and that future studies \emph{must} use ordered-probit statistical
-models and estimate highest-density or confidence intervals, not point-estimates 
-and significance values~\cite{Meehl1997}.
-
-Due to a lack of data sharing in general, and often from decades-old papers, and a persistent 
-failure of group polarization work to provide opinion variance information, 
-it is impossible to know whether an historical detection of group polarization
-is a true or false positive. 
-
-We did make some simplifying assumptions that could affect model outcomes. 
-
-This problem is made all the worse by the lack of a consistent experimental design for group
-polarization experiments. This makes it impossible to systematically account for
-additional sources of vairance known to lead to over-estimates
-of effect sizes~\cite{Yarkoni2021}, independent of the false positives problem
-we identified in the current paper. 
-
-% This is due to the rush to explain why 
-% group polarization occurs using weak theory~\cite{Cartwright1971,Cartwright1973} and makes
-% group polarization meta-analyses (e.g. Brown, 1986; and Isenberg, 1986)\nocite{Brown1986,Isenberg1986}
-% unreliable~\cite{Meehl1990,Meehl1997}.
-
-Group polariztion is an essential social phenomenon that could be a major driver of
-progress-halting political polarization more broadly. If echo chambers of like-minded
-individuals tend to become radicalized it is essential to measure by how much
-in different contexts, and to develop rigorous theoretical explanations of
-this phenomenon. It appears, unfortunately, that decades of group polarization
-research may have published many plausibly false inferences of the
-occurrence of group polarization, as demonstrated by our simple consensus
-model of false group polarization detection. As mentioned, a lack of
-consistency and failure to account for additional sources of variance could
-be two additional ways published research is underpowered, and associated
-theoretical insights undermined. It may not be easy to get the group polarization field to 
-consolidate experimental designs and use appropriate statistical procedures,
-but it is a straightforward solution. Indeed, combining inter-study consistency and statistical
-rigor is the only way to a reliable understanding of group polarization.
-
-\bibliographystyle{apacite}
-
-\setlength{\bibleftmargin}{.125in}
-\setlength{\bibindent}{-\bibleftmargin}
-
-\bibliography{/Users/mt/workspace/Writing/library.bib}
-
-\appendix
-
-\section*{Figures}
-
-\begin{figure}
-  \caption{
-    Boxplots visualizing the distribution of Cohen's $d$ values (x-axis in
-    A and B) inferred through a metric linear model over 1000 simulation 
-    trials for each experimental condition (y-axis in A and B). All conditions
-    have many trials that result in non-zero Cohen's $d$ values with number of
-    simulated participants, $N$, set to their empirical values reported in the
-    associated journal article (A). However, when the number of simulated
-    participants is increased to $10N$, there are several conditions that 
-    indeed yield distributions closer to $d = 0$ as expected, however some
-    conditions have $d$ distributions centered on a nonzero mean with little to
-    no overlap with $d=0$; variance in $d$ decreases as expected
-    across experimental conditions (B).
-  }  
-  \label{fig:MetricBoxplot}
-  \centering
-  \begin{subfigure}[]{0.9\textwidth}
-    % \hspace{-7.5em} 
-    \centering
-    \textsf{\large \textbf{A}, empirical $N$} \\
-    \includegraphics[width=\textwidth]{Figures/boxplots/metric_cohens.pdf}
-    \label{fig:MetricBoxplot_N}
-  \end{subfigure} \\
-\end{figure}
-\begin{figure}\ContinuedFloat
-  \begin{subfigure}[]{0.9\textwidth}
-    % \hspace{-5.5em} 
-    \centering
-    \textsf{\large \textbf{B}, 10 $\times$ empirical $N$} \\
-    \includegraphics[width=\textwidth]{Figures/boxplots/10N_metric_cohens.pdf}
-    \label{fig:MetricBoxplot_10N}
-  \end{subfigure}
-\end{figure}
-
-
-\clearpage
-
-\section*{Notes on studies}
-
-Different group polarization studies have different goals, and measure shifts
-in a variety of ways, using different (or no) statistical tests to confirm
-the presence of group polarization opinion shifts. This supplemental section
-reviews the ten papers one-by-one and explains how group 
-polarization was measured in each paper. I also explain how I decided which
-group polarization detections I included from each paper, and how we decided
-if they were plausibly false positives, including whether we needed to 
-
-\paragraph{{Abrams1990}} This study is meant to support the presence of the "self-categorization" effect in
-social psychology. The paper presents three experiments and their results--Experiment 3 is the group polarization
-experiment, designed to show that self-categorization is at work in the emergence of group polarization. Uses high
-schoolers aged 16-17 in Hawkes Bay, New Zealand. There are five deliberation topics (p. 112) across two conditions
-(p. 113): one condition where participants are made aware of the relationship between their opinions and other group
-members' opinions ("Categorized") and another condition where participants were given no information about their
-opinion relative to other group members' opinions ("Uncategorized"). It was confusing to me what scale is used for
-Table 2 (p. 114), but parsing the "Dependent measures" subsection several times led me to understand the last
-paragraph, that "[a]ttitude shift overall was...assessed...on the unconverted +4 to -4 scale."
-
-\paragraph{{Burnstein1973}} First I want to note this study was funded in part by a Guggenheim fellowship (see
-note on first page) and the authors acknolwedge the assistance of "vinous" discussions with colleagues at the
-University of Provence and the "spirited and intelligent efforts" of two female research assistants. The study
-presents the results of two experiments (really one experiment with two pools of participants) that test the
-persuasive arguments hypothesis by having students perform the standard group polarization experiment with five CDQ
-discussion items, items A,B,E,F, and H (A,B risk-inducing; E, F caution-inducing; H neutral). Experiment 1 used 149
-male intro psych students and Experiment 2 used 76 male intro psych students from the University of Michigan. There
-are three conditions across the two experiments--one hypothesized to show an emergent shift and the other two
-hypothesized to not show a shift. None of the conditions allowed participants to know each others' ratings exactly,
-the participants only deliberated the various topics. In the one hypothesized to show a shift, participants were
-instructed to argue for their position. In the other two, participants argued against their position. The "against"
-condition was further divided into a case where everyone knew everyone was prompted to argue against their position,
-and another sub-condition where participants did not know if others were arguing for or against their true position.
-We include only the first condition where participants argued for their position, which is the only condition
-expected to show shifts (though others do, but the authors let themselves off the hook saying, "They are curious
-findings and defy straightforward explanation...we will merely note their occurrence and not venture to speculate as
-to their cause"). Thus, in our table we have conditions A, B, E, F, and H. Even though H is supposed to not show a
-shift, it does in this study, which is possibly further evidence that this study merely shows participant consensus
-formation, not opinion shifts.
-
-\paragraph{{Burnstein1975}} In this study, Burnstein and Vinokur ran an experiment to evaluate their theory
-that generating persuasive arguments are necessary for group polarization to occur. The authors design a study with
-three conditions, one Experimental and two Control, where participants (60 male students from intro psych at the
-University of Michigan) first answered four CDQ items that typically generate shifts towards more risk, then, in the
-Experimental condition, saw group members' responses and produced arguments that might support the positions of
-other participants. In the first control condition, Condition II in the paper and Control1 in our table,
-participants were exposed to others' opinions, but does not get to reflect on their opinions or give arguments. In
-condition III, the second control condtition (we call Control2) participants do not get to know other participants'
-opinions at all. Thus, Burnstein and Vinokur hypothesize that significant shifts will only occur in Condition I, the
-Experimental condition. We thus only include Condition I in our analysis. The authors only report the shift, meaning
-we are free to choose any pre- and post-deliberation value to see if the null hypothesis is actually plausible.  
-
-\paragraph{{Schkade2010}} Friedkin uses three CDQ topics, "Sports", "School", and "Surgery" that use a
-20-point CDQ risk scale in fractional units, 0.05, 0.10, ..., 1.00 across three group sizes (2, 3, and 4, which he
-calls "dyads", "triads", and "tetrads", which we use in our CaseStudyTag). Friedkin only gives opinion shifts, and
-apparently transforms the fractional CDQ responses into percentages, since the shifts range between 5 and 9.
-However, closer inspection of Friedkin's results shows that the reported "Choice Shift" is not equal to the
-difference between mean final and initial opinions. Friedkin also uses "different" means for pre- and
-post-discussion opinions, which seems easy enough to show are really the same by re-organizing terms in the sum.
-Friedkin uses two topics in the tetrad condition where responses are in units of money where participants can freely
-give any number they choose ("Asbestos" and "Disaster"), and another topic called "Institutions" where participants
-rate 13 institutions, which participants rated on a scale from 0 to 100 percent to indicate the degree of trust the
-participant has in each institution. We only consider the CDQ topics since these are the ones rated on a discrete
-scale. 
-
-\paragraph{{Hogg1990}} It is not clear if there are indeed significant
-pre-post deliberation differences reported in this paper. The Results are a
-tangle of estimates of effect sizes and diagnostic statistical measures. It
-is also not clear that they actually report the pre- and post-deliberation
-opinions; it appears they only report the shifts. ``Opinion Difference
-Measures'' does not seem to include a test that the shifts themselves are
-reliable. I decided to count a finding from this study as a false positive if
-the model generated pre- and post-deliberation mean opinions within an
-absolute error of 0.01 of the reported value. The argument seems to be that
-since they are testing social ``frame[s] of reference'' (Table 1) that it is
-not necessary to show that group polarization itself occurs, only that the
-various experimental treatments yield different shifts---but if the shifts
-themselves are insignificant, then what is being measured, exactly?
-
-\paragraph{{Krizan2007}} Uses five CDQ topics ("scenarios") from Kogan and
-Wallach (1967) that typically provide shifts toward more risky decisions.  These are
-given in Footnote 2 on p. 194. Krizan and Baron report shifts and mean pre-test
-opinions on the risk scale, meaning that shifts are expected to be negative towards
-lower odds of success required to take the risk, i.e., the acceptance of more risk.
-Krizan and Baron report mean pre-test opinions, but average over all three conditions
-for each scenario, then report shifts for each scenario and condition, so we
-effectively have no way for an exact match of initial mean to condition x scenario,
-where conditions are no-discussion, deliberation without knowledge of an out-group's
-opinion, and deliberation with knowledge of an out-group's opinion. We are only
-interested in the non-control cases--K\&B found no difference in knowing out-group
-opinion, which they say is evidence against the self-categorization hypothesis of group
-polarization.  Therefore, we have ten cases we test across five scenarios and two
-conditions with our model, and we use the reported initial mean for each scenario
-twice--once for each scenario across the two conditions. Post-deliberation opinions are
-calculated in the spreadsheet using the reported shifts. K\&B also report the "Overall"
-shift, but I find this meaningless since it is across different items with no
-statistical control for inter-item variability. I noted that false detections are
-plausible in all cases due to the fact that the standard deviations of shifts overwhelm
-the shifts themselves, but I will still run the model on these cases to confirm.
-
-\paragraph{{Moscovici1969}} Moscovici and Zavalloni studied whether group
-polarization is more general than CDQ by using opinions about political topics. There
-were two general topics--attitudes about "Americans" and attitudes about then-president
-of France Charles "DeGaulle"--with 12 and 11 specific items, respectively, on which
-participants gave opinions and deliberated. Participants deliberated on one of the two
-general topics, giving opinions on each item on a seven-point Likert scale, -3 to +3.
-The authors reported pre-consensus and post-consensus mean opinions taken over all
-participants and items for each of the two general topics I have called the "Americans"
-and "DeGaulle" conditions.
-
-\paragraph{{Myers1970}} Myers and Bishop test whether group polarization occurs
-in groups with different levels of racial bias determined by a survey that is not also
-the deliberation topic. The participants were high school students from western
-Michigan. In the experimental condition, social influence occurs through deliberation;
-in the control condition there is no deliberation or social influence at all, just
-re-tested opinions after a distraction task. Obviously we only report on whether there
-was a significant shift in the experimental condition. In both conditions, three groups
-were created according to their racial prejudice as measured by a 100-item racial
-attitude measurement instrument, called "low", "medium", and "high" prejudice groups.
-The participants then gave their opinions, deliberated, and gave opinions again on
-eight deliberation topics. Means were taken across items and prejudice group.
-
-\paragraph{{Myers1975}} Myers performs two experiments each with experimental and control conditions for two group types with initial biases. In Experiment 1, Myers creates biased groups by having participants (intro psychology students) read a description of six different teachers, three "bad" professors and three "good" professors, which the participants are assumed to infer through vignettes about the professors. The participants in the experimental condition of Experiment 1 deliberated in small groups after giving their initial opinions on six items a 0-to-10 bad-to-good scale. In Experiment 2, participants were put into conservatively or liberally biased small groups based on their pre-deliberation opinions on six deliberation items regarding womens' rights and the role of women in the family and society. Again, in the experimental group, participants deliberated each item before giving their final opinions on the items. In the control group in each Experiment, there was no deliberation, just some filler task. Curiously, significant shifts were still found in the control groups--it is unclear to us why. Experiment 1 also had participants adjust the bad and good professors' pay to obtain non-ordinal measures of opinion regarding these professors, which we do not consider here. However, as we will discuss in the paper, this does not make it free of problems--like so many other group polarization studies, Myers statistical model does not account for inter-item, inter-group, or inter-participant variability.
-
-\paragraph{{Schkade2010}} Participants in Schkade, Sunstein, and Hastie's study were put into two politically ideologically biased groups based on their geographical location in the US state of Colorado: participants were drawn from Boulder, Colorado (abbreviated CO), to be liberally biased and from Colorado Springs, CO, to be conservatively biased. Participants gave their opinions and discussed three topics related to Global Warming, Civil Unions, and Affirmative Action. Pre- and post-deliberation mean are given in Table 1 (p. 232) for all six (topics x geographies).  
 
 \end{document}

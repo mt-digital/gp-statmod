@@ -1,0 +1,56 @@
+---
+title: "Prominent claims of group polarization are plausibly false with lessons for studying psychological dynamics"
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+    cite-method: biblatex
+    biblatexoptions: sorting=none, style=numeric-comp
+    pdf-engine: latexmk
+    pdf-engine-opt: -xelatex
+    # template-partials:
+    #   - _extensions/partials/title.tex
+authors:
+  - name: Matthew Adam Turner
+    institute: Stanford University Doerr School of Sustainability, Stanford University
+    roles: writing, model development, project development
+    corresponding: true
+    email: maturner@stanford.edu
+  - name: Paul E. Smaldino
+    institute: 
+      - Cognitive and Information Sciences, Univeristy of California, Merced
+      - Santa Fe Institute
+    roles: writing
+    corresponding: true
+bibliography: ../library.bib
+classoption: abstract
+keep-tex: true
+abstract: |
+  This is the abstract
+geometry:
+  - margin=1.1in
+  - letterpaper
+biblio-title: References
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
