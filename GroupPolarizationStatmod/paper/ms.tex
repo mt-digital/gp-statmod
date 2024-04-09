@@ -4,8 +4,7 @@
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
 \documentclass[
-  letterpaper,
-  abstract]{scrartcl}
+  abstract]{article}
 
 \usepackage{amsmath,amssymb}
 \usepackage{iftex}
@@ -118,7 +117,6 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -178,11 +176,22 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
+\usepackage{authblk}
+\usepackage{etoolbox}
+\makeatletter
 \title{Prominent claims of group polarization are plausibly false with
 lessons for studying psychological dynamics}
-\author{Matthew Adam Turner \and Paul E. Smaldino}
-\date{}
+\makeatother
+\author[1,*]{{Matthew A.~Turner}}
+\affil[1]{\small Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
 
+\author[2,3]{{Paul E.~Smaldino}}
+\affil[2]{\small Cognitive and Information Sciences, University of California, Merced}
+\affil[3]{\small Santa Fe Institute} 
+% \vspace{2em}
+\affil[*]{\small Correspondence: \href{mailto:maturner@stanford.edu}{maturner@stanford.edu}}
+
+\date{}
 \begin{document}
 \maketitle
 \begin{abstract}

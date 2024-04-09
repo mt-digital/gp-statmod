@@ -1,28 +1,15 @@
-$if(title)$
-\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
-$endif$
-$if(subtitle)$
-$if(beamer)$
-$else$
+\usepackage{authblk}
 \usepackage{etoolbox}
 \makeatletter
-\providecommand{\subtitle}[1]{% add subtitle to \maketitle
-  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
-}
+\title{$title$}
 \makeatother
-$endif$
-\subtitle{$subtitle$}
-$endif$
-\author{$for(authors)$$it.name.literal$$sep$ \and $endfor$}
-\date{$date$}
-$if(beamer)$
-$if(institute)$
-\institute{$for(institute)$$institute$$sep$ \and $endfor$}
-$endif$
-$if(titlegraphic)$
-\titlegraphic{\includegraphics{$titlegraphic$}}
-$endif$
-$if(logo)$
-\logo{\includegraphics{$logo$}}
-$endif$
-$endif$
+\author[1,*]{{Matthew A.~Turner}}
+\affil[1]{\small Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
+
+\author[2,3]{{Paul E.~Smaldino}}
+\affil[2]{\small Cognitive and Information Sciences, University of California, Merced}
+\affil[3]{\small Santa Fe Institute} 
+% \vspace{2em}
+\affil[*]{\small Correspondence: \href{mailto:maturner@stanford.edu}{maturner@stanford.edu}}
+
+\date{}

@@ -9,16 +9,17 @@ format:
     biblatexoptions: sorting=none, style=numeric-comp
     pdf-engine: latexmk
     pdf-engine-opt: -xelatex
-    # template-partials:
-    #   - _extensions/partials/title.tex
+    keep-tex: true
+    template-partials:
+      - _extensions/partials/title.tex
 authors:
   - name: Matthew Adam Turner
-    institute: Stanford University Doerr School of Sustainability, Stanford University
+    affiliation: Stanford University Doerr School of Sustainability, Stanford University
     roles: writing, model development, project development
     corresponding: true
     email: maturner@stanford.edu
   - name: Paul E. Smaldino
-    institute: 
+    affiliation: 
       - Cognitive and Information Sciences, Univeristy of California, Merced
       - Santa Fe Institute
     roles: writing
