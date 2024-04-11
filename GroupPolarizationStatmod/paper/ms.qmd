@@ -1,5 +1,5 @@
 ---
-title: "Prominent claims of group polarization are plausibly false with lessons for studying psychological dynamics"
+title: "Foundational claims of group polarization are plausibly false, with lessons for studying psychological dynamics"
 format:
   pdf:
     toc: true
@@ -28,30 +28,11 @@ bibliography: ../library.bib
 classoption: abstract
 keep-tex: true
 abstract: |
-  This is the abstract
+  \noindent _Group polarization_ is the accepted name for a form of consensus where members of a like-minded group become, on average, more extreme in their opinions after discussing a topic. Group polarization is important because it may drive broader polarization if relatively moderate groups become more extreme. Group polarization is celebrated as a regular, reliable outcome of a certain experimental design based on dozens of published studies that purportedly demonstrate the phenomena. However, in this paper we show that 55 of 60 published observations of purported group polarization, from ten foundational studies, are equally well-explained by a simple consensus model where group opinion variance decreases, but extremity does not increase. We show this through a novel computational meta-analysis framework designed to identify plausible pre- and post-discussion opinion distributions that are consistent with simple consensus, but appear to be group polarization when measured on ordinal, Likert-style scales. This occurs due to ceiling effects induced by ordinal measurements. At best this shows that a selection of foundational findings in social psychology must be discarded. At worst this is the tip of the iceberg, and many similar social psychological findings within and without the group polarization tradition will similarly be shown to be unreliable.
 geometry:
   - margin=1.1in
   - letterpaper
 biblio-title: References
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+## Introduction
