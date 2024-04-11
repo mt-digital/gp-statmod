@@ -1,1 +1,7 @@
 *.fdb_latexmk
+
+
+# Because the paper is a Quarto document ignore built .tex and other stuff
+*.tex
+*.xdv
+*.aux

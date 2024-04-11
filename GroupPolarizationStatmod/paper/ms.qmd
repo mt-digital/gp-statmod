@@ -1,5 +1,5 @@
 ---
-title: "Foundational claims of group polarization are plausibly false, with lessons for studying psychological dynamics"
+title: "Foundational claims of group polarization are plausibly false, with lessons for the empirical study of psychological dynamics"
 format:
   pdf:
     toc: true
@@ -24,15 +24,52 @@ authors:
       - Santa Fe Institute
     roles: writing
     corresponding: true
-bibliography: ../library.bib
+bibliography: "/Users/mt/workspace/Writing/library.bib"
 classoption: abstract
 keep-tex: true
 abstract: |
-  \noindent _Group polarization_ is the accepted name for a form of consensus where members of a like-minded group become, on average, more extreme in their opinions after discussing a topic. Group polarization is important because it may drive broader polarization if relatively moderate groups become more extreme. Group polarization is celebrated as a regular, reliable outcome of a certain experimental design based on dozens of published studies that purportedly demonstrate the phenomena. However, in this paper we show that 55 of 60 published observations of purported group polarization, from ten foundational studies, are equally well-explained by a simple consensus model where group opinion variance decreases, but extremity does not increase. We show this through a novel computational meta-analysis framework designed to identify plausible pre- and post-discussion opinion distributions that are consistent with simple consensus, but appear to be group polarization when measured on ordinal, Likert-style scales. This occurs due to ceiling effects induced by ordinal measurements. At best this shows that a selection of foundational findings in social psychology must be discarded. At worst this is the tip of the iceberg, and many similar social psychological findings within and without the group polarization tradition will similarly be shown to be unreliable.
+  \noindent _Group polarization_ is the name for a form of consensus where members of a like-minded group become, on average, more extreme in their opinions after discussing a topic. Group polarization is important because it may drive political polarization if moderate partisans become more extreme. Theoretically, group polarization is celebrated as a regular, reliable outcome of a certain experimental design based on dozens of published studies that purportedly demonstrate the phenomena. However, in this paper we show that 55 of 60 published observations of purported group polarization, from ten foundational studies, are equally well-explained by a simple consensus model where group opinion variance decreases, but extremity does not increase. We use a novel computational meta-analysis framework designed to identify plausible pre- and post-discussion opinion distributions that are consistent with simple consensus, but appear to be group polarization when measured on ordinal, Likert-style scales. This occurs due to ceiling effects induced by ordinal measurements. At best this shows that a selection of foundational research in social psychology must be discarded. At worst this is the tip of the iceberg, and many similar social psychological findings within and without the group polarization tradition will similarly be shown to be unreliable.
 geometry:
   - margin=1.1in
   - letterpaper
 biblio-title: References
 ---
 
+```{=tex}
+\begin{quote}
+In our introductory social psychology course, 
+we have for many years used the [group polarization experimental paradigm] as
+a laboratory exercise. The exercise works beautifully, but one must be
+careful to forewarn a class that [group polarization] does not occur with every 
+group\ldots and that the effect is not large. 
+\par\raggedleft(Brown, 1986, p.\cite[p. 205]{Brown1986})
+\end{quote}
+```
+```{=tex}
+\begin{quote}
+One of the most robust findings in social psychology is that of attitude polarization 
+following discussion with like-minded others.
+\par\raggedleft(Cooper et al, 2001, p. 267 \cite[p. 267]{Cooper2001})
+\end{quote}
+```
 ## Introduction
+
+*Group polarization* is the name for a group-level process that leads to greater opinion extremity in a group as the group deliberates some topic (e.g., "Do you approve, disapprove, or neither approve nor disapprove of the current administration's policies?"). Extremity only increases, though, assuming that the mean opinion of the group is initially biased towards one extreme or the other [@Brown1986; @Brown2020]. Theoretically, group polarization occurs as groups find consensus, meaning that the variance in group opinion decreases [@DeGroot1974]. Group polarization is important to understand rigorously, therefore, since if groups become increasingly extreme over time, while group opinions are consolidated, this would exacerbate political polarization between political opposition groups, which is already undermines the ability of partisans in democratic governments to work together [@Mason2018UncivilAgreementBook; @Klein2020]. Dozens of studies and meta-analyses over decades have apparently established the empirical reality of group polarization \[@Moscovici1969; @Myers1970; @Isenberg1986; @Sunstein2009; @Sunstein2019\] [@Brown2000, Ch. 5]. However, many or most of the evidence for group polarization relies on experimental designs that use ordinal measurements that are then analyzed as if they were continuous. Unfortunately, this procedure is unfortunately known to induce false positives if it is not properly accounted for [@Liddell2018].
+
+In this paper, we perform a meta-analysis of sixty detections of group polarization from ten published research articles and show that fifty-five of the sixty cannot be reliably identified as group polarization. We show that these 55 detections are equally well-explained by a *simple consensus* model, where the mean group opinion is unchanged by group discussion but opinion variance decreases. We use a novel approach, described herein, that enabled us to identify continuous pre- and post-discussion simple consensus opinion distributions that, when measured with an ordinal scale, result in data that appear to be group-polarized. (How this procedure works in detail: continuous case to identify means, then More broadly, this approach could be used in similar studies that used ordinal measures to determine whether change occurred in distributions of continuous psychological variables. For social psychology and group polarization, this means that an empirical fact must be re-evaluated and new experimental procedures established to rigorously understand whether and when group polarization occurs.
+
+More about group polarization history and evidence; why these ten studies and how they represent prominent theories (see Rupert Brown book, Isenberg review; Sunstein highly prominent and elevated GP in trade books)
+
+NEXT =\> More about the logic of this study, why showing that these results are plausibly false strictly means they are not rigorously true.
+
+RESEARCH OVERVIEW
+
+## Methods
+
+## Results
+
+## Discussion
+
+Ordinal scales are a useful experimental
+
+Replication crisis, generalizability crisis [@Yarkoni2022], and general lack of coordination in asking the right questions to efficiently understand the mechanisms behind . Understanding mechanisms is the goal of science [@Machamer2000; @Craver2006]. However, in social and psychological sciences, finding mechanisms is more difficult due to the complexity of social psychological systems [@Dubova2023], which require a high density of conceptual definitions that may be difficult to harmonize.
