@@ -72,13 +72,17 @@ The first theoretical explanation whose supporting findings we include here is (
 
 Each of the ten group polarization studies we analyze here varied significantly in how groups were formed, how opinions were gathered, and other details. There was significant variation across experimental designs, participant population sizes, group sizes, and how like-minded groups were formed in the first place. We review some of these details below to provide the reader with some insight into the experimental designs that produced what we show are plausibly false positive detections of group polarization. We focus here on the questions that were asked, how like-minded novel experimental groups were formed, organizing our presentation by theoretical tradition.
 
-#### Details of experimental conditions included in this meta-analysis 
+#### Details of experimental conditions included in this meta-analysis
 
-\paragraph{Atheoretical} The first of ten studies we included in our meta-analysis was by Moscovici and Zavalloni (1969) [@Moscovici1969] who sought to measure group polarization among groups of French high school students who discussed domestic and foreign politics. Moscovici and Zavalloni tested four conditions whether group polarization occurred for two different questions and two different rating systems: participants were asked their opinions on then-president Charles De Gaulle and their opinion about foreign aid from the USA either in the "Opinion" setting or the "Judgement" condition (see Table 4 on p. 132).
+\paragraph{Atheoretical}
+
+The first of ten studies we included in our meta-analysis was by Moscovici and Zavalloni (1969) [@Moscovici1969] who sought to measure group polarization among groups of French high school students who discussed domestic and foreign politics. Moscovici and Zavalloni tested four conditions whether group polarization occurred for two different questions and two different rating systems: participants were asked their opinions on then-president Charles De Gaulle and their opinion about foreign aid from the USA either in the "Opinion" setting or the "Judgement" condition (see Table 4 on p. 132).
 
 The second, relatively more recent article is Schkade, Sunstein, and Hastie (2010) [@Schkade2010] who used geographic location to construct like-minded groups by running a group polarization experiment in two cities in the state of Colorado in the United States: Colorado Springs, whose residents historically voted for republican candidates, and Boulder, whose residents historically voted for democratic candidates. Discussion groups were formed in which they measured group polarization when group members discussed global warming, affirmative action, and same-sex civil unions.
 
-\paragraph{Social comparisons} In developing the social comparisons theory of group polarization (described in Myers (1978) [@Myers1978]), Myers and Bishop (1970), writing in *Science,* [@Myers1970] sought to measure group polarization among high school students in the United States who discussed racial attitudes and Myers (1975) [@Myers1975] measured group polarization in groups of college students discussing the quality of a faculty member in one condition, and women's rights and issues in another condition.
+\paragraph{Social comparisons}
+
+In developing the social comparisons theory of group polarization (described in Myers (1978) [@Myers1978]), Myers and Bishop (1970), writing in *Science,* [@Myers1970] sought to measure group polarization among high school students in the United States who discussed racial attitudes and Myers (1975) [@Myers1975] measured group polarization in groups of college students discussing the quality of a faculty member in one condition, and women's rights and issues in another condition.
 
 \paragraph{Persuasive arguments}
 
@@ -86,7 +90,7 @@ The second, relatively more recent article is Schkade, Sunstein, and Hastie (201
 
 \paragraph{Social decisions scheme}
 
-The ten studies we included each tested several experimental conditions meant to elicit group polarization in novel experimental groups, 60 in total, which we briefly introduce here. \
+The ten studies we included each tested several experimental conditions meant to elicit group polarization in novel experimental groups, 60 in total, which we briefly introduce here.\
 
 ### Research overview
 
