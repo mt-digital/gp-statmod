@@ -63,7 +63,6 @@ plotFreq <- function(inputDf, fittedFreq, nBins)
              adj=c(0.5,0.5), padj=c(-0.5,-0.5))
     } else {
       mtext(text=bquote( "d = "* .(round(effSz, 2)) 
-                               # *", t = "* .(round(tInfo$statistic, 2)) 
                                *", p < 0.001" ), 
              at=c(0.5), cex=1.5, side=3, outer=TRUE, 
              adj=c(0.5,0.5), padj=c(-0.5,-0.5))
@@ -78,7 +77,7 @@ plot_metric_cohens <- function(metric_cohens_csv = "data/output/metric_cohens_d.
     unite(ExperimentID, ArticleTag, TreatmentTag) %>% 
     ggplot(mapping = aes(x = Cohens_d, y = ExperimentID)) + 
       geom_vline(xintercept = 0, color = "red") + 
-      geom_vline(xintercept = c(-1, 1), color="red", linetype="dotted") + 
+      geom_vline(xintercept = c(-0.8, -0.5, -0.2, 0.2, 0.5, 0.8), color="red", linetype="dotted") + 
       geom_boxplot() +
       xlim(-2.0, 2.0)
   
