@@ -1,5 +1,7 @@
 library(ggplot2)
 
+source("model.R")  # for binProb function used in ordinal plot function below.
+
 plot_latent_pdf_integration = function(mu = 0, sd = 2.5, xlim = c(-6.0, 6.0), 
                                        bin1 = c(-0.5, 0.5), bin2 = c(1.5, 5.0),
                                        save_path = "test_latent_pdf.pdf") {
