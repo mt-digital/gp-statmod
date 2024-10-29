@@ -40,9 +40,12 @@ false_detection_rate_by_condition = function(probit_fits_dir = "data/probit_fits
                           Treatment = Treatment)
 
   for (this_sigval in sigvals) {
-    gb = load_fdr_data(fdr_data_file) %>%
+    # Create a tibble with only this_sigval and for one treatment tag
+     alpha_v_this_sigval <- load_fdr_data(fdr_data_file) %>%
            select(Sigval == this_sigval) %>%
            group_by(TreatmentTag)
+
+    alpha_v_sigval %>% filter(mutate(alpha_v_sigval, 
 
     # Calculate alpha from this gb and put in alpha_v_sigval.
     # Or somehow need to save one for each treatment or sig val then
