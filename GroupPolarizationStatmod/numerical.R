@@ -14,8 +14,8 @@ source('model.R')
 solveForLatentSD <- function(kVec, latentMean, observedMean, guess, 
                              step = 0.01, maxIts = 10000, tol = 1e-6)
 {
-    # Keep the squared error function to be minimized through hillclimbing
-    # separate from hillclimbing itself.
+    # Keep the error function to be minimized through hillclimbing
+    # separate from hillclimbing itself. ### XXXX BUT WHYYYY seems confusing...
     errfunc <- function(latentSD)
     {
         simulatedObservedMean <- meanObs(
@@ -27,6 +27,9 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
         return (simulatedObservedMean - observedMean);
     }
 
+    # This structure is kind of weird with this implicitly defined "errfunc" that
+    # only takes one variable because the other one has been set "privately"
+    # and implicitly within this function definition.
     return (hillclimbing(errfunc, guess, step, maxIts, tol))
 }
 
@@ -37,9 +40,7 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
 hillclimbing <- function(errfunc, sd_guess, stepSize = 0.1, maxIts = 1e5, tol = 1e-4)
 {
     sd_curr <- sd_guess
-    # sqerr_curr <- errfunc(sd_curr)[2]
-    # err_curr <-  errfunc(sd_curr)[2]
-    # sqerr_curr <- err_curr^2
+    # "Error" between the published shift and the one simulated here via simple consensus.
     err_curr <- errfunc(sd_curr)
     sqerr_curr <- err_curr^2
     

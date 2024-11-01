@@ -1,54 +1,43 @@
-# Group Polarization Generative Modeling
-
-## Background
-
-This code implements numerical analyses, generative simulations and statistical
-tests described in the paper "Many claims of group polarization are plausibly 
-false due to inappropriate statistics". 
+# Generative modeling of group polarization experiments to control false detection rate
 
 ## Code
 
-### Simulate simple consensus group polarization data
+### Identify plausibly false detections
 
-Given a static latent mean, a pre-deliberation and post-deliberation
-standard deviation, we can generate simulated simple consensus data to be fit
-using either a metric- or ordinal-data statistical model. The metric model is
-a t-test, which is equivalent to a linear model. The ordinal model is the 
-ordered probit model, which accounts for the binning process that experiment
-participants do when reporting their ordinal opinions.
+### Bayesian fits
 
-### Metric linear model of group polarization
+( explain how `singleBayesianFitTrial` works in [`experiments.R`](/experiments.R) )
 
-We fit a linear model of the simulated simple consensus data drawn from
-continous normal pre- and post-deliberation distributions and put in ordinal
-bins. For simplicity we use the `t.test` function in R, which may be also be a 
-common approach used for this type of inference. Specifically, in the
-`simulate_metric_cohens_d` function in the file
-[`experiments.R`](https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/experiments.R)
-there is the following line that fits a `t.test` to simulated observations of
-pre- and post-deliberation opinions
 
-```R
-t_result <- t.test(sim_obs_pre, sim_obs_post, paired = paired, var.equal = var.equal)
+### Cluster script for Bayesian fits
+
+[`bayesian_fit_trial.sh`](/bayesian_fit_trial.sh) uses
+`singleBayesianFitTrial` [`in experiments.R`](/experiments.R)
+
+Submit a job array to run 1000 trials like so
+
+```
+qsub --array=[1-1000] bayesian_fit_trial.sh
 ```
 
-The linear estimates of means and standard deviations are then extracted in the
-following lines:
 
-```R
-pre_mean_estimate <- t_result$estimate[[1]] 
-post_mean_estimate <- t_result$estimate[[2]] 
+Each of the 1000 trials writes its output data 
+to a randomly-named .csv into the `data/probit_fits`
+directory, which must be created before submitting the job array.
+Each .csv output has 55 rows: 54 rows of data, one for each  and one header row.
 
-pre_sd <- sd(sim_obs_pre)
-post_sd <- sd(sim_obs_post)
-```
+### False detection rate calculations
 
-Effect size is quantified as Cohen's _d_.  We calculate _d_ in 1000 trials using `make_metric_cohens_d_table` in
-[`analysis.R`](https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/analysis.R).
-The output is written to a csv file specified by the `output_file` argument.
-To analyze the distribution of _d_ values we create a [boxplot using
-`ggplot2`](http://www.sthda.com/english/wiki/ggplot2-box-plot-quick-start-guide-r-software-and-data-visualization).
 
-### Ordered probit model of group polariztion
+Cohen's *d* is calculated with [`cohens_d` in experiments.R](/experiments.R). 
+This asymmetric-variance version of Cohen's d is enumerated in Liddell and
+Kruschke (2018) and used by them at line 884 in their script
+[OrdinalScaleGroupJags.R](https://osf.io/5jrgz), hosted in the associated 
+["Ordinal Data Analysis" OSF repository](https://osf.io/53ce9/).
+
+For each plausible false detection experimental condition we calculate $\alpha =
+\Pr(D|\not E)$ for a given significance value, $\alpha^*$, by calculating the
+fraction of $d$ values that are greater than $\alpha^*$ (EVENTUALLY/SOON)
+to be implemented in [`false_detection_rate.R`](/false_detection_rate.R).
 
 

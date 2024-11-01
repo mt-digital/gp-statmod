@@ -7,6 +7,8 @@
   abstract]{article}
 
 \usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -126,6 +128,20 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
+
+\newcommand{\mupre}{\mu_\mathrm{pre}}
+\newcommand{\mupost}{\mu_\mathrm{post}}
+
+\newcommand{\sigmapre}{\sigma_\mathrm{pre}}
+\newcommand{\sigmapost}{\sigma_\mathrm{post}}
+
+\newcommand{\thetafit}{\theta_\mathrm{fit}}
+
+\newcommand{\fdr}{\mathrm{FDR}}
+
+\definecolor{myorange}{RGB}{240, 96, 0}
+\newcommand{\mt}[1]{{\textcolor{myorange} {({\tiny MT:} #1)}}}
+
 \usepackage{authblk}
 \usepackage{etoolbox}
 \makeatletter
@@ -169,10 +185,14 @@ similarly be shown to be unreliable.
 
 \renewcommand*\contentsname{Table of contents}
 {
-\hypersetup{linkcolor=}
+\hypersetup{linkcolor=gray}
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
+
+\begin{center} \noindent\rule{4cm}{0.4pt} \end{center}
+\clearpage
+
 \begin{quote}
 In our introductory social psychology course, 
 we have for many years used the [group polarization experimental paradigm] as
@@ -188,33 +208,39 @@ following discussion with like-minded others.
 \par\raggedleft(Cooper et al, 2001, p. 267 \cite[p. 267]{Cooper2001})
 \end{quote}
 
+\begin{quote}
+A medium effect size is conceived as one large enough to be visible to the naked eye.
+\par\raggedleft(Cohen, 1988 \cite[p. 26]{CohenBook1988})
+\end{quote}
+
+
 \section{Introduction}\label{introduction}
 
-Unchecked social and political polarization undermines cooperation and
-political efficacy \autocite{Mason2018UncivilAgreementBook,Klein2020}.
-\emph{Group polarization} is the name for a group-level process that
-leads to greater opinion extremity in a group as the group deliberates
-some topic (e.g., ``Do you approve, disapprove, or neither approve nor
-disapprove of the current administration's policies?''). Extremity only
-increases, though, assuming that the mean opinion of the group is
-initially biased towards one extreme or the other
-\autocite{Brown1986,Brown2020}. Group polarization is important to
-understand rigorously, therefore, since if groups become increasingly
-extreme over time, while group opinions are consolidated, this would
-exacerbate political polarization between political opposition groups,
-which is already undermines the ability of partisans in democratic
-governments to work together. Dozens of studies and meta-analyses over
-decades have apparently established the empirical reality of group
-polarization
+the ten-article corpus, which is representative of the
+false discovery rate for group polarization studies.
+
+Unchecked social and political polarization undermines cooperation and political
+efficacy \autocite{Mason2018UncivilAgreementBook,Klein2020}.  \emph{Group
+polarization} is the name that has been given to a group-level process that leads
+to greater opinion extremity in a group as the group deliberates some topic (e.g.,
+``Do you approve, disapprove, or neither approve nor disapprove of the current
+administration's policies?''). Extremity only increases, though, assuming that the
+mean opinion of the group is initially biased towards one extreme or the other
+\autocite{Brown1986,Brown2020}. Group polarization is important to understand
+rigorously, therefore, since if groups become increasingly extreme over time,
+while group opinions are consolidated, this would exacerbate political
+polarization between political opposition groups, which is already undermines the
+ability of partisans in democratic governments to work together. Dozens of studies
+and meta-analyses over decades have apparently established the empirical reality
+of group polarization
 \autocite{Moscovici1969,Myers1970,Isenberg1986,Sunstein2009,Sunstein2019}
-\autocite[Ch. 5]{Brown2000}. We believe group polarization should occur
-in certain contexts since more extreme group members are likely also to
-be more stubborn \autocite{Guazzini2015,Lewandowsky2019}, which should
-pull consensus to extremes \autocite{Turner2020}. However, many or most
-of the evidence for group polarization relies on experimental designs
-that use ordinal measurements that are then analyzed as if they were
-continuous. Unfortunately, this procedure is unfortunately known to
-induce false positives if it is not properly accounted for
+\autocite[Ch. 5]{Brown2000}. We believe group polarization should occur in certain
+contexts since more extreme group members are likely also to be more stubborn
+\autocite{Guazzini2015,Lewandowsky2019}, which should pull consensus to extremes
+\autocite{Turner2020}. However, many or most of the evidence for group
+polarization relies on experimental designs that use ordinal measurements that are
+then analyzed as if they were continuous. Unfortunately, this procedure is
+unfortunately known to induce false positives if it is not properly accounted for
 \autocite{Liddell2018}.
 
 Experimetnal designs in group polarization studies share a certain
@@ -431,9 +457,54 @@ opinion alone.
 
 \section{Methods}\label{methods}
 
-We begin by developing a formal model of ordinal measurement of latent
-continuous opinions (model variables and parameters are given in
-Table~\ref{tab:modelVariables}). First, we assume that participant $i$ has
+% We begin by developing a formal model of ordinal measurement of latent
+% continuous opinions (model variables and parameters are given in
+% Table~\ref{tab:modelVariables}).
+
+Metascience frames our analysis since metascientific theory provides a framework for
+our goal of calculating the false discovery rate across experimental conditions,
+journal articles, and the ten-paper corpus. The false discovery rate is then
+the Type I error rate relative to the rate of positive discoveries, true or false.
+We calculate via simulation and data fitting
+the Type I error rate for the experimental designs used in experimental conditions
+that, under a preliminary large-$N$ model analysis, generated group
+polarization upon ordinal measurement of simple consensus latent opinion 
+distributions. These can then be aggregated to estimate the false discovery rate
+for each journal article and for the ten-article corpus, which is representative of the
+false discovery rate for group polarization studies. 
+
+\subsection{Metascience of the false detection rate}
+
+The false detection rate is the scaled probability that a detection, $D$, of
+an effect, $E$, is in fact a false detection and there is \emph{not} an effect,
+denoted $\neg E$. The probability that a detection $D$ has occurred when there
+was no effect, i.e. when $\neg E$, is denoted $\alpha = \Pr(D | \neg E)$.
+This is known as the Type I or family-wise error rate. To calculate the 
+false detection rate ($\fdr$), one must compare $\alpha$ to the statistical power,
+the probability of a detection when there is an effect, denoted $W = \Pr(D | E)$.
+Both these values must be scaled by the rate at which effects occur, denoted $b$.
+Using the notation outlined above, the false detection rate is
+\begin{equation}
+  \fdr = \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
+\end{equation}
+
+We calculate $\alpha = \Pr(D | \neg E)$ through simulation for experimental
+conditions identified as plausibly generating false detections, 
+and use generously optimistic values of
+$b=0.1$~\cite{Ioannidis2005,McElreath2015} and $W=0.8$~\cite{Smaldino2016NatSel}
+in the main text and in the compare with more pessimistic, yet realistic, estimates
+of these values, as well as even more optimistic estimates. 
+
+In group polarization, $E$ represents the group polarization \emph{effect}, and
+$\neg E$ represents its absence. Simple consensus is one way for group polarization
+to be absent, i.e., simple consensus is one form of $\neg E$. The presence of
+an effect $E$ is independent of whether an effect was \emph{detected}, 
+represented by $D$ if it was detected and $\neg D$ if not. 
+
+
+\subsection{How study design can induce false detections of group polarization}
+
+First, we assume that participant $i$ has
 latent opinion at time $t$ that is drawn from a group-level normal distribution,
 \begin{equation}
   o_{i,t} \sim p(o; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
@@ -444,21 +515,75 @@ The initial opinion of agent $i$ is are denoted by $o_{i,t=0}$, and thus
 in the model are drawn from a normal distribution with mean $\mu_0$ and standard
 deviation $\sigma_0$. The final opinion of agent $i$ is written $o_{i,t=T}$,
 drawn from a normal distribution with mean $\mu_T$ and standard deviation
-$\sigma_T$.
+$\sigma_T$. 
+
+\subsection{Root-finding algorithm to identify plausible false detections} 
+
+Simple consensus can appear as group polarization since a change in 
+
+\begin{algorithm}
+  \caption{User-guided routine to find pre- and post-deliberation variances that
+  yield group polarization in the absence of mean opinion change.
+\mt{NOT YET DONE...}}\label{alg:routine}
+  \begin{algorithmic}
+    \Require $\mu$, $\sigmapre$, $\sigmapost$ \Comment{Static guess for common mean,
+    initial guesses of variances.}
+    \Require $\epsilon$, $\delta$, $i_\mathrm{max}$ \Comment{Root-finding tolerance, step size, and maximum
+    iterations.}
+    % \Require $\delta$ \Comment{Root-finding step size.}
+    % \Require $i_\mathrm{max}$ \Comment{Maximum number of iterations.}
+    \State $\Delta \gets \mupre' - \mupost'$ 
+    \While {$\epsilon < |\Delta| $ \and $i < i_max$}
+      \State $\Delta \gets (\mupre' - \mupost')^2$
+    \EndWhile
+  \end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Calculate false detection rate from simulations}
+
+False detection rates are calculated using Cohen's $d$ to measure effect
+size, defined as~\cite[p. 331]{Liddell2018}
+\begin{equation}
+  d = \frac{\mupost - \mupre}{\sqrt{\frac{1}{2}(\sigmapost^2 + \sigmapre^2)}}.
+\end{equation}. 
+\noindent
+Denote the collection of fitted parameters from the $i^\mathrm{th}$ simulation trial
+for experimental condition $c$ and journal article $a$ as
+% $\thetafit = \left{\mu_t = \left{\mupre,~\mupost\right},~\sigma_t = \left{\mupre,~\mupost\right}\right}$.
+$\thetafit_{a,c,i} = \{\mupre,~\mupost,~\mupre,~\mupost\}_{a,c,i}$.
+These parameters are the modal estimates for each parameter obtained from
+an ordered probit statistical model fit with
+Bayesian Markov-Chain Monte Carlo (MCMC)~\cite[p. 338]{Liddell2018}. 
+
+For each $a,c$, we calculate $\alpha_{a,c}(d^*) =
+\Pr(D |\neg E;~a,~c,~d^*)$ for a given significance value, $d^*$, directly as
+the fraction of $d$ values that are greater than $d^*$.
+
+To calculate article-level false detection curves we calculate the average
+across , we set $\alpha_{a,c} = 0.0$ for those
+conditions for which we failed to generate spurious group polarization in the
+large-$N$ model.
+
+
+
+
+
 
 \section{Results}\label{results}
 
 
-\vspace{0.5em}
-\begin{center}
-{[ FIGURE \ref{fig:MetricBoxplot} ABOUT HERE ]} \\
-\end{center}
+\subsection{Ninety percent of detections are plausibly false}
 
+We identified 54 of 60 experimental 
+conditions where a $N \to \infty$ model falsely indicated group polarization 
+instead of simple consensus.
 
-\vspace{0.5em}
-\begin{center}
-{[ FIGURE \ref{fig:OrdinalBoxplot} ABOUT HERE ]} \\
-\end{center}
+\subsection{Eighty percent false detection rate across corpus for $d^*=0.8$?}
+
+\subsection{What $d^*$ is necessary to achieve magical $\alpha = 0.05$?}
+
 
 \section{Discussion}\label{discussion}
 
@@ -482,55 +607,55 @@ definitions that may be difficult to harmonize.
 
 \appendix
 
-\section{Figures}
+% \section{Figures}
 
-\begin{figure}
-  \caption{
-    Boxplots visualizing the distribution of Cohen's $d$ values (x-axis in
-    A and B) inferred through a metric linear model over 1000 simulation 
-    trials for each experimental condition (y-axis in A and B). All conditions
-    have many trials that result in non-zero Cohen's $d$ values with number of
-    simulated participants, $N$, set to their empirical values reported in the
-    associated journal article (A). However, when the number of simulated
-    participants is increased to $10N$, there are several conditions that 
-    indeed yield distributions closer to $d = 0$ as expected, however some
-    conditions have $d$ distributions centered on a nonzero mean with little to
-    no overlap with $d=0$; variance in $d$ decreases as expected
-    across experimental conditions (B).
-  }  
-  \label{fig:MetricBoxplots}
-  \centering
-  \begin{subfigure}[]{0.9\textwidth}
-    % \hspace{-7.5em} 
-    \centering
-    \textsf{\large \textbf{A}, empirical $N$} \\
-    \includegraphics[width=\textwidth]{Figures/boxplots/metric_cohens.pdf}
-    \label{fig:MetricBoxplot_N}
-  \end{subfigure} \\
-\end{figure}
-\begin{figure}\ContinuedFloat
-  \begin{subfigure}[]{0.9\textwidth}
-    % \hspace{-5.5em} 
-    \centering
-    \textsf{\large \textbf{B}, 10 $\times$ empirical $N$} \\
-    \includegraphics[width=\textwidth]{Figures/boxplots/10N_metric_cohens.pdf}
-    \label{fig:MetricBoxplot_10N}
-  \end{subfigure}
-\end{figure}
+% \begin{figure}
+%   \caption{
+%     Boxplots visualizing the distribution of Cohen's $d$ values (x-axis in
+%     A and B) inferred through a metric linear model over 1000 simulation 
+%     trials for each experimental condition (y-axis in A and B). All conditions
+%     have many trials that result in non-zero Cohen's $d$ values with number of
+%     simulated participants, $N$, set to their empirical values reported in the
+%     associated journal article (A). However, when the number of simulated
+%     participants is increased to $10N$, there are several conditions that 
+%     indeed yield distributions closer to $d = 0$ as expected, however some
+%     conditions have $d$ distributions centered on a nonzero mean with little to
+%     no overlap with $d=0$; variance in $d$ decreases as expected
+%     across experimental conditions (B).
+%   }  
+%   \label{fig:MetricBoxplots}
+%   \centering
+%   \begin{subfigure}[]{0.9\textwidth}
+%     % \hspace{-7.5em} 
+%     \centering
+%     \textsf{\large \textbf{A}, empirical $N$} \\
+%     \includegraphics[width=\textwidth]{Figures/boxplots/metric_cohens.pdf}
+%     \label{fig:MetricBoxplot_N}
+%   \end{subfigure} \\
+% \end{figure}
+% \begin{figure}\ContinuedFloat
+%   \begin{subfigure}[]{0.9\textwidth}
+%     % \hspace{-5.5em} 
+%     \centering
+%     \textsf{\large \textbf{B}, 10 $\times$ empirical $N$} \\
+%     \includegraphics[width=\textwidth]{Figures/boxplots/10N_metric_cohens.pdf}
+%     \label{fig:MetricBoxplot_10N}
+%   \end{subfigure}
+% \end{figure}
 
 
-\begin{figure}
-  \caption{Boxplot of Cohen's $d$ for the ordered probit model over 100
-    simulation trias for each experimental condition (y-axis in A and B). Each
-    trial represents a possible outcome of a group polarization experiment where
-    the true opinion shift is zero. The mean across trials is closer to 0 than
-    in the metric case, but many simulated zero-shift experiments still result in
-    an observed shift. This illustrates the weak statistical power of these group
-    polarization experiments.}
-  \label{fig:OrdinalBoxplot}
-  \centering
-    \includegraphics[width=0.9\textwidth]{Figures/boxplots/ordinal_cohens.pdf}
-\end{figure}
+% \begin{figure}
+%   \caption{Boxplot of Cohen's $d$ for the ordered probit model over 100
+%     simulation trias for each experimental condition (y-axis in A and B). Each
+%     trial represents a possible outcome of a group polarization experiment where
+%     the true opinion shift is zero. The mean across trials is closer to 0 than
+%     in the metric case, but many simulated zero-shift experiments still result in
+%     an observed shift. This illustrates the weak statistical power of these group
+%     polarization experiments.}
+%   \label{fig:OrdinalBoxplot}
+%   \centering
+%     \includegraphics[width=0.9\textwidth]{Figures/boxplots/ordinal_cohens.pdf}
+% \end{figure}
 
 
 \end{document}

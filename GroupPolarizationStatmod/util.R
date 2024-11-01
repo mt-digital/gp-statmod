@@ -117,6 +117,7 @@ convertFriedkinTo20Bin <- function(friedkinVal)
     return ( 20 * (friedkinVal / 100.0) )
 }
 
+
 pooled.sd <- function(x1, x2)
 {
   #calculate sample size of each group

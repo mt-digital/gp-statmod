@@ -1,14 +1,20 @@
 ##
-# 
+# Calculate the false detection rate from bayesian fits data.
 #
+# Author: Matthew A. Turner
+# Date: 2024-10-30
+#
+
+library(tidyverse)
+library(checkmate)
 
 load_fdr_data = function(probit_fits_dir = "data/probit_fits", 
                          sync_file = "data/probit_fits/all.csv",
                          overwrite = FALSE) {
    
-  if (file_exists(sync_file) && !overwrite) {
+  if (!file.exists(sync_file) || overwrite) {
 
-    ret <- dir_ls(ordinal_data_dir, glob = "*.csv") %>%
+    ret <- dir.ls(ordinal_data_dir, glob = "*.csv") %>%
       read_csv() %>% unite(ExperimentID, ArticleTag, TreatmentTag)
 
     write_csv(df, sync_file)

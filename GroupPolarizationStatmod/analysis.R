@@ -111,7 +111,7 @@ make_metric_cohens_d_table <- function(studiesAnalysisDfPath = "data/StudiesAnal
       threadlocal_result_rows[[ trial_idx ]] <- 
         data.frame(ArticleTag = row$ArticleTag, 
                    TreatmentTag = row$TreatmentTag,
-                   TrialIndex = trial_idx, 
+                   TrialIndex = trial_idx,
                    LatentMean = row$LatentMean,
                    ObservedShift = row$ObservedShift,
                    LatentSDPre = row$LatentSDPre, 
