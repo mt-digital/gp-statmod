@@ -28,8 +28,8 @@ load_fdr_data = function(probit_fits_dir = "data/probit_fits",
 }
 
 
-false_detection_rate_by_condition = function(probit_fits_dir = "data/probit_fits",
-                                             sigvals = seq(0.2, 2.0, 0.15)) {
+false_detection_rate_by_condition <- 
+    function(probit_fits_dir = "data/probit_fits", sigval = 0.8) {
   
   fdr_data = read_csv(load_fdr_data(probit_fits_dir)) 
 
@@ -52,10 +52,18 @@ false_detection_rate_by_condition = function(probit_fits_dir = "data/probit_fits
 
     # Calculate alpha from this gb and put in alpha_v_sigval.
     # Or somehow need to save one for each treatment or sig val then
-    # rbind all the results
+    # rbind all the results.
     
   }
-         
-
+           
 }
 
+
+false_detection_rate = function(by = "condition") {
+  if (by == "condition") {
+    
+  }
+}
+
+
+ret = false_detection_rate_by_condition()
