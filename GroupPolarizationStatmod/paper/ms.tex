@@ -135,7 +135,7 @@
 \newcommand{\sigmapre}{\sigma_\mathrm{pre}}
 \newcommand{\sigmapost}{\sigma_\mathrm{post}}
 
-\newcommand{\thetafit}{\theta_\mathrm{fit}}
+\newcommand{\thetafit}{\theta^\mathrm{fit}}
 
 \newcommand{\fdr}{\mathrm{FDR}}
 
@@ -568,9 +568,6 @@ large-$N$ model.
 
 
 
-
-
-
 \section{Results}\label{results}
 
 
@@ -580,9 +577,23 @@ We identified 54 of 60 experimental
 conditions where a $N \to \infty$ model falsely indicated group polarization 
 instead of simple consensus.
 
-\subsection{Eighty percent false detection rate across corpus for $d^*=0.8$?}
 
-\subsection{What $d^*$ is necessary to achieve magical $\alpha = 0.05$?}
+
+\subsection{False detection rates exceed ??\% even at ``high significance''}
+
+\mt{Graph with $\alpha(d^*)$ for $d^* = 0.2,~0.5,~0.8$ for each condition,
+each article aggregated, and across all conditions/articles. Use color-coding for
+each article, stems with dots at end, red to yellow gg2 theme, in order of
+appearance.}
+
+
+\subsection{Minimum $d^*$ for FWER of 0.05}
+
+Solving the inverse problem of which $d^*$ achieves a low family-wise error rate,
+which drives the false detection rate. Here we present our calculations to find
+$d^*$ that achieve $\alpha(d^*) = 0.05$, a commonly-assumed parameter value of
+metascience. 
+
 
 
 \section{Discussion}\label{discussion}
