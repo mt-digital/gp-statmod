@@ -89,7 +89,8 @@ calculate_fwer = function (probit_fits_dir = "data/probit_fits", sigval = 0.8) {
     group_by(ExperimentID) %>% 
     summarise(FWER = mean(Significant)) %>%
     separate_wider_delim(ExperimentID, delim = "_", 
-                         names = c("StudyID", "ExperimentID"))
+                         names = c("StudyID", "ExperimentID")) %>%
+    arrange(desc(FWER))
 
   return (ret)
 }
@@ -102,5 +103,5 @@ false_detection_rate = function(by = "condition") {
 }
 
 
-ret = calculate_fwer()
+ret = calculate_fwer(sigval=0.5)
 
