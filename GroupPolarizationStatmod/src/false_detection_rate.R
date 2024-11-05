@@ -5,7 +5,8 @@
 # Date: 2024-10-30
 #
 
-library(tidyverse)
+# library(tidyverse)
+library(dplyr)
 library(fs)
 
 
@@ -19,10 +20,10 @@ cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
 }
 
 
-load_fdr_data = function(probit_fits_dir = "data/probit_fits", 
-                         sync_file = "data/probit_fits/all.csv",
-                         overwrite = FALSE) {
-   
+load_probit_data = function(probit_fits_dir = "data/probit_fits", 
+                            sync_file = "data/probit_fits/all.csv",
+                            overwrite = FALSE) {
+     
   if (!file.exists(sync_file) || overwrite) {
 
     ret <- dir_ls(probit_fits_dir, glob = "*.csv") %>%
@@ -39,53 +40,28 @@ load_fdr_data = function(probit_fits_dir = "data/probit_fits",
 }
 
 
-false_detection_rate_by_condition <- 
-    function(probit_fits_dir = "data/probit_fits", sigval = 0.8) {
-  
-  fdr_data = load_fdr_data(probit_fits_dir) 
-
-  unique_treatments = unique(fdr_data$TreatmentTag)
-
-  n_plausible = length(unique_treatments)
-
-  Treatment = unlist(
-    map(unique_treatments, \(treatment) rep(treatment, sigvals))
-  )
-
-  alpha_v_sigval = tibble(Alpha = rep(NA, n_plausible*length(sigvals)),
-                          Sigval = rep(sigvals, n_plausible),
-                          Treatment = Treatment)
-
-  for (this_sigval in sigvals) {
-    gb = load_fdr_data(fdr_data_file) %>%
-           select(Sigval == this_sigval) %>%
-           group_by(TreatmentTag)
-
-    # Calculate alpha from this gb and put in alpha_v_sigval.
-    # Or somehow need to save one for each treatment or sig val then
-    # rbind all the results.
-    
-  }
-}
-
-
 ##
-# Family-wise error rate calculation using whatever ExperimentIDs are
+# Family-wise error rate calculation using whatever ExperimentIDs are present.
+# Note probit_fits may be a tibble for avoiding reading data every calculation.
 #
-#
-calculate_fwer = function (probit_fits_dir = "data/probit_fits", sigval = 0.8) {
+calculate_fwer = function (probit_fits = "data/probit_fits", sigval = 0.8) {
 
-  fdr_data = load_fdr_data(probit_fits_dir)
+  # Load probit data if necessary.
+  if (typeof(probit_fits) == "character") {
+    probit_data = load_probit_data(probit_fits)
+  } else {
+    probit_data = probit_fits
+  }
      
-  fdr_data$Cohens_d = cohens_d(fdr_data$LatentMeanPrePosteriorMean, 
-                                fdr_data$LatentMeanPostPosteriorMean,
-                                fdr_data$LatentMeanPrePosteriorSD, 
-                                fdr_data$LatentMeanPostPosteriorSD)
+  probit_data$Cohens_d = cohens_d(probit_data$LatentMeanPrePosteriorMean, 
+                                  probit_data$LatentMeanPostPosteriorMean,
+                                  probit_data$LatentMeanPrePosteriorSD, 
+                                  probit_data$LatentMeanPostPosteriorSD)
 
-  fdr_data$Significant = ifelse(fdr_data$Cohens_d >= sigval, 1, 0)
+  probit_data$Significant = ifelse(probit_data$Cohens_d >= sigval, 1, 0)
 
-  # return (fdr_data)
-  ret = fdr_data %>%
+  # return (probit_data)
+  ret = probit_data %>%
     group_by(ExperimentID) %>% 
     summarise(FWER = mean(Significant)) %>%
     separate_wider_delim(ExperimentID, delim = "_", 
@@ -95,13 +71,4 @@ calculate_fwer = function (probit_fits_dir = "data/probit_fits", sigval = 0.8) {
   return (ret)
 }
 
-
-false_detection_rate = function(by = "condition") {
-  if (by == "condition") {
-    
-  }
-}
-
-
-ret = calculate_fwer(sigval=0.5)
 
