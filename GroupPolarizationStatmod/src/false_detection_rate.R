@@ -6,7 +6,18 @@
 #
 
 library(tidyverse)
-library(checkmate)
+library(fs)
+
+
+cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
+  
+  numerator <- post_mean_estimate - pre_mean_estimate
+  
+  denominator = sqrt((pre_sd**2 + post_sd**2) / 2.0)
+  
+  return (numerator / denominator)
+}
+
 
 load_fdr_data = function(probit_fits_dir = "data/probit_fits", 
                          sync_file = "data/probit_fits/all.csv",
@@ -14,10 +25,10 @@ load_fdr_data = function(probit_fits_dir = "data/probit_fits",
    
   if (!file.exists(sync_file) || overwrite) {
 
-    ret <- dir.ls(ordinal_data_dir, glob = "*.csv") %>%
+    ret <- dir_ls(probit_fits_dir, glob = "*.csv") %>%
       read_csv() %>% unite(ExperimentID, ArticleTag, TreatmentTag)
 
-    write_csv(df, sync_file)
+    write_csv(ret, sync_file)
 
   } else {
 
@@ -31,7 +42,7 @@ load_fdr_data = function(probit_fits_dir = "data/probit_fits",
 false_detection_rate_by_condition <- 
     function(probit_fits_dir = "data/probit_fits", sigval = 0.8) {
   
-  fdr_data = read_csv(load_fdr_data(probit_fits_dir)) 
+  fdr_data = load_fdr_data(probit_fits_dir) 
 
   unique_treatments = unique(fdr_data$TreatmentTag)
 
@@ -55,7 +66,32 @@ false_detection_rate_by_condition <-
     # rbind all the results.
     
   }
-           
+}
+
+
+##
+# Family-wise error rate calculation using whatever ExperimentIDs are
+#
+#
+calculate_fwer = function (probit_fits_dir = "data/probit_fits", sigval = 0.8) {
+
+  fdr_data = load_fdr_data(probit_fits_dir)
+     
+  fdr_data$Cohens_d = cohens_d(fdr_data$LatentMeanPrePosteriorMean, 
+                                fdr_data$LatentMeanPostPosteriorMean,
+                                fdr_data$LatentMeanPrePosteriorSD, 
+                                fdr_data$LatentMeanPostPosteriorSD)
+
+  fdr_data$Significant = ifelse(fdr_data$Cohens_d >= sigval, 1, 0)
+
+  # return (fdr_data)
+  ret = fdr_data %>%
+    group_by(ExperimentID) %>% 
+    summarise(FWER = mean(Significant)) %>%
+    separate_wider_delim(ExperimentID, delim = "_", 
+                         names = c("StudyID", "ExperimentID"))
+
+  return (ret)
 }
 
 
@@ -66,4 +102,5 @@ false_detection_rate = function(by = "condition") {
 }
 
 
-ret = false_detection_rate_by_condition()
+ret = calculate_fwer()
+
