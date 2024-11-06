@@ -66,8 +66,8 @@ calc_fdr_vs_significance_tibble = function(
         fwer_fdr,
         # Three metadata columns.
         tibble(SigVal = rep(significance_vals[ii], n_experiments),
-               BaseRate = rep(base_rate, n_experiments),
-               Power = rep(power, n_experiments))
+               Power = rep(power, n_experiments),
+               BaseRate = rep(base_rate, n_experiments))
       )
     
     ii = ii + 1
@@ -77,6 +77,43 @@ calc_fdr_vs_significance_tibble = function(
 }
 
 
+sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
+
+  return(
+
+    fdr_vs_sig_tbl %>%
+      filter(tbl, FWER <= 0.05) %>% 
+      group_by(StudyID, ExperimentID) %>% 
+      filter(SigVal == min(SigVal))  %>% 
+      arrange(desc(SigVal)) 
+
+  )
+}
 
 
+add_default_fwer_rows = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
+
+  # Figure out the number of sig values used.
+  n_sigvals = length(unique(fdr_vs_sig_tbl$SigVal))
+
+  # Extract power and base rate.
+  power = fdr_vs_sig_tbl[1, Power]
+  
+  # Use default FWER, FDR for all SigVals for non-plausibly-identified studies.
+   
+}
+
+
+aggregate_fdr_vs_sig = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
+  
+  ret = 
+    add_default_fwer_rows(fdr_vs_sig_tbl, default_fwer) %>%
+      group_by(StudyID, SigVal) %>%
+      summarise(FWER = mean(FWER), FDR = mean(FDR))
+}
+
+
+NON_IDENTIFIED_STUDIES_EXPERIMENTS = 
+  tibble(StudyID = c("Schkade2010", "Schkade2010", "Myers1975"),
+         ExperimentID = c("COSprings-GlobalWarming", "Boulder-Aff.Act.", "Bad-Experimental"))
 

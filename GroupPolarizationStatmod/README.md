@@ -20,14 +20,13 @@ Submit a job array to run 1000 trials like so
 qsub --array=[1-1000] bayesian_fit_trial.sh
 ```
 
-
 Each of the 1000 trials writes its output data 
 to a randomly-named .csv into the `data/probit_fits`
 directory, which must be created before submitting the job array.
 Each .csv output has 55 rows: 54 rows of data, one for each  and one header row.
 
-### False detection rate calculations
 
+### False detection rate calculations
 
 Cohen's *d* is calculated with `cohens_d` in
 [`src/false_detection_rate.R`](/src/false_experiments.R). 
