@@ -1,3 +1,14 @@
+##
+#
+# Plot model illustrations and analysis of family-wise error rate simulations.
+# 
+# Currently model illustrations are in the root project directory and will
+# soon be ported here.
+# 
+# Author: Matthew A. Turner <maturner01@gmail.com>
+# Date: 2024-11-05
+#
+
 library(ggplot2)
 
 source("scripts/analysis.R")
