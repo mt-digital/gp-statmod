@@ -78,20 +78,6 @@ calc_fdr_vs_significance = function(
 }
 
 
-sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
-
-  return(
-
-    fdr_vs_sig_tbl %>%
-      filter(FWER <= target_fwer) %>% 
-      group_by(StudyID, ExperimentID) %>% 
-      filter(SigVal == min(SigVal))  %>% 
-      arrange(desc(SigVal)) 
-
-  )
-}
-
-
 add_default_rows = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
 
   # Figure out the number of sig values used.
@@ -153,3 +139,21 @@ NON_IDENTIFIED =
     DefaultFWER = c(0.5, 0.5, 0.2)
   )
 
+
+##
+# Given fdr_vs_sig_tbl (which includes an FWER column), 
+# calculate the smallest significance value that achieves an FWER of 
+# target_fwer, set to a default main text value of 0.05.
+#
+sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
+
+  return(
+
+    fdr_vs_sig_tbl %>%
+      filter(FWER <= target_fwer) %>% 
+      group_by(StudyID, ExperimentID) %>% 
+      filter(SigVal == min(SigVal))  %>% 
+      arrange(desc(SigVal)) 
+
+  )
+}
