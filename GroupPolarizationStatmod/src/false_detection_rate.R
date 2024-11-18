@@ -8,6 +8,8 @@
 # library(tidyverse)
 library(dplyr)
 library(fs)
+library(readr)
+library(tidyr)
 
 
 cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
