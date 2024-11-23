@@ -17,21 +17,31 @@ source("scripts/analysis.R")
 
 
 plot_sigval_for_low_fwer = function(target_fwer = 0.05, 
+                                    save_path = "paper/Figures/sigval_for_low_fwer.pdf",
                                     probit_fits_dir = "data/probit_fits",
                                     base_rate = 0.1, power = 0.8, 
                                     significance_vals = seq(0.2, 3.0, 0.01)) {
-
   
-  sigval_for_low_fwer(calc_fdr_vs_significance(significance_vals = 
-                                               significance_vals)) %>%
-    mutate(ExperimentID = paste(StudyID, ExperimentID, "_")) %>%
-    ggplot(aes(x = SigVal, y = ExperimentID, color = ))
-    
+  tbl = 
+    sigval_for_low_fwer(calc_fdr_vs_significance(significance_vals = 
+                                                 significance_vals)) %>%
+      mutate(ExperimentID = paste(StudyID, ExperimentID, "_")) # %>%
 
+  return (tbl)
+
+  # ggplot(tbl, aes(x = SigVal, y = ExperimentID)) +
+  #   geom_bar(aes(fill = StudyID, color = StudyID), 
+  #            stat = "identity", width = 0.15)  +
+  #   xlab(TeX("Significance $d^*$ for $\\alpha \\leq 0.05")) + 
+  #   ylab("Experiment ID")
+      
+  #  ggsave(save_path, p) 
+
+  #  return (p)
 }
 
 
-plot_fwer_fdr = function(save_path = "paper/Figures/fwer_fdr_experiment.pdf", 
+plot_fdr = function(save_path = "paper/Figures/fwer_fdr_experiment.pdf", 
                          aggregate = FALSE,
                          probit_fits_dir = "data/probit_fits",
                          base_rate = 0.1, power = 0.8, 
@@ -73,4 +83,5 @@ plot_fwer_fdr = function(save_path = "paper/Figures/fwer_fdr_experiment.pdf",
 }
 
 
-plot_fwer_fdr()
+plot_fdr()
+plot_sigval_for_low_fwer()

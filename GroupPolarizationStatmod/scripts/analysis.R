@@ -153,6 +153,7 @@ sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
       filter(FWER <= target_fwer) %>% 
       group_by(StudyID, ExperimentID) %>% 
       filter(SigVal == min(SigVal))  %>% 
+      mutate(SigVal = as_factor(SigVal)) %>%
       arrange(desc(SigVal)) 
 
   )
