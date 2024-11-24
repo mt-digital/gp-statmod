@@ -12,6 +12,8 @@
 # Date: 2024-11-05
 #
 
+library(purrr)
+
 
 source("src/false_detection_rate.R")
 
@@ -81,12 +83,13 @@ calc_fdr_vs_significance = function(
 add_default_rows = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
 
   # Figure out the number of sig values used.
-  sigvals = fdr_vs_sig_tbl$SigVal
-  n_sigvals = length(unique(sigvals))
+  sigvals = unique(fdr_vs_sig_tbl$SigVal)
+  n_sigvals = length(sigvals)
+  # print(sigvals)
 
   # Extract power and base rate.
-  W = fdr_vs_sig_tbl[1, Power]
-  b = fdr_vs_sig_tbl[1, BaseRate]
+  W = pull(fdr_vs_sig_tbl[1, "Power"])
+  b = pull(fdr_vs_sig_tbl[1, "BaseRate"])
   
   # Load and use non-identified plausible.
   non_id = NON_IDENTIFIED
@@ -94,41 +97,53 @@ add_default_rows = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
   n_non_id = n_distinct(non_id)
   n_default_rows = n_non_id * n_sigvals
 
-  # Set default_fwer to be half of the least fwer calculated for that article
-  # by first finding the minimum fwer for the study.
-  study_ids = non_id$StudyID
+  # # Set default_fwer to be half of the least fwer calculated for that article
+  # # by first finding the minimum fwer for the study.
+  # study_ids = non_id$StudyID
 
-  default_fwers_tbl = 
-    fdr_vs_sig_tbl %>% 
-    filter(StudyID %in% study_ids) %>%
-    group_by(StudyID) %>%
-    summarize(default_fwer = min(FWER))
+  # default_fwers_tbl = 
+  #   fdr_vs_sig_tbl %>% 
+  #   filter(StudyID %in% study_ids) %>%
+  #   group_by(StudyID) %>%
+  #   summarize(default_fwer = min(FWER))
 
-  # Then create a vector that fits with default_rows.
-  default_fwers_vec = map(default_frews$DEFAULT, 
-                          \(frew) rep(frew / 2.0, n_sigvals))
+  # # Then create a vector that fits with default_rows.
+  # default_fwers_vec = map(default_fwers_tbl$default_fwer, 
+  #                         \(fwer) rep(fwer / 2.0, n_sigvals))
+  # print(default_fwers_vec)
 
-  default_fdr_vec = fdr(default_fwers_vec, b, W)
+  # default_fdr_vec = fdr(default_fwers_vec, b, W)
 
-  default_rows = tibble(StudyID = non_id$StudyID,
-                        ExperimentID = non_id$ExperimentID,
-                        FWER = default_fwers_vec,
-                        FDR = default_fdr_vec,
+  default_fdr = fdr(default_fwer, b, W)
+
+  print(default_fdr)
+
+  default_rows = tibble(StudyID = rep(non_id$StudyID, n_sigvals),
+                        ExperimentID = rep(non_id$ExperimentID, n_sigvals),
+                        FWER = default_fwer,
+                        FDR = default_fdr,
                         SigVal = rep(sigvals, n_non_id),
-                        Power = rep(W, n_default_rows),
-                        BaseRate = rep(b, n_default_rows))
+                        Power = W,
+                        BaseRate = b)
+                        # Power = rep(W, n_default_rows),
+                        # BaseRate = rep(b, n_default_rows))
   
   # Use default FWER, FDR for all SigVals for non-plausibly-identified studies.
   return (bind_rows(fdr_vs_sig_tbl, default_rows))
 }
 
 
-aggregate_fdr_vs_sig = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
+aggregate_fdr_vs_sig = function(fdr_vs_sig_tbl, use_non_identified = FALSE, 
+                                default_fwer = 0.05) {
   
-  ret = 
-    add_default_rows(fdr_vs_sig_tbl, default_fwer) %>%
-      group_by(StudyID, SigVal) %>%
-      summarise(FWER = mean(FWER), FDR = mean(FDR))
+  tbl = fdr_vs_sig_tbl
+  if (use_non_identified) {
+    tbl = add_default_rows(tbl, default_fwer)
+  }  
+
+  return (
+    group_by(tbl, StudyID, SigVal) %>% summarise(FDR = mean(FDR))
+  )
 }
 
 
