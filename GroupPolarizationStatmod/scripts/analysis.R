@@ -142,7 +142,7 @@ aggregate_fdr_vs_sig = function(fdr_vs_sig_tbl, use_non_identified = FALSE,
   }  
 
   return (
-    group_by(tbl, StudyID, SigVal) %>% summarise(FDR = mean(FDR))
+    group_by(tbl, StudyID, SigVal) %>% summarise(FDR = mean(FDR), FWER = mean(FWER))
   )
 }
 
@@ -162,14 +162,20 @@ NON_IDENTIFIED =
 #
 sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
 
+  # return (fdr_vs_sig_tbl)
+
   return(
 
     fdr_vs_sig_tbl %>%
+      # Reorder ExperimentID factors to be by max FWER, i.e., FWER for lowest sig. val.
+      mutate(StudyID = fct_reorder(StudyID, FWER, mean), 
+             ExperimentID = fct_reorder(ExperimentID, FWER, mean)) %>%
       filter(FWER <= target_fwer) %>% 
-      group_by(StudyID, ExperimentID) %>% 
+      # group_by(StudyID, ExperimentID) %>% 
+      group_by(ExperimentID) %>% 
       filter(SigVal == min(SigVal))  %>% 
-      mutate(SigVal = as_factor(SigVal)) %>%
-      arrange(desc(SigVal)) 
+      mutate(SigVal = as_factor(SigVal), ExperimentID = fct_reorder(ExperimentID, FDR)) # %>%
+      # arrange(desc(SigVal)) 
 
   )
 }

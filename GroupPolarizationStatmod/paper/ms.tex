@@ -587,7 +587,7 @@ large-$N$ model.
 \section{Results}\label{results}
 
 
-\subsection{Ninety percent of detections are plausibly false}
+\subsection{Ninety percent of detections identified as plausibly false}
 
 We identified 54 of 60 experimental 
 conditions where a $N \to \infty$ model falsely indicated group polarization 
@@ -620,6 +620,16 @@ Solving the inverse problem of which $d^*$ achieves a low family-wise error rate
 which drives the false detection rate. Here we present our calculations to find
 $d^*$ that achieve $\alpha(d^*) = 0.05$, a commonly-assumed parameter value of
 metascience. 
+
+
+\begin{figure}
+  \caption{\textbf{Significance value, $d^*$, to limit family-wise error 
+  rate of 0.05 for each identified study.} \mt{Does this make sense? Order by the
+rankings in fdr\_vs\_experiment plots to better understand/compare.}}
+  \centering
+    \includegraphics[width=0.55\textwidth]{Figures/sigval_for_low_fwer.pdf}
+  \label{fig:sigval_for_low_fwer}
+\end{figure}
 
 
 

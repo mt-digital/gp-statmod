@@ -42,4 +42,8 @@ to be implemented in [`false_detection_rate.R`](/false_detection_rate.R).
 
 
 
+See `src/false_detection_rate.R`, used by `scripts/analysis.R`, both used by
+`scripts/plot.R`. The analysis of the probit fits is entirely here now, I believe.
+Still need a lot of the other stuff, which should be cleaned up and organized
+into `src` or `scripts` if needed, or discarded if no longer used.
 
