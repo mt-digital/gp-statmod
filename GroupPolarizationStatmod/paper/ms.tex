@@ -270,15 +270,15 @@ polarization measurements as continuous although they are ordinal, and
 more appropriate statistical models that account for data ordinality.
 
 \begin{figure}
-  \caption{\textbf{Common components of a group polarization experiment.}
-  Participants first give their opinion in response to some prompt (A). Afterwards,
-  participants deliberate the topic (B). Participants then give their opinion again
-  (C). Opinions are implicitly behavioral choices that are most consistent with some
+  \caption{\textbf{Opinions are implicitly behavioral choices that are most consistent with some
   complex aggregation of brain states and dynamics, and so are theoretically
-  continuous (D).}
+  continuous (A). Common components of a group polarization experiment.}
+  Participants first give their opinion in response to some prompt (B). Afterwards,
+  participants deliberate the topic (C). Participants then give their opinion again
+  (D). }
   \centering
-    \includegraphics[width=0.7\textwidth]{Figures/ModelSketchesA-C.pdf}
-    \includegraphics[width=0.65\textwidth]{Figures/ModelSketchesD.pdf}
+    \includegraphics[width=0.65\textwidth]{Figures/Model/ModelSketchesA.pdf}
+    \includegraphics[width=0.7\textwidth]{Figures/Model/ModelSketchesB-D.pdf}
   \label{fig:ModelSketch}
 \end{figure}
 
@@ -533,6 +533,16 @@ deviation $\sigma_0$. The final opinion of agent $i$ is written $o_{i,t=T}$,
 drawn from a normal distribution with mean $\mu_T$ and standard deviation
 $\sigma_T$. 
 
+An opinion is never measured directly, only behaviors meant to indicate one's opinion.
+For example, only the location of a mark that a participant makes is measured, not
+the complex neural activity that somehow aggregates and expresses some latent
+representation. Because so much neural activity must be integrated to yield an opinion,
+it is most reasonable to assume opinions are continuous. We call these 
+\textit{latent opinions} because they are unobservable. In contrast, ordinal-valued
+\text{observed opinions} are the value participants report before and after group
+polarization deliberation.
+
+
 \subsection{Root-finding algorithm to identify plausible false detections} 
 
 Simple consensus can appear as group polarization since a change in 
@@ -614,6 +624,18 @@ was Myers (1975), with a false discovery rate of 0.58, meaning that probability
 a group polarization detection in the best-designed study is greater than one in
 two.
 
+\begin{figure}
+
+  \caption{\textbf{Family-wise error rates and false discovery rates across studies and experiments for
+    low, medium, and high Cohen's $d$ significance.}}
+  \label{fig:fwer_fdr_synthesis}
+
+  \centering
+  \includegraphics[width=1.1\textwidth]{Figures/Results/fwer_fdr_synthesis.pdf}
+    
+\end{figure}
+
+
 \subsection{Minimum $d^*$ for FWER of 0.05}
 
 Solving the inverse problem of which $d^*$ achieves a low family-wise error rate,
@@ -627,7 +649,7 @@ metascience.
   rate of 0.05 for each identified study.} \mt{Does this make sense? Order by the
 rankings in fdr\_vs\_experiment plots to better understand/compare.}}
   \centering
-    \includegraphics[width=0.55\textwidth]{Figures/sigval_for_low_fwer.pdf}
+    \includegraphics[width=0.75\textwidth]{Figures/Results/sigval_for_low_fwer.pdf}
   \label{fig:sigval_for_low_fwer}
 \end{figure}
 
