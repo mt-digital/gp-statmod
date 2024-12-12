@@ -1,61 +1,72 @@
 library(ggplot2)
+library(readr)
+library(dplyr)
 
 source("model.R")  # for binProb function used in ordinal plot function below.
 
-plot_latent_pdf_integration = function(mu = 0, sd = 2.5, xlim = c(-6.0, 6.0), 
-                                       bin1 = c(-0.5, 0.5), bin2 = c(1.5, 5.0),
-                                       save_path = "test_latent_pdf.pdf") {
 
+# mytheme = theme(
+#   axis.line = element_line(), legend.key=element_rect(fill = NA),
+#   text = element_text(size=16),# family = 'PT Sans'),
+#   # legend.key.width = unit(2, 'cm'),
+#   # legend.key.size = unit(1.5, 'lines'),
+#   panel.background = element_rect(fill = "white"),
+#   panel.grid.major.x = element_line(color = "lightgrey", linewidth = 0.1, linetype = 2)
+# )
   mytheme = theme(
     panel.border = element_blank(), axis.line = element_line(), 
     text = element_text(size=16, family = 'PT Sans'), 
     panel.background = element_rect(fill = "white")
   )
 
-  p = ggplot(data.frame(x = xlim), aes(x)) + 
+plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin, 
+                                       bins, bin_colors, # xlim = c(-6.0, 6.0), 
+                                       save_path = "test_latent_pdf.pdf") {
+  print(save_path)
 
-    stat_function(fun = dnorm,
-                  args = c(mu, sd),
-                  geom = "line",
-                  xlim = xlim + 1) +
-    
-    stat_function(fun = dnorm,
-                  geom = "area",
-                  args = c(mu, sd),
-                  fill = "lightpink",
-                  xlim = c(-5.0, -1.5)) +
-    
-    stat_function(fun = dnorm,
-                  geom = "area",
-                  args = c(mu, sd),
-                  fill = "lightblue",
-                  xlim = c(-1.5, -0.5)) +
 
-    stat_function(fun = dnorm,
-                  geom = "area",
-                  args = c(mu, sd),
-                  fill = "#ffcb58",
-                  xlim = c(-0.5, 0.5)) +
+  xmin = min_bin - 1
+  xmax = max_bin + 1
 
-    stat_function(fun = dnorm,
-                  geom = "area",
-                  args = c(mu, sd),
-                  fill = "lightgreen",
-                  xlim = c(0.5, 1.5)) +
-    
-    stat_function(fun = dnorm,
-                  geom = "area",
-                  args = c(mu, sd),
-                  fill = "#F6CFFF",
-                  xlim = c(1.5, 5)) +
+  xlim = c(xmin, xmax)
 
-    xlab("Latent opinion") + ylab("Probability density\n\n") + 
-    geom_vline(xintercept=-1.5:1.5, linetype="dotted") + 
-    geom_vline(xintercept=mu, linetype="dashed") + 
-    xlim(c(-5, 5)) + 
-    # ylim(0.01, NA) + 
+  p = ggplot(data.frame(x = xlim), aes(x)) 
 
-    mytheme
+  p = p + stat_function(fun = dnorm,
+                        args = c(mu, sd),
+                        geom = "line",
+                        xlim = c(xmin, xmax)) 
+
+  p = p + stat_function(fun = dnorm,
+                        geom = "area",
+                        args = c(mu, sd),
+                        fill = bin_colors[1],
+                        xlim = c(xmin, min_bin + 0.5))
+
+  n_bins = length(bins)
+
+  for (idx in 2:(n_bins - 1)) {
+
+    p = p + stat_function(fun = dnorm,
+                          geom = "area",
+                          args = c(mu, sd),
+                          fill = bin_colors[idx],
+                          xlim = c(bins[idx - 1] + 0.5, bins[idx] + 0.5))
+  }
+
+  p = p + stat_function(fun = dnorm,
+                        geom = "area",
+                        args = c(mu, sd),
+                        fill = bin_colors[n_bins],
+                        xlim = c(xmax, max_bin + 0.5))
+
+  p = p + xlab("Latent opinion") + ylab("Probability density\n\n") + 
+  geom_vline(xintercept=c(min_bin - 0.5, (bins + 0.5)), linetype="dotted") + 
+  geom_vline(xintercept=mu, linetype="dashed") + 
+  xlim(c(xmin, xmax)) + 
+  ylim(c(0, 1)) +
+  scale_x_continuous(breaks = bins) +
+  mytheme
   
   ggsave(filename = save_path, device = cairo_pdf, p, width=5, height=3.5, units="in")
   
@@ -95,6 +106,7 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
          geom_bar(stat = "identity", fill = bin_colors) + 
          geom_vline(xintercept = mean_observed, linetype="dashed") +
          xlab("Binned ordinal opinion") + ylab("Probability density\n\n") +
+         ylim(c(0.0, 1.0)) + 
          mytheme
   
   ggsave(filename = save_path, device = cairo_pdf, p, 
@@ -106,23 +118,54 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
 
 # Consensus occurs when group opinion variance decreases; simple consensus when mu 
 # remains constant, while group polarization is when the mean becomes more extreme.
-make_distros_consensus_figure <- function(mu = 0.8, sds = c(2.0, 1.0), 
-                                          save_dir = 
-  "~/workspace/gp-statmod/GroupPolarizationStatmod/paper/ConsensusDistroIllustration/") {
+make_distros_consensus_figure =
+  function(mu = 0.8, sigma_pre = 2.0, sigma_post = 1.0, min_bin = -2, 
+           max_bin = 2, bins = -2:2, bin_colors = c("lightpink", "lightblue", 
+                                                    "#f7ae3d", "lightgreen", 
+                                                    "#F6CFFF"),
+           save_dir = 
+             "~/workspace/gp-statmod/GroupPolarizationStatmod/paper/Figures/Model"
+           ) {
 
+  sds = c(sigma_pre, sigma_post)
   for (sd in sds) {
-    save_path = paste(save_dir, "ordinal", "_mu=", mu, "_sd=", sd, ".pdf", 
-                      sep = "")
+    save_path = fs::path_join(c(save_dir, paste0("ordinal", "_mu=", mu, "_sd=", round(sd, 2), ".pdf")))
 
-    plot_ordinal_distribution(mu, sd, save_path = save_path)
+    plot_ordinal_distribution(mu, sd, min_bin, max_bin, bins, bin_colors, save_path = save_path)
   }
   
   for (sd in sds) {
-    save_path = paste(save_dir, "latent", "_mu=", mu, "_sd=", sd, ".pdf", 
-                      sep = "")
+    save_path = fs::path_join(c(save_dir, paste0("latent", "_mu=", mu, "_sd=", round(sd, 2), ".pdf")))
 
-    plot_latent_pdf_integration(mu, sd, save_path = save_path)
+    print(save_path)
+
+    plot_latent_pdf_integration(mu, sd, min_bin, max_bin, bins, bin_colors, 
+                                save_path = save_path)
   }
   
 }
 
+
+# Run figure-making routines using data from CaseStudies.xlsx
+# Get schkade2010 data
+case_studies_tbl = read_csv("data/StudiesAnalysis.csv")
+
+# XXX note that the analyzed study CSV uses column name "ArticleTag" not StudyID
+# and "TreatmentTag" not ExperimentID. 
+# TODO Not sure right now where this change is done, need to find out
+schkade2010 = filter(case_studies_tbl, ArticleTag == "Schkade2010" &
+                     TreatmentTag == "COSprings-CivilUnions")
+                         
+mu = schkade2010$LatentMean
+sigma_pre = schkade2010$LatentSDPre
+sigma_post = schkade2010$LatentSDPost
+min_bin = schkade2010$MinBinValue
+max_bin = schkade2010$MaxBinValue
+bins = min_bin:max_bin
+
+rhg_cols_10 <- rev(c("#771C19", "#AA3929", "#E25033", "#F27314", "#F8A31B", 
+              "#E2C59F", "#B6C5CC", "#8E9CA3", "#556670", "#556AAA"))
+
+bin_colors = rhg_cols_10
+
+make_distros_consensus_figure(mu, sigma_pre, sigma_post, min_bin, max_bin, bins, rhg_cols_10)

@@ -1,5 +1,5 @@
-TreatmentTag,ArticleTag,LatentSDPre,LatentSDPost,ObservedMeanPre,ObservedMeanPost,ObservedShift,ObservedShiftSD,N,LatentMean,HillclimbStepSize,HillclimbSuccessThreshold,ObservedMeanPreError,ObservedMeanPostError,MinBinValue,MaxBinValue,Plausible,PlausibleInt,Include,IncludeInt,Notes
-Boulder-Aff.Act.,Schkade2010,7.535666663,0.932865658,5.81,6.38,0.57,NA,32,6.2,0.05,0.05,0.004523077,-0.180002035,1,10,FALSE,1,TRUE,1,"The solutions here tend to have a large pre SD for which no cases were observed in Boulder, but it is still plausible that a different group could have the sorts of statistics we found. The histograms do not disambiguate actually, because they are over all topics. Probably this is less plausible than other cases, but plausible nonetheless. Take example of California, which defeated an Affirmative Action measure. It is totally plausible that many liberals have strong views against Affirmative Action, at least 1 in 5 in some groups."
+﻿TreatmentTag,ArticleTag,LatentSDPre,LatentSDPost,ObservedMeanPre,ObservedMeanPost,ObservedShift,ObservedShiftSD,N,LatentMean,HillclimbStepSize,HillclimbSuccessThreshold,ObservedMeanPreError,ObservedMeanPostError,MinBinValue,MaxBinValue,Plausible,PlausibleInt,Include,IncludeInt,Notes
+Boulder-Aff.Act.,Schkade2010,7.535666663,0.932865658,5.81,6.38,0.57,NA,32,6.2,0.05,0.05,0.004523077,-0.180002035,1,10,TRUE,1,TRUE,1,"The solutions here tend to have a large pre SD for which no cases were observed in Boulder, but it is still plausible that a different group could have the sorts of statistics we found. The histograms do not disambiguate actually, because they are over all topics. Probably this is less plausible than other cases, but plausible nonetheless. Take example of California, which defeated an Affirmative Action measure. It is totally plausible that many liberals have strong views against Affirmative Action, at least 1 in 5 in some groups."
 COSprings-Aff.Act.,Schkade2010,3.874399317,0.488934522,2.84,1.61,-1.23,NA,31,1.6,0.05,0.001,-0.000407539,0.003909894,1,10,TRUE,1,TRUE,1,
 Boulder-CivilUnions,Schkade2010,1.424743236,0.200932784,9.22,9.69,0.47,NA,32,9.6,0.05,1.00E-05,0.000725181,0.000644775,1,10,TRUE,1,TRUE,1,
 COSprings-CivilUnions,Schkade2010,1.847694435,0.417290247,2.48,2.19,-0.29,NA,31,2.2,0.05,0.001,1.31E-05,0.000289142,1,10,TRUE,1,TRUE,1,
@@ -59,3 +59,6 @@ B,Burnstein1973,16.14782519,4.968923774,5.76,5.42,-0.33,NA,149,5.3,0.05,0.001,-0
 E,Burnstein1973,3.267465911,0.891943118,7.76,8.42,0.68,NA,149,8.4,0.01,0.01,NA,NA,1,10,TRUE,1,TRUE,1,Solid false positive.
 F,Burnstein1973,1.588302783,0.657507632,8.36,8.56,0.2,NA,149,8.5,0.01,0.01,NA,NA,1,10,TRUE,1,TRUE,1,Solid false positive.
 H,Burnstein1973,3.467724848,1.489014823,6.87,7.26,0.41,NA,149,7.24,0.01,0.01,5.13E-06,0.001340534,1,10,TRUE,1,TRUE,1,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,

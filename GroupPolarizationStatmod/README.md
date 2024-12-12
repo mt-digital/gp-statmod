@@ -29,7 +29,7 @@ Each .csv output has 55 rows: 54 rows of data, one for each  and one header row.
 ### False detection rate calculations
 
 Cohen's *d* is calculated with `cohens_d` in
-[`src/false_detection_rate.R`](/src/false_experiments.R). 
+[`src/false_detection_rate.R`](src/false_detection_rate.R). 
 This asymmetric-variance version of Cohen's d is enumerated in Liddell and
 Kruschke (2018) and used by them at line 884 in their script
 [OrdinalScaleGroupJags.R](https://osf.io/5jrgz), hosted in the associated 
@@ -41,9 +41,9 @@ fraction of $d$ values that are greater than $\alpha^*$ (EVENTUALLY/SOON)
 to be implemented in [`false_detection_rate.R`](/false_detection_rate.R).
 
 
-
 See `src/false_detection_rate.R`, used by `scripts/analysis.R`, both used by
 `scripts/plot.R`. The analysis of the probit fits is entirely here now, I believe.
 Still need a lot of the other stuff, which should be cleaned up and organized
 into `src` or `scripts` if needed, or discarded if no longer used.
+
 

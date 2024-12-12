@@ -7,7 +7,6 @@
 # simulations with N specified by referring to studies we review in our
 # paper. 
 #
-# library(cmna)
 source('model.R')
 
 

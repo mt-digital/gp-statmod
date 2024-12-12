@@ -205,33 +205,6 @@ calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 }
 
 
-
-### XXX Outdated as of 2024-10-30 due to Bayesian-only statistical fits XXX ###
-
-
-
-# Uses R's t.test function to fit a linear model to estimate pre- and post-
-# deliberation means in a simple consensus context where there is only one
-# latent mean.
-# simulate_metric_cohens_d <- function(N, firstBinValue, nBins, latentMean, latentSdPre, 
-#                             latentSdPost, paired = FALSE, var.equal = FALSE)
-# {
-#   sim_obs_pre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
-
-#   sim_obs_post <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
-  
-#   t_result <- t.test(sim_obs_pre, sim_obs_post, paired = paired, var.equal = var.equal)
-  
-#   pre_mean_estimate <- t_result$estimate[[1]] 
-#   post_mean_estimate <- t_result$estimate[[2]] 
-  
-#   pre_sd <- sd(sim_obs_pre)
-#   post_sd <- sd(sim_obs_post)
-  
-#   return (cohens_d(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd))
-# }
-
-
 cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
   
   numerator <- post_mean_estimate - pre_mean_estimate
@@ -240,16 +213,6 @@ cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
   
   return (numerator / denominator)
 }
-
-# orderedProbitExperiment <- function(N, firstBinValue, nBins, latentMean,
-#                                         latentSdPre, latentSdPost, paired = TRUE,
-#                                         var.equal = FALSE)
-# {
-#     simObsPre <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPre)
-#     simObsPost <- simulatedObservation(N, firstBinValue, nBins, latentMean, latentSdPost)
-
-#     # Call helper function to run Bayesian analysis adapted from L&K 2018.
-# }
 
 
 simulatedObservation <- function(N, firstBinValue, nBins, latentMean, latentSd)

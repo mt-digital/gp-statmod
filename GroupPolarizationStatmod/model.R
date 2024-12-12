@@ -33,8 +33,7 @@ binProb <- function(thisBin, bin1, K, latentMean, latentSD)
     {
         theta_k <- interiorThresholds[binIdx]
     }
-    # print(theta_k)
-    # print(theta_km1)
+    
     # From Equation 2 in Liddell & Kruschke (2018), p. 340.
     return (pnorm((theta_k - latentMean) / latentSD) - 
             pnorm((theta_km1 - latentMean) / latentSD))
