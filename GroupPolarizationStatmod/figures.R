@@ -30,6 +30,8 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
 
   xlim = c(xmin, xmax)
 
+  print(xlim)
+
   p = ggplot(data.frame(x = xlim), aes(x)) 
 
   p = p + stat_function(fun = dnorm,
@@ -37,6 +39,7 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
                         geom = "line",
                         xlim = c(xmin, xmax)) 
 
+  # First bin from -infinity to min_bin + 0.5
   p = p + stat_function(fun = dnorm,
                         geom = "area",
                         args = c(mu, sd),
@@ -45,6 +48,7 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
 
   n_bins = length(bins)
 
+  # Middle bins.
   for (idx in 2:(n_bins - 1)) {
 
     p = p + stat_function(fun = dnorm,
@@ -54,6 +58,7 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
                           xlim = c(bins[idx - 1] + 0.5, bins[idx] + 0.5))
   }
 
+  # Final bin from last_bin - 0.5 to infinity.
   p = p + stat_function(fun = dnorm,
                         geom = "area",
                         args = c(mu, sd),
@@ -61,7 +66,7 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
                         xlim = c(xmax, max_bin + 0.5))
 
   p = p + xlab("Latent opinion") + ylab("Probability density\n\n") + 
-  geom_vline(xintercept=c(min_bin - 0.5, (bins + 0.5)), linetype="dotted") + 
+  geom_vline(xintercept=c((bins[1:(length(bins) - 1)] + 0.5)), linetype="dotted") + 
   geom_vline(xintercept=mu, linetype="dashed") + 
   xlim(c(xmin, xmax)) + 
   ylim(c(0, 1)) +
@@ -84,7 +89,7 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
   # Use same parameters as latent distribution to calculate integration over
   # bin threshold limits \theta_{k-1}..\theta_k
   opinion_bin_vec <- seq(min_bin, max_bin)
-  
+
   n_bins <- length(opinion_bin_vec)
   
   ord_dist_df <- data.frame(OpinionBin = seq(min_bin, max_bin), 
@@ -102,11 +107,20 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
   
   print(paste("Mean observed for sd = ", sd, ": ", mean_observed, sep = ""))
   
+  # Set x-axis limits to match continuous distro.
+  xmin = min_bin - 1
+  xmax = max_bin + 1
+
+  xlim = c(xmin, xmax)
+
+  print(xlim)
+
   p <- ggplot(data=ord_dist_df, aes(x=OpinionBin, y=Density)) +
          geom_bar(stat = "identity", fill = bin_colors) + 
          geom_vline(xintercept = mean_observed, linetype="dashed") +
-         xlab("Binned ordinal opinion") + ylab("Probability density\n\n") +
+         xlab("Ordinal opinion measurement") + ylab("Probability density\n\n") +
          ylim(c(0.0, 1.0)) + 
+         scale_x_continuous(breaks = bins, limits = xlim) +
          mytheme
   
   ggsave(filename = save_path, device = cairo_pdf, p, 
