@@ -10,123 +10,14 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{iftex}
-\ifPDFTeX
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-  \usepackage{unicode-math}
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-\usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
-\fi
-% Use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\usepackage{xcolor}
-\usepackage[margin=1.1in,letterpaper]{geometry}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
-% Make \paragraph and \subparagraph free-standing
-\ifx\paragraph\undefined\else
-  \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-  \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
-
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
-\usepackage{calc} % for calculating minipage widths
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
-\usepackage{graphicx}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-
-\makeatletter
-\@ifpackageloaded{caption}{}{\usepackage{caption}}
-\AtBeginDocument{%
-\ifdefined\contentsname
-  \renewcommand*\contentsname{Table of contents}
-\else
-  \newcommand\contentsname{Table of contents}
-\fi
-\ifdefined\listfigurename
-  \renewcommand*\listfigurename{List of Figures}
-\else
-  \newcommand\listfigurename{List of Figures}
-\fi
-\ifdefined\listtablename
-  \renewcommand*\listtablename{List of Tables}
-\else
-  \newcommand\listtablename{List of Tables}
-\fi
-\ifdefined\figurename
-  \renewcommand*\figurename{Figure}
-\else
-  \newcommand\figurename{Figure}
-\fi
-\ifdefined\tablename
-  \renewcommand*\tablename{Table}
-\else
-  \newcommand\tablename{Table}
-\fi
-}
-\@ifpackageloaded{float}{}{\usepackage{float}}
-\floatstyle{ruled}
-\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
-\floatname{codelisting}{Listing}
-\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\@ifpackageloaded{caption}{}{\usepackage{caption}}
-\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
-\makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\usepackage[sorting=none, style=numeric-comp]{biblatex}
-\addbibresource{/Users/mt/workspace/Writing/library.bib}
-\usepackage{bookmark}
-
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\input{preamble.tex}
 \hypersetup{
-  pdftitle={Foundational claims of group polarization are plausibly false, with lessons for the empirical study of psychological dynamics},
+  pdftitle={Group polarization replications may be marred by high false discovery rates},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
   citecolor={Blue},
-  urlcolor={Blue},
-  pdfcreator={LaTeX via pandoc}}
+  urlcolor={Blue}}
 
 
 \newcommand{\mupre}{\mu_\mathrm{pre}}
@@ -139,15 +30,22 @@
 
 \newcommand{\fdr}{\mathrm{FDR}}
 
+\newcommand{\meanobs}{\bar{o}}
+\newcommand{\meanobsemp}{\bar{\mathbf{o}}}
+\newcommand{\meanobst}{\meanobs_t}
+\newcommand{\meanobsjt}{\meanobs_{j,t}}
+
+\newcommand{\meanobspre}{\meanobs_\mathrm{pre}}
+\newcommand{\meanobspost}{\meanobs_\mathrm{post}}
+
 \definecolor{myorange}{RGB}{240, 96, 0}
 \newcommand{\mt}[1]{{\textcolor{myorange} {({\tiny MT:} #1)}}}
 
 \usepackage{authblk}
 \usepackage{etoolbox}
+\usepackage{wrapfig}
 \makeatletter
-\title{Decades of ``group polarization'' replications may be undermined by high false discovery rates}
-% \title{Foundational claims of group polarization are plausibly false,
-% with lessons for the empirical study of psychological dynamics}
+\title{Group polarization replications may be marred by high false discovery rates}
 \makeatother
 \author[1,*]{{Matthew A.~Turner}}
 \affil[1]{\small Division of Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
@@ -176,11 +74,12 @@ polarization was spurious, i.e., to calculate the \emph{false detection
 rate}.  Across 54 group polarization experimental conditions from ten
 representative journal articles, we calculated false detection rates to be
 between 0.52 and 0.88, with a median of 0.75, using a generative model of
-group polarization experiments seeded with data from the studies
-themselves.  We also use our model to develop experimental designs that
+group polarization experiments seeded with empirical data.  
+We also use our model to develop experimental designs that
 achieve an acceptable false discovery rate.  Much of group polarization
-research may be unreliable, but this analysis can help change that. More
-broadly, this work demonstrates one way that replication success alone
+research may be unreliable. This analysis can help change that by enabling others to avoid this
+hidden pitfall. More
+broadly this work demonstrates one important way that replication success alone
 does not imply epistemic reliability.
 \end{abstract}
 
@@ -269,18 +168,18 @@ to compare model fits between metric models that treat group
 polarization measurements as continuous although they are ordinal, and
 more appropriate statistical models that account for data ordinality.
 
-\begin{figure}
-  \caption{\textbf{Opinions are implicitly behavioral choices that are most consistent with some
-  complex aggregation of brain states and dynamics, and so are theoretically
-  continuous (A). Common components of a group polarization experiment.}
-  Participants first give their opinion in response to some prompt (B). Afterwards,
-  participants deliberate the topic (C). Participants then give their opinion again
-  (D). }
-  \centering
-    \includegraphics[width=0.65\textwidth]{Figures/Model/ModelSketchesA.pdf}
-    \includegraphics[width=0.7\textwidth]{Figures/Model/ModelSketchesB-D.pdf}
-  \label{fig:ModelSketch}
-\end{figure}
+% \begin{figure}
+%   \caption{\textbf{Opinions are implicitly behavioral choices that are most consistent with some
+%   complex aggregation of brain states and dynamics, and so are theoretically
+%   continuous (A). Common components of a group polarization experiment.}
+%   Participants first give their opinion in response to some prompt (B). Afterwards,
+%   participants deliberate the topic (C). Participants then give their opinion again
+%   (D). }
+%   \centering
+%     \includegraphics[width=0.65\textwidth]{Figures/Model/ModelSketchesA.pdf}
+%     \includegraphics[width=0.7\textwidth]{Figures/Model/ModelSketchesB-D.pdf}
+%   \label{fig:ModelSketch}
+% \end{figure}
 
 
 In this paper, we perform a meta-analysis of sixty detections of group
@@ -471,6 +370,19 @@ reliably identify simulated simple consensus in latent opinions when
 simulated observations appear as group polarization based on mean group
 opinion alone.
 
+% \begin{wrapfigure}{l}{0.5\textwidth}
+\begin{figure}
+  \caption{\textbf{Group polarization experimental model.} Latent opinions are 
+    represented as numbers corresponding to the valence and extremism of one's opinion
+(A). Before deliberating a topic of interest, all participants report their 
+opinion (B). Participants then deliberate the topic with others (C). Following
+deliberation participants report their opinion once more (D).}
+  \centering
+  \includegraphics[width=0.65\textwidth]{Figures/Model/ModelSketches.pdf}
+  \label{fig:experiment_model}
+% \end{wrapfigure}
+\end{figure}
+
 \section{Methods}\label{methods}
 
 % We begin by developing a formal model of ordinal measurement of latent
@@ -489,7 +401,7 @@ distributions. These can then be aggregated to estimate the false discovery rate
 for each journal article and for the ten-article corpus, which is representative of the
 false discovery rate for group polarization studies. 
 
-\subsection{Metascience of the false detection rate}
+\subsection{Metascience of the false detection rate in group polarization}
 
 The false detection rate is the scaled probability that a detection, $D$, of
 an effect, $E$, is in fact a false detection and there is \emph{not} an effect,
@@ -504,12 +416,6 @@ Using the notation outlined above, the false detection rate is
   \fdr = \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
 \end{equation}
 
-We calculate $\alpha = \Pr(D | \neg E)$ through simulation for experimental
-conditions identified as plausibly generating false detections, 
-and use generously optimistic values of
-$b=0.1$~\cite{Ioannidis2005,McElreath2015} and $W=0.8$~\cite{Smaldino2016NatSel}
-in the main text and in the compare with more pessimistic, yet realistic, estimates
-of these values, as well as even more optimistic estimates. 
 
 In group polarization, $E$ represents the group polarization \emph{effect}, and
 $\neg E$ represents its absence. Simple consensus is one way for group polarization
@@ -517,57 +423,231 @@ to be absent, i.e., simple consensus is one form of $\neg E$. The presence of
 an effect $E$ is independent of whether an effect was \emph{detected}, 
 represented by $D$ if it was detected and $\neg D$ if not. 
 
+The group polarization studies are journal articles that present
+the results of multiple experiments to support some hypothesis. To organize
+the presentation of false detection rates across the ten studies in our
+analysis, we first will organize false detection rates by experiment, where
+we created `ExperimentID` tags for each of the sixty experiments across ten
+studies. We also created `StudyID` tags for each of the ten journal articles
+with the key `{Author}{Year}`, e.g., \texttt{Schkade2010} for Schkade, et al.,
+(2010) \cite{Schkade2010}. 
+
+We calculate $\alpha = \Pr(D | \neg E)$ through simulation for experimental
+conditions, 
+and use optimistic values of
+$b=0.1$~\cite{Ioannidis2005,McElreath2015} and $W=0.8$~\cite{Smaldino2016NatSel}
+in the main text and in the compare with more pessimistic, yet realistic, estimates
+of these values, as well as even more optimistic estimates. 
 
 \subsection{How study design can induce false detections of group polarization}
 
-First, we assume that participant $i$ has
-latent opinion at time $t$ that is drawn from a group-level normal distribution,
-\begin{equation}
+
+An opinion is never measured directly, only a behavior that indicates an opinion
+in a behavioral experiment or survey.  For example, the location of a mark
+that a participant makes is measured, not the complex neural activity that
+underlies forming opinions (Figure~\ref{fig:experiment_model}A) \mt{Some of this
+needs to be Intro'd}.
+Theoretically, an internal opinion in the form of neural activity is a
+\textit{latent opinion}, from the Latin \emph{latentem} meaning ``lie
+hidden''.  Participants report \text{observed opinions}, typically as one of
+a finite number of ranked, successive integer values that form the
+\emph{selection set}. The minimum possible value in the selection set might
+mean ``strongly disagree'' and the maximum value represents ``strongly
+agree''.
+
+% \begin{wrapfigure}{r}{0.5\textwidth}
+\begin{figure}
+  \caption{\textbf{Opinion measurement model and spurious group polarization.} 
+  Latent model participant opinions are drawn from a normal distribution with the
+  listed parameters (A,C). The pre-deliberation latent distribution has high
+  variance, but appears polarized when measured via integration (A).  The latent
+  distribution's variance is expected to decrease during deliberation (B) via
+  consensus, but in this example the latent mean is static, 
+$\mupre = \mupost$. However, when the post-deliberation distribution is measured,
+the simulated observed mean increases, i.e., spurious
+group polarization occurs (C).}
+  \centering
+  \includegraphics[width=0.65\textwidth]{Figures/Model/latent-ordinal-distros.pdf}
+  \label{fig:distros}
+\end{figure}
+% \end{wrapfigure}
+
+Group polarization experiments share a common experimental design where,
+first, participant opinions are gathered on a topic of interest. Next, groups
+are formed that have some initial opinion extremism. Participants deliberate
+or discuss the topic for some set time. After the set time, participants
+again give their opinion. Group polarization is said to occur if the
+mean group opinion became more extreme, i.e., if the magnitude of the mean
+group opinion is greater \emph{post-deliberation} compared to
+\emph{pre-deliberation}. For example,
+\cite{Moscovici1969} asked Parisian high school students to indicate their
+degree of agreement with the statement, ``American economic aid is always
+used for political pressure'' (Figure~\ref{fig:experiment_model}A). There
+were seven options in the selection set, -3 indicating ``strongly disagree'',
++3 indicating ``strongly agree'', and 0 was neutral. Moscovici and Zavalloni
+report that the mean pre-deliberation opinion was -0.61 and the mean
+post-deliberation opinion was -1.09 (Moscovici and Zavalloni, 1969; Table 4,
+p. 132). This is a -0.48 shift to more extreme disagreement with the 
+statement, reported by Moscovici and Zavalloni as statistically significant
+in Table 5 on p. 132.
+
+We formalize this experimental design in the $N\to\infty$ case where the
+distribution of ordinal measurements is created by integrating continuous latent
+opinion distributions.  Latent opinions in the model are normally distributed with
+mean $\mu_t$ and variance $\sigma_t$ for time $t$. We are concerned with only two
+times, \emph{pre-} and \emph{post-} deliberation ($t=0$ and $t=T$, respectively).
+For short we can write $\mu_\mathrm{pre}$ and $\sigma_\mathrm{pre}$ for
+pre-deliberation mean and variance (and similar for \emph{post}-deliberation).  
+The latent opinion of participant $i$ at time $t$ is drawn from a normal 
+distribution in the model, 
+\begin{equation} 
   o_{i,t} \sim p(o; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
-  \label{eq:opinionDistribution}
+  \label{eq:opinionDistribution} 
 \end{equation} 
 \noindent 
-The initial opinion of agent $i$ is are denoted by $o_{i,t=0}$, and thus
-in the model are drawn from a normal distribution with mean $\mu_0$ and standard
-deviation $\sigma_0$. The final opinion of agent $i$ is written $o_{i,t=T}$,
-drawn from a normal distribution with mean $\mu_T$ and standard deviation
-$\sigma_T$. 
+Latent opinions are assumed to be normally distributed since they are unbounded 
+aggregations of neurobiological activity. 
 
-An opinion is never measured directly, only behaviors meant to indicate one's opinion.
-For example, only the location of a mark that a participant makes is measured, not
-the complex neural activity that somehow aggregates and expresses some latent
-representation. Because so much neural activity must be integrated to yield an opinion,
-it is most reasonable to assume opinions are continuous. We call these 
-\textit{latent opinions} because they are unobservable. In contrast, ordinal-valued
-\text{observed opinions} are the value participants report before and after group
-polarization deliberation.
+The measurement process with $N\to\infty$ participants is simulated by 
+integrating the latent opinion distribution between ordinal bin thresholds, 
+of which there are $B+1$, where $B$ is the number of opinion bins, with sequential
+integer values $b$. In the Moscovici and Zavalloni (1969) example, $b \in
+\{-3,-2,\ldots,2,3\}$ and $B = 7$.
+Bin $b$ is defined by its lower and upper continuous-valued thresholds, 
+$\theta_{b-1}$ and
+$\theta_{b}$, respectively. Thresholds are given by the following equations
+(and visualized as dotted lines in Figure~\ref{fig:distros}).
+\begin{equation}
+\begin{cases}
+  \theta_0 &= -\infty \\
+  \theta_{B} &= \infty \\
+  \theta_b &= b + \frac{1}{2} \text{ if } 0 < b < B.
+\end{cases}
+\end{equation}
+\noindent
+With thresholds defined, the frequency of ordinal measurment $b$ at time $t$ 
+is (Figure~\ref{fig:distros})
+\begin{equation}
+  p(b;~\mu_t, \sigma_t, B) = \int_{\theta_{b-1}}^{\theta_b} p(o; \mu_t, \sigma_t)
+  do.
+  \label{eq:ordinal-frequency}
+\end{equation}
+
+We can now define spurious group polarization and give examples of when it occurs.
+First, the observed group polarization opinion shift is
+\begin{equation}
+  s = \meanobs_\mathrm{post} - \meanobs_\mathrm{pre}~,
+  \label{eq:group-polarization}
+\end{equation}
+\noindent
+where the expected value of observed opinions at time $t$ is
+\begin{equation}
+  \meanobst = \frac{1}{B} \sum_{b=1}^B b \cdot p(b; \mu_t, \sigma_t, B).
+  \label{eq:meanobs}
+\end{equation}
+\noindent
+\emph{Spurious} group polarization is when mean observed opinions seem to increase in 
+extremity when the latent mean held constant. We simulate spurious
+group polarization by setting $\mupre = \mupost = \mu$ and setting the variances
+to values known to induce spurious group polarization. 
+We explain how to find a constant latent mean, $\mu$, and pre- and post-deliberation
+variances, $\sigmapre$ and $\sigmapost$, respectively, that generate spurious 
+detections of group polarization in the next section. 
+% We describe how we find $\mu$,
+% $\sigmapre$ and $\sigmapost$ next in Section~\ref{sec:finding-variances}.
 
 
-\subsection{Root-finding algorithm to identify plausible false detections} 
+\subsection{Web app controls algorithm to find parameters inducing spurious group polarization} 
 
-Simple consensus can appear as group polarization since a change in 
+To calculate the false discovery rate for each experimental condition, we first must
+identify a constant latent mean, $\mu$, and latent variances $\sigmapre$ and
+$\sigmapost$ that generate observation distributions\mt{define earlier?} with
+reported mean pre- and post-deliberation opinions and resulting shift $s$ (calculated
+using Equation~\ref{eq:group-polarization}). Define the collection of these
+parameters $\beta = \{\mu, \sigmapre, \sigmapost\}$. We identify $\beta$ through a
+hillclimbing optimization algorithm that finds $\beta$ that minimizes the difference
+between reported pre- and post-deliberation mean opinions and simulated ones
+calculated with Equation~\ref{eq:meanobs}. 
+
+The algorithm to find $\beta$ holds $\mu$ constant while searching for $\sigmapre$
+and $\sigmapost$ that generate observed $\meanobspre$ and $\meanobspost$, within a
+tolerance of $\pm10^{-3}$ (Algorithm~\ref{alg:hillclimbing}). 
+The algorithm requires a researcher to specify an initial
+guess for $\beta$ and auxiliary parameter settings, which generally vary between
+experimental conditions.  Furthermore, the algorithm does not always produce
+reasonable distributions with a given $\beta$, and sometimes it does not produce
+spurious group polarization.  Therefore, it is necessary to sanity check the latent
+and ordinal opinion distributions for the $\beta$ found by the algorithm. If all is
+well, the experimental condition can be marked as plausibly spurious.  To tame the
+complexity involved in data entry and model fitting for each of these sixty
+experimental conditions, we developed a web application to input data from control
+the algorithm and inspect its results (Figure~\ref{fig:webapp}). Web application code is
+available online in our GitHub
+repository\footnote{\url{https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/app.R}}.
 
 \begin{algorithm}
-  \caption{User-guided routine to find pre- and post-deliberation variances that
-  yield group polarization in the absence of mean opinion change.
-\mt{NOT YET DONE...}}\label{alg:routine}
+  \caption{Routine to find latent mean and variance that generate spurious group polarization.}
+  \label{alg:hillclimbing}
   \begin{algorithmic}
-    \Require $\mu$, $\sigmapre$, $\sigmapost$ \Comment{Static guess for common mean,
-    initial guesses of variances.}
-    \Require $\epsilon$, $\delta$, $i_\mathrm{max}$ \Comment{Root-finding tolerance, step size, and maximum
-    iterations.}
-    % \Require $\delta$ \Comment{Root-finding step size.}
-    % \Require $i_\mathrm{max}$ \Comment{Maximum number of iterations.}
-    \State $\Delta \gets \mupre' - \mupost'$ 
-    \While {$\epsilon < |\Delta| $ \and $i < i_max$}
-      \State $\Delta \gets (\mupre' - \mupost')^2$
-    \EndWhile
+
+    \Require $\mu$, $\sigma$, $\bar{\mathbf{o}}$ 
+      \Comment{Static guess for common mean, initial guess of variance.}
+
+    \Require $\epsilon$, $\delta$, $i_\mathrm{max}$ 
+      \Comment{Hillclimbing tolerance, step size, and maximum iterations.}
+
+    \State $\Delta \gets \meanobs(\mu, \sigma) - \meanobsemp$ 
+      \Comment{Initialize simulation error.}
+    \While {$\Delta^2 > \epsilon$ and $i < i_\mathrm{max}$} \Comment{Search until desired
+    accuracy or max iterations reached.}
+      \State $\sigma' \sim \mathcal{N}(\sigma, \delta)$ \Comment{Draw new variance to test.}
+      \State $\Delta' \gets \bar{o}(\mu, \sigma') - \bar{\mathbf{o}}$
+      \If {$\Delta' - \Delta < 0$}
+        \State $\sigma \gets \sigma'$
+          \Comment{Update $\sigma$ if the error is less than before.}
+      \EndIf
+      \State $\Delta \gets \bar{o}(\mu, \sigma) - \bar{\mathbf{o}}$
+        \Comment{Update simulation error if $\sigma$ is updated.}
+    \EndWhile \\
+
+    \Return $\sigma$
   \end{algorithmic}
 \end{algorithm}
 
 
+\begin{figure}
+  \caption{\textbf{Shiny web application for user-guided hillclimbing to find
+  parameters that generate spurious group polarization.} This web application enables users to
+create new analyses of experimental conditions from published studies. Users 
+provide initial guesses for the algorithm to use as starting points in 
+finding variances that generate spurious group polarization. Users inspect 
+model fits provided by the algorithm, adjusting parameters if necessary, and
+mark an experimental condition as ``Plausibly spurious'' if a reasonable fit
+is indeed found.\mt{Maybe add some A, B, C guides to the figure and include
+in parentheses here to go with the text?}}
+  \centering
+    \includegraphics[width=0.75\textwidth]{Figures/Model/WebApp.png}
+  \label{fig:webapp}
+\end{figure}
+
+
+Note that so far, we have only identified cases where spurious group polarization plausibly
+occurs in the asymptotic case where $N\to\infty$ ($N$ being the number of participants).
+Experimental conditions yielding plausibly spurious group polarization warrant 
+some suspicion. If there exists set of latent simple consensus 
+parameters $\beta$ that create binned (Equation~\ref{eq:ordinal-frequency})
+opinion distributions that naively seem to be group polarized, then the means
+of at least some samples from these distibutions with empirical numbers of 
+participants would also appear to be shifted consistent with group
+polarization. This process itself does not tell us the false detection rate.
+We use the identified simple consensus parameters to define pre- and post-deliberation
+latent opinion distributions in simulated trials of group polarization 
+experiments.
+
 
 \subsection{Calculate false detection rate from simulations}
+
+
 
 False detection rates are calculated using Cohen's $d$ to measure effect
 size, defined as~\cite[p. 331]{Liddell2018}

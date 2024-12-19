@@ -21,12 +21,13 @@ source("model.R")  # for binProb function used in ordinal plot function below.
 
 plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin, 
                                        bins, bin_colors, # xlim = c(-6.0, 6.0), 
-                                       save_path = "test_latent_pdf.pdf") {
+                                       save_path = "test_latent_pdf.pdf", 
+                                       max_prob = 1.0) {
   print(save_path)
 
 
-  xmin = min_bin - 1
-  xmax = max_bin + 1
+  xmin = min_bin - 0.5
+  xmax = max_bin + 0.5
 
   xlim = c(xmin, xmax)
 
@@ -63,13 +64,13 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
                         geom = "area",
                         args = c(mu, sd),
                         fill = bin_colors[n_bins],
-                        xlim = c(xmax, max_bin + 0.5))
+                        xlim = c(xmax, max_bin - 0.5))
 
   p = p + xlab("Latent opinion") + ylab("Probability density\n\n") + 
   geom_vline(xintercept=c((bins[1:(length(bins) - 1)] + 0.5)), linetype="dotted") + 
   geom_vline(xintercept=mu, linetype="dashed") + 
   xlim(c(xmin, xmax)) + 
-  ylim(c(0, 1)) +
+  ylim(c(0, max_prob)) +
   scale_x_continuous(breaks = bins) +
   mytheme
   
@@ -84,7 +85,8 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
                                      bin_colors = c("lightpink", "lightblue", 
                                                       "#f7ae3d", "lightgreen", 
                                                       "#F6CFFF"),
-                                     save_path = "test_ordinal_pdf.pdf") {
+                                     save_path = "test_ordinal_pdf.pdf",
+                                     max_prob = 1.0) {
   
   # Use same parameters as latent distribution to calculate integration over
   # bin threshold limits \theta_{k-1}..\theta_k
@@ -108,8 +110,8 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
   print(paste("Mean observed for sd = ", sd, ": ", mean_observed, sep = ""))
   
   # Set x-axis limits to match continuous distro.
-  xmin = min_bin - 1
-  xmax = max_bin + 1
+  xmin = min_bin - 0.5
+  xmax = max_bin + 0.5
 
   xlim = c(xmin, xmax)
 
@@ -119,7 +121,7 @@ plot_ordinal_distribution = function(mu = 0, sd = 2.5, min_bin = -2,
          geom_bar(stat = "identity", fill = bin_colors) + 
          geom_vline(xintercept = mean_observed, linetype="dashed") +
          xlab("Ordinal opinion measurement") + ylab("Probability density\n\n") +
-         ylim(c(0.0, 1.0)) + 
+         ylim(c(0.0, max_prob)) + 
          scale_x_continuous(breaks = bins, limits = xlim) +
          mytheme
   
@@ -139,13 +141,13 @@ make_distros_consensus_figure =
                                                     "#F6CFFF"),
            save_dir = 
              "~/workspace/gp-statmod/GroupPolarizationStatmod/paper/Figures/Model"
-           ) {
+           , max_prob = 1.0) {
 
   sds = c(sigma_pre, sigma_post)
   for (sd in sds) {
     save_path = fs::path_join(c(save_dir, paste0("ordinal", "_mu=", mu, "_sd=", round(sd, 2), ".pdf")))
 
-    plot_ordinal_distribution(mu, sd, min_bin, max_bin, bins, bin_colors, save_path = save_path)
+    plot_ordinal_distribution(mu, sd, min_bin, max_bin, bins, bin_colors, save_path = save_path, max_prob = max_prob)
   }
   
   for (sd in sds) {
@@ -154,7 +156,7 @@ make_distros_consensus_figure =
     print(save_path)
 
     plot_latent_pdf_integration(mu, sd, min_bin, max_bin, bins, bin_colors, 
-                                save_path = save_path)
+                                save_path = save_path, max_prob = max_prob)
   }
   
 }
@@ -167,19 +169,33 @@ case_studies_tbl = read_csv("data/StudiesAnalysis.csv")
 # XXX note that the analyzed study CSV uses column name "ArticleTag" not StudyID
 # and "TreatmentTag" not ExperimentID. 
 # TODO Not sure right now where this change is done, need to find out
-schkade2010 = filter(case_studies_tbl, ArticleTag == "Schkade2010" &
-                     TreatmentTag == "COSprings-CivilUnions")
+# schkade2010 = filter(case_studies_tbl, ArticleTag == "Schkade2010" &
+#                      TreatmentTag == "COSprings-CivilUnions")
                          
-mu = schkade2010$LatentMean
-sigma_pre = schkade2010$LatentSDPre
-sigma_post = schkade2010$LatentSDPost
-min_bin = schkade2010$MinBinValue
-max_bin = schkade2010$MaxBinValue
+# mu = schkade2010$LatentMean
+# sigma_pre = schkade2010$LatentSDPre
+# sigma_post = schkade2010$LatentSDPost
+# min_bin = schkade2010$MinBinValue
+# max_bin = schkade2010$MaxBinValue
+# bins = min_bin:max_bin
+
+
+# Trying Moscovici "Americans" as example to match other model figure.
+moscovici1969 = filter(case_studies_tbl, 
+                     ArticleTag == "Moscovici1969" & 
+                       TreatmentTag == "Americans")
+                         
+mu = moscovici1969$LatentMean
+sigma_pre = moscovici1969$LatentSDPre
+sigma_post = moscovici1969$LatentSDPost
+min_bin = moscovici1969$MinBinValue
+max_bin = moscovici1969$MaxBinValue
 bins = min_bin:max_bin
 
 rhg_cols_10 <- rev(c("#771C19", "#AA3929", "#E25033", "#F27314", "#F8A31B", 
               "#E2C59F", "#B6C5CC", "#8E9CA3", "#556670", "#556AAA"))
 
-bin_colors = rhg_cols_10
+bin_colors = rhg_cols_10[1:7]
 
-make_distros_consensus_figure(mu, sigma_pre, sigma_post, min_bin, max_bin, bins, rhg_cols_10)
+make_distros_consensus_figure(mu, sigma_pre, sigma_post, 
+                              min_bin, max_bin, bins, bin_colors, max_prob = 0.4)

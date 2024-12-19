@@ -36,7 +36,7 @@ ui <- function(request) { fluidPage(
     
     "))),
   
-    titlePanel("Group polarization counterexample generator."),
+    titlePanel("Spurious group polarization generator."),
 
     h3(textOutput("treatmentTag")),
 
@@ -89,7 +89,7 @@ ui <- function(request) { fluidPage(
                                          0.05, step = 0.005)
                         )
                     ),
-                    checkboxInput("Plausible", "Plausibly false positive?", FALSE)
+                    checkboxInput("Plausible", "Plausibly spurious?", FALSE)
                 ),
                 column(12,
                     textAreaInput("Notes", "Notes", 
@@ -136,7 +136,7 @@ server <- function(input, output, session) {
     output$MinBinValue <- reactive({treatmentRow()$MinBinValue})
     output$MaxBinValue <- reactive({treatmentRow()$MaxBinValue})
     output$treatmentTag <- renderText({
-        paste("Currently analyzing treatment:", input$treatmentTag)
+        paste("Currently analyzing ExperimentID:", input$treatmentTag)
     })
 
     # Use a guess of 1.5 for latentSD.
