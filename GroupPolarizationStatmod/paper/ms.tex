@@ -116,32 +116,40 @@ A medium effect size is conceived as one large enough to be visible to the naked
 
 \section{Introduction}\label{introduction}
 
-the ten-article corpus, which is representative of the
-false discovery rate for group polarization studies.
+Unchecked social and political polarization undermines cooperation and
+political efficacy \autocite{Mason2018UncivilAgreementBook,Klein2020}.
+\emph{Group polarization} is the name given the social phenomenon of 
+when a group becomes more extreme in mean opinion over
+time, assuming the mean opinion is biased to one extreme to begin with.
+\mt{now hit them with the real shit to intro the problem, our analysis, and
+how this can be used constructively going forward.}
 
-Unchecked social and political polarization undermines cooperation and political
-efficacy \autocite{Mason2018UncivilAgreementBook,Klein2020}.  \emph{Group
-polarization} is the name that has been given to a group-level process that leads
-to greater opinion extremity in a group as the group deliberates some topic (e.g.,
-``Do you approve, disapprove, or neither approve nor disapprove of the current
-administration's policies?''). Extremity only increases, though, assuming that the
-mean opinion of the group is initially biased towards one extreme or the other
-\autocite{Brown1986,Brown2020}. Group polarization is important to understand
-rigorously, therefore, since if groups become increasingly extreme over time,
-while group opinions are consolidated, this would exacerbate political
-polarization between political opposition groups, which is already undermines the
-ability of partisans in democratic governments to work together. Dozens of studies
-and meta-analyses over decades have apparently established the empirical reality
-of group polarization
+\mt{Seems like a good second paragraph structurally. We should give more
+details about the scope of the study, group polarization and common
+elements of experimental designs.} 
+Group polarization experiments tend to employ a common set of design
+elements incorporated in our computational model analysis. Group
+polarization experiments mostly use ordinal (see exceptions
+\cite{Blascovich1974,Blascovich1975,Blascovich1976,Keating2016}). The opinions (e.g., ``Do you approve,
+disapprove, or neither approve nor disapprove of the current
+administration's policies?''). Extremity only increases, though, assuming
+that the mean opinion of the group is initially biased towards one extreme
+or the other \autocite{Brown1986,Brown2020}. Group polarization is important
+to understand rigorously, therefore, since if groups become increasingly
+extreme over time, while group opinions are consolidated, this would
+exacerbate political polarization between political opposition groups, which
+is already undermines the ability of partisans in democratic governments to
+work together. Dozens of studies and meta-analyses over decades have
+apparently established the empirical reality of group polarization
 \autocite{Moscovici1969,Myers1970,Isenberg1986,Sunstein2009,Sunstein2019}
-\autocite[Ch. 5]{Brown2000}. We believe group polarization should occur in certain
-contexts since more extreme group members are likely also to be more stubborn
-\autocite{Guazzini2015,Lewandowsky2019}, which should pull consensus to extremes
-\autocite{Turner2020}. However, many or most of the evidence for group
-polarization relies on experimental designs that use ordinal measurements that are
-then analyzed as if they were continuous. Unfortunately, this procedure is
-unfortunately known to induce false positives if it is not properly accounted for
-\autocite{Liddell2018}.
+\autocite[Ch. 5]{Brown2000}. We believe group polarization should occur in
+certain contexts since more extreme group members are likely also to be more
+stubborn \autocite{Guazzini2015,Lewandowsky2019}, which should pull
+consensus to extremes \autocite{Turner2020}. However, many or most of the
+evidence for group polarization relies on experimental designs that use
+ordinal measurements that are then analyzed as if they were continuous.
+Unfortunately, this procedure is unfortunately known to induce false
+positives if it is not properly accounted for \autocite{Liddell2018}.
 
 Experimetnal designs in group polarization studies share a certain
 experimental boilerplate (Figure 1 --- NEED TO INCLUDE) with the goal of
@@ -414,6 +422,7 @@ Both these values must be scaled by the rate at which effects occur, denoted $b$
 Using the notation outlined above, the false detection rate is
 \begin{equation}
   \fdr = \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
+  \label{eq:fdr}
 \end{equation}
 
 
@@ -518,10 +527,10 @@ $\theta_{b-1}$ and
 $\theta_{b}$, respectively. Thresholds are given by the following equations
 (and visualized as dotted lines in Figure~\ref{fig:distros}).
 \begin{equation}
-\begin{cases}
-  \theta_0 &= -\infty \\
-  \theta_{B} &= \infty \\
-  \theta_b &= b + \frac{1}{2} \text{ if } 0 < b < B.
+\theta_b = \begin{cases}
+  -\infty         & \text{ if } b=0 \\
+  \infty          & \text{ if } b=B \\
+  b + \frac{1}{2} & \text{ otherwise.}
 \end{cases}
 \end{equation}
 \noindent
@@ -591,7 +600,7 @@ repository\footnote{\url{https://github.com/mt-digital/gp-statmod/blob/main/Grou
   \begin{algorithmic}
 
     \Require $\mu$, $\sigma$, $\bar{\mathbf{o}}$ 
-      \Comment{Static guess for common mean, initial guess of variance.}
+      \Comment{Set latent mean, guess variance that yields, input empirical mean.}
 
     \Require $\epsilon$, $\delta$, $i_\mathrm{max}$ 
       \Comment{Hillclimbing tolerance, step size, and maximum iterations.}
@@ -601,7 +610,8 @@ repository\footnote{\url{https://github.com/mt-digital/gp-statmod/blob/main/Grou
     \While {$\Delta^2 > \epsilon$ and $i < i_\mathrm{max}$} \Comment{Search until desired
     accuracy or max iterations reached.}
       \State $\sigma' \sim \mathcal{N}(\sigma, \delta)$ \Comment{Draw new variance to test.}
-      \State $\Delta' \gets \bar{o}(\mu, \sigma') - \bar{\mathbf{o}}$
+      \State $\Delta' \gets \bar{o}(\mu, \sigma') - \bar{\mathbf{o}}$ 
+        \Comment{Calculate error using new variance.}
       \If {$\Delta' - \Delta < 0$}
         \State $\sigma \gets \sigma'$
           \Comment{Update $\sigma$ if the error is less than before.}
@@ -645,33 +655,44 @@ latent opinion distributions in simulated trials of group polarization
 experiments.
 
 
-\subsection{Calculate false detection rate from simulations}
+\subsection{Outcomes: Estimating and limiting false detection rates}
 
-
-
-False detection rates are calculated using Cohen's $d$ to measure effect
-size, defined as~\cite[p. 331]{Liddell2018}
+To calculate the false detection rate we begin by simulating 
+pre- and post-deliberation 
+opinions by drawing $N_e$ samples from normal latent opinion
+distributions that generated spurious group polarization, i.e., with
+parameters labelled $\beta_e$ found in the hillclimbing step. Binning these
+random values simulates observations. $N_e$ is the number
+of participants in experimental condition $e$. Each trial $i$ of $N_e$
+simulated pre- and post-deliberation observations is then inspected to see
+if spurious group polarization occurred in the simulation. Spurious group
+polarization is determined by first inferring the latent parameters of each
+simulated experimental trial by fitting an ordered probit model. 
+The inferred parameters are then used to calculate the effect size for that
+trial, Cohen's $d$, defined as~\cite[p. 331]{Liddell2018}
 \begin{equation}
   d = \frac{\mupost - \mupre}{\sqrt{\frac{1}{2}(\sigmapost^2 + \sigmapre^2)}}.
-\end{equation}. 
+\end{equation}
 \noindent
-Denote the collection of fitted parameters from the $i^\mathrm{th}$ simulation trial
-for experimental condition $c$ and journal article $a$ as
-% $\thetafit = \left{\mu_t = \left{\mupre,~\mupost\right},~\sigma_t = \left{\mupre,~\mupost\right}\right}$.
-$\thetafit_{a,c,i} = \{\mupre,~\mupost,~\mupre,~\mupost\}_{a,c,i}$.
-These parameters are the modal estimates for each parameter obtained from
-an ordered probit statistical model fit with
-Bayesian Markov-Chain Monte Carlo (MCMC)~\cite[p. 338]{Liddell2018}. 
+The family-wise error rate is, $\alpha = \Pr(D|\neg E)$, is the 
+fraction of trials with $d > d^*$. To calculate the family-wise error rate
+for a study, $s$ which contains several experimental conditions, $e$,
+\begin{equation}
+  \alpha_s = \frac{1}{|s|} \sum_{e \in s} \alpha_e
+\end{equation}
+\noindent
+The grand mean across all studies for the corpus is 
+\begin{equation}
+  \alpha_\mathrm{all} = \frac{1}{|E|} \sum_{e \in E} \alpha_e.
+\end{equation}
+With $\alpha$ calculated, we calculate the false discovery rate using
+Equation~\ref{eq:fdr}.
 
-For each $a,c$, we calculate $\alpha_{a,c}(d^*) =
-\Pr(D |\neg E;~a,~c,~d^*)$ for a given significance value, $d^*$, directly as
-the fraction of $d$ values that are greater than $d^*$.
-
-To calculate article-level false detection curves we calculate the average
-across , we set $\alpha_{a,c} = 0.0$ for those
-conditions for which we failed to generate spurious group polarization in the
-large-$N$ model.
-
+We invert this procedure to find what significance value $d^*$ is necessary
+to achieve a low family-wise error rate $\alpha_e = 0.05$ for experimental
+condition, $e$. To do this we first calculate $\alpha_e(d^*)$ for a
+sufficiently wide range of $d^*$. We then find the lowest $d^*$ for which
+$\alpha_e(d^*) \leq 0.05$.
 
 
 \section{Results}\label{results}
@@ -769,6 +790,24 @@ have an effect on the calculated false positive rate? More generally, our
 work motivates similar analyses of sub-fields of social 
 psychology and that do not account for Likert-based experimental designs in
 their statistical analyses. We provided a template for this future work.
+
+Our analysis brings some additional questions into focus. Most
+significantly, recall that even the commensurate ordered probit Bayesian
+model often failed to accurately detect negative results. A more rigorous
+analysis would include additional sources of variance that will likely
+further inflate the family-wise error rate, $\alpha$, and the false
+discovery rate~\cite{Yarkoni2022}. First and foremost, there is variance
+within each experimental deliberation group; no group polarization study
+accounts for this, instead treating participants in each experimental
+condition as if they were one large group. Furthermore, survey data are
+known to be noisy~\cite{Zaller1992}. People report opinions differently
+over time for no apparent reason (i.e., opinions are \emph{unstable}).
+Context matters: the order in which a survey question is asked, and which
+question framing is chosen among logically equivalent alternatives, can
+both significantly influence participant responses. The effect of 
+accounting for these sources of variance must be understood to estimate
+$\alpha$ (and power, $W$) for the design of the next generation of group
+polarization experiments.
 
 \mt{concluding paragraph: first sentences summarize the Discussion, then
 in 1-2 sentences summarize the paper.}
