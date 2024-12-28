@@ -14,7 +14,7 @@ library(ggplot2)
 library(latex2exp)
 library(emojifont)
 
-source("src/false_detection_rate.R")
+source("src/fwer.R")
 source("scripts/analysis.R")
 
 mytheme = theme(
@@ -58,7 +58,6 @@ plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
 
 plot_fdr = function(save_path = "paper/Figures/fdr_vs_experiment.pdf", 
                     aggregate = FALSE, use_non_identified = FALSE,
-                    probit_fits_dir = "data/probit_fits",
                     default_fwer = 0.05,
                     base_rate = 0.1, power = 0.8, 
                     significance_vals = c(0.2, 0.5, 0.8),
@@ -67,7 +66,6 @@ plot_fdr = function(save_path = "paper/Figures/fdr_vs_experiment.pdf",
   # Load data.
   tbl = calc_fdr_vs_significance(significance_vals = significance_vals) %>%
     mutate(ExperimentID = paste(StudyID, ExperimentID, sep = "_")) %>%
-    # select(!c(StudyID)) %>% 
     mutate(SigVal = as_factor(SigVal), Power = power, BaseRate = base_rate)
 
   if (aggregate)

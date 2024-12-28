@@ -116,6 +116,9 @@ A medium effect size is conceived as one large enough to be visible to the naked
 
 \section{Introduction}\label{introduction}
 
+If an extremist opinion falls and it is measured with a Likert scale, will it make a noise?
+
+
 Unchecked social and political polarization undermines cooperation and
 political efficacy \autocite{Mason2018UncivilAgreementBook,Klein2020}.
 \emph{Group polarization} is the name given the social phenomenon of 
@@ -449,6 +452,7 @@ in the main text and in the compare with more pessimistic, yet realistic, estima
 of these values, as well as even more optimistic estimates. 
 
 \subsection{How study design can induce false detections of group polarization}
+\label{subsec:false-detections}
 
 
 An opinion is never measured directly, only a behavior that indicates an opinion
@@ -655,7 +659,7 @@ latent opinion distributions in simulated trials of group polarization
 experiments.
 
 
-\subsection{Outcomes: Estimating and limiting false detection rates}
+\subsection{Estimating and limiting false detection rates}
 
 To calculate the false detection rate we begin by simulating 
 pre- and post-deliberation 
@@ -667,15 +671,33 @@ of participants in experimental condition $e$. Each trial $i$ of $N_e$
 simulated pre- and post-deliberation observations is then inspected to see
 if spurious group polarization occurred in the simulation. Spurious group
 polarization is determined by first inferring the latent parameters of each
-simulated experimental trial by fitting an ordered probit model. 
+simulated experimental trial by fitting an ordered probit model~\cite{Liddell2018}. 
 The inferred parameters are then used to calculate the effect size for that
 trial, Cohen's $d$, defined as~\cite[p. 331]{Liddell2018}
 \begin{equation}
   d = \frac{\mupost - \mupre}{\sqrt{\frac{1}{2}(\sigmapost^2 + \sigmapre^2)}}.
+  \label{eq:cohens}
 \end{equation}
 \noindent
-The family-wise error rate is, $\alpha = \Pr(D|\neg E)$, is the 
-fraction of trials with $d > d^*$. To calculate the family-wise error rate
+The family-wise error rate is, $\alpha_{e} = \Pr(D|\neg E)$, is the 
+fraction of trials, 
+with $d_{ei} > d^*$ for the $i^\text{th}$ trial for experimental
+condition $e$, written
+\begin{equation}
+  \alpha_e = \frac{1}{N_T} \sum_i^{N_T} \Theta_i,
+\end{equation}
+\noindent
+where
+\[
+  \Theta_i = 
+    \begin{cases}
+      1 & \text{ if } d_{ei} > d^* \\
+      0 & \text{ otherwise.}
+    \end{cases}
+\]
+and $N_T = 1000$ is the number of trials.
+
+To calculate the family-wise error rate
 for a study, $s$ which contains several experimental conditions, $e$,
 \begin{equation}
   \alpha_s = \frac{1}{|s|} \sum_{e \in s} \alpha_e
@@ -688,6 +710,8 @@ The grand mean across all studies for the corpus is
 With $\alpha$ calculated, we calculate the false discovery rate using
 Equation~\ref{eq:fdr}.
 
+
+
 We invert this procedure to find what significance value $d^*$ is necessary
 to achieve a low family-wise error rate $\alpha_e = 0.05$ for experimental
 condition, $e$. To do this we first calculate $\alpha_e(d^*)$ for a
@@ -695,18 +719,83 @@ sufficiently wide range of $d^*$. We then find the lowest $d^*$ for which
 $\alpha_e(d^*) \leq 0.05$.
 
 
-\section{Results}\label{results}
+\section{Analysis}\label{analysis}
+
+Our analysis estimates how the probability that a published detection of group
+polarization is actually a false detection. We first identified latent opinion
+parameters that yield spurious group polarization in an asymptotic $N\to\infty$
+model. This gives us our first suggestion that experimental conditions may be
+plausibly false. Briefly, we identified latent opinion distribution parameters
+that generated spurious group polarization in 54 out of 57 experimental
+conditions. In other words, 95\% of all group polarization detections are
+plausibly spurious due to ceiling artifacts from the continuous latent
+opinions-ordinal measurement experimental design. We then analyze family-wise
+error and false detection rates for each experimental condition and aggregated 
+up to the study level and across all studies and experimental conditions. 
+Family-wise error rates varied from a minimum of 0.097 for the
+\texttt{Feminists-Experimental} condition from Myers (1975)~\cite{Myers1975a}
+and a maximum of 0.67 for the \texttt{COSprings-CivilUnions} condition from
+Schkade, Sunstein, and Hastie (2010)~\cite{Schkade2010}. The median family-wise error
+rate is 0.28 for Krizan and Baron's experimental condition
+\texttt{NoOutgroupScenario1}. We close by inverting our procedure of calculating
+family-wise error rates to calculating what $d^*$ would be required in each of the 54
+experimental conditions to reduce the family-wise error rate to $\alpha = 0.05$.
 
 
-\subsection{Ninety percent of detections identified as plausibly false}
+\subsection{Nearly all group polarization detections are plausibly false}
 
-We identified 54 of 60 experimental 
-conditions where a $N \to \infty$ model falsely indicated group polarization 
-instead of simple consensus.
+We used our formal distribution model of group polarization experiments
+to identify plausible latent simple consensus distributions that generate spurious
+group polarization in observed ordinal distributions 
+in the asymptotic case of taking $N \to \infty$ ordinal measurements.
+Across the ten studies we analyzed, we excluded 3 out of 60 experimental
+conditions that did not claim to be positive findings of group polarization.
+Of the remaining 57, we identified plausible $\beta$ that generate spurious
+group polarization in 54 experimental conditions. In the other three, we did
+identify $\beta$ that generate spurious group polarization, but the initial
+simulated distributions were highly polarized. Two of these
+simulations of experimental conditions from Schkade, et al., (2010) because
+the histogram plots of the observed opinion distributions are not
+polarized~\cite[Figure 1, p. 234]{Schkade2010}. The other condition where we
+rejected candidate $\beta$ was in a question about a ``bad teacher'' in Myers
+(1975)~\cite{Myers1975a}, where lower values signify increasingly 
+worse impressions of the teacher and higher values signify increasingly good
+impressions. It is unlikely that any participants would rate a ``bad teacher''
+as good, so we excluded this from our analysis as well. This exclusion may be
+overly generous since Myers (1975) did not provide details beyond mean values
+and opinion shifts, and the article was published before the importance
+of open data best practices was recognized.
+
+\clearpage
+
+\begin{table}[ht]
+\rotatebox{90} {
+  \input{tex/quantile_table.tex}
+}
+\end{table}
+
+\subsection{Half of experiments exceed a 75\% false discovery rate at ``medium'' significance}
+
+The $N\to\infty$ model enabled us to identify pre- and post-deliberation latent
+opinion distribution parameters that caused spurious group polarization, denoted
+$\beta_e$ for experimental condition $e$. Using these $\beta$ we drew 
+$N_\mathrm{emp}$ samples from the pre- and post-deliberation latent opinion 
+distributions, then binned them (Section~\ref{subsec:false-detections}) 
+to simulate participants reporting their pre- and post-deliberation opinions. 
+To estimate optimistic family-wise error and false detection rates, we fit an
+ordered probit model to the simulated observations and obtained estimates of
+the group polarization effect size, $d$ (Equation~\ref{eq:cohens}).
+If the effect size was greater than a significance value, $d > d^*$, then there
+was a detection $D$ of group polarization, even though by design the simulated latent mean
+group opinion was constant, i.e., there in fact was no effect, written $\neg E$.
+The family-wise error rate is the calculation of $\Pr(D|\neg E)$ as the frequency with which
+$d > d^*$ out of 1000 simulation trials. The false detection rate is the family-wise
+error rate scaled using the base rate of effects and the statistical power
+(Equation~\ref{eq:fdr}). We test three difference significance values,
+$d = 0.2,~0.5$ and $0.8$, corresponding to what Cohen prescribed to use for
+``low'', ``medium'', and ``high'' significance, respectively.
 
 
-
-\subsection{False detection rates exceed ??\% even at ``high significance''}
 
 We calculated the false detection rate across experimental conditions where
 we identified parameters that generate spurious group polarization in the 
@@ -735,6 +824,7 @@ two.
   \includegraphics[width=1.1\textwidth]{Figures/Results/fwer_fdr_synthesis.pdf}
     
 \end{figure}
+
 
 
 \subsection{Minimum $d^*$ for FWER of 0.05}
@@ -791,22 +881,26 @@ work motivates similar analyses of sub-fields of social
 psychology and that do not account for Likert-based experimental designs in
 their statistical analyses. We provided a template for this future work.
 
-Our analysis brings some additional questions into focus. Most
-significantly, recall that even the commensurate ordered probit Bayesian
-model often failed to accurately detect negative results. A more rigorous
-analysis would include additional sources of variance that will likely
-further inflate the family-wise error rate, $\alpha$, and the false
-discovery rate~\cite{Yarkoni2022}. First and foremost, there is variance
-within each experimental deliberation group; no group polarization study
-accounts for this, instead treating participants in each experimental
-condition as if they were one large group. Furthermore, survey data are
-known to be noisy~\cite{Zaller1992}. People report opinions differently
-over time for no apparent reason (i.e., opinions are \emph{unstable}).
-Context matters: the order in which a survey question is asked, and which
-question framing is chosen among logically equivalent alternatives, can
-both significantly influence participant responses. The effect of 
-accounting for these sources of variance must be understood to estimate
-$\alpha$ (and power, $W$) for the design of the next generation of group
+Our analysis brings some additional questions into focus. Most significantly, recall that even
+the more appropriate ordered probit Bayesian model often failed to accurately detect negative
+results with the number of participants used in the original papers. Many of the studies
+analyzed here did not use any statistical test to establish significance; those that did used
+some form of a $t$-test, and it is not clear if the $t$-test that was used 
+accounted for a change in pre- and post-deliberation opinion variance, which we expect due to
+consensus.
+
+The ordered probit model we used still likely underestimates the variance in outcomes, which
+could require even larger sample sizes. A more rigorous analysis
+would include additional sources of variance that will likely further inflate the Type I
+error rate, $\alpha$, and the false discovery rate~\cite{Yarkoni2022}. First and foremost,
+there is variance within each experimental deliberation group; no group polarization study
+accounts for this, instead treating participants in each experimental condition as if they were
+one large group. Furthermore, survey data are known to be noisy~\cite{Zaller1992}. People
+report opinions differently over time for no apparent reason (i.e., opinions are
+\emph{unstable}).  Context matters: the order in which a survey question is asked, and which
+question framing is chosen among logically equivalent alternatives, can both significantly
+influence participant responses. The effect of accounting for these sources of variance must be
+understood to estimate $\alpha$ (and power, $W$) for the design of the next generation of group
 polarization experiments.
 
 \mt{concluding paragraph: first sentences summarize the Discussion, then

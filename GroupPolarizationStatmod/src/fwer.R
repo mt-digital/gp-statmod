@@ -5,11 +5,11 @@
 # Date: 2024-10-30
 #
 
-# library(tidyverse)
 library(dplyr)
-library(fs)
 library(readr)
 library(tidyr)
+
+source("src/util.R")
 
 
 cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
@@ -19,26 +19,6 @@ cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
   denominator = sqrt((pre_sd**2 + post_sd**2) / 2.0)
   
   return (numerator / denominator)
-}
-
-
-load_probit_data = function(probit_fits_dir = "data/probit_fits", 
-                            sync_file = "data/probit_fits/all.csv",
-                            overwrite = FALSE) {
-     
-  if (!file.exists(sync_file) || overwrite) {
-
-    ret <- dir_ls(probit_fits_dir, glob = "*.csv") %>%
-      read_csv() %>% unite(ExperimentID, ArticleTag, TreatmentTag)
-
-    write_csv(ret, sync_file)
-
-  } else {
-
-    ret <- read_csv(sync_file)
-  }
-
-  return (ret)
 }
 
 
