@@ -729,17 +729,14 @@ plausibly false. Briefly, we identified latent opinion distribution parameters
 that generated spurious group polarization in 54 out of 57 experimental
 conditions. In other words, 95\% of all group polarization detections are
 plausibly spurious due to ceiling artifacts from the continuous latent
-opinions-ordinal measurement experimental design. We then analyze family-wise
-error and false detection rates for each experimental condition and aggregated 
+opinions-ordinal measurement experimental design. We then analyze the family-wise
+error ($\alpha$) and false detection rate (FDR) 
+for each experimental condition and aggregated 
 up to the study level and across all studies and experimental conditions. 
-Family-wise error rates varied from a minimum of 0.097 for the
-\texttt{Feminists-Experimental} condition from Myers (1975)~\cite{Myers1975a}
-and a maximum of 0.67 for the \texttt{COSprings-CivilUnions} condition from
-Schkade, Sunstein, and Hastie (2010)~\cite{Schkade2010}. The median family-wise error
-rate is 0.28 for Krizan and Baron's experimental condition
-\texttt{NoOutgroupScenario1}. We close by inverting our procedure of calculating
-family-wise error rates to calculating what $d^*$ would be required in each of the 54
-experimental conditions to reduce the family-wise error rate to $\alpha = 0.05$.
+The lower twentieth percentile of $\alpha$
+We close by showing that $d^*$ must be greater than the ``high'' effect size
+$d^*=0.8$ to limit family-wise error rates to $\alpha \leq 0.05$ in all but six
+experimental conditions.
 
 
 \subsection{Nearly all group polarization detections are plausibly false}
@@ -766,53 +763,44 @@ overly generous since Myers (1975) did not provide details beyond mean values
 and opinion shifts, and the article was published before the importance
 of open data best practices was recognized.
 
-\clearpage
-
 \begin{table}[ht]
-\rotatebox{90} {
+  \caption{yo}
+  \label{tab:quantiles}
+\rotatebox{90} {\textbf{Quantiles for the two error-rate measures under different
+  significance values.}\mt{Not sure about the best way to format; probably don't
+  need this in the main text, but could be valuable in supplement?}}
   \input{tex/quantile_table.tex}
-}
+  
 \end{table}
 
 \subsection{Half of experiments exceed a 75\% false discovery rate at ``medium'' significance}
 
-The $N\to\infty$ model enabled us to identify pre- and post-deliberation latent
-opinion distribution parameters that caused spurious group polarization, denoted
-$\beta_e$ for experimental condition $e$. Using these $\beta$ we drew 
-$N_\mathrm{emp}$ samples from the pre- and post-deliberation latent opinion 
-distributions, then binned them (Section~\ref{subsec:false-detections}) 
-to simulate participants reporting their pre- and post-deliberation opinions. 
-To estimate optimistic family-wise error and false detection rates, we fit an
-ordered probit model to the simulated observations and obtained estimates of
-the group polarization effect size, $d$ (Equation~\ref{eq:cohens}).
-If the effect size was greater than a significance value, $d > d^*$, then there
-was a detection $D$ of group polarization, even though by design the simulated latent mean
-group opinion was constant, i.e., there in fact was no effect, written $\neg E$.
-The family-wise error rate is the calculation of $\Pr(D|\neg E)$ as the frequency with which
-$d > d^*$ out of 1000 simulation trials. The false detection rate is the family-wise
-error rate scaled using the base rate of effects and the statistical power
-(Equation~\ref{eq:fdr}). We test three difference significance values,
-$d = 0.2,~0.5$ and $0.8$, corresponding to what Cohen prescribed to use for
-``low'', ``medium'', and ``high'' significance, respectively.
+We simulated trials from each experimental condition, $e$, 
+by sampling and binning pre- and
+post-deliberation latent opinions from distributions with parameters identified
+with the $N\to\infty$ model as causing plausibly spurious group
+polarization. For each $e$,
+we drew a number of samples equal to the number of participants in 
+the original experiments, $N_\mathrm{emp}$. To estimate
+family-wise error and false detection rates, we fit an ordered probit
+model to the simulated observations and obtained estimates of the group polarization
+effect size, $d$ (Equation~\ref{eq:cohens}). If the effect size was greater than a
+significance value, $d > d^*$, then by definition there was a detection $D$ of group 
+polarization,
+even though there was no effect by design, written $\neg E$. 
+The family-wise error rate is $\Pr(D|\neg E)$, calculated as the frequency with which $d > d^*$ out of 1000
+simulation trials. The false detection rate is the family-wise error rate scaled
+using the base rate of effects and the statistical power (Equation~\ref{eq:fdr}). We
+test three difference significance values, $d = 0.2,~0.5$ and $0.8$, corresponding
+to what Cohen prescribed to use for ``low'', ``medium'', and ``high'' significance.
 
-
-
-We calculated the false detection rate across experimental conditions where
-we identified parameters that generate spurious group polarization in the 
-large-$N$ model (Figure~\ref{fig:fdr_experiments}). We then aggregated over
-experimental conditions within each study to understand the false detection rate
-across the ten studies (Figure~\ref{fig:fdr_studies}). Across the identified
-spurious conditions, we calculated a mean false detection rate of 0.74 with
-a significance level of $d^* = 0.5$. We also
-examined the mean false detection rates across studies if we set a highly
-optimistic estimate of the family-wise error rate, setting $\alpha = 0.05$. 
-This only reduces the false discovery rate to 0.71, but does slightly change the
-rankings of which study had the highest mean false discovery rates, with 
-Schkade, et al., (2010) going from highest mean false discovery rate to 
-second-lowest false discovery rate. The minimum false discovery rate in a study
-was Myers (1975), with a false discovery rate of 0.58, meaning that probability
-a group polarization detection in the best-designed study is greater than one in
-two.
+Family-wise error rates (Figure~\ref{fig:fwer_fdr_synthesis} and
+Table~\ref{tab:quantiles}) varied from a minimum of one in ten for the
+\texttt{Feminists-Experimental} condition from Myers (1975)~\cite{Myers1975a}
+to a maximum of two in three for the \texttt{COSprings-CivilUnions} condition from
+Schkade, Sunstein, and Hastie (2010)~\cite{Schkade2010}. The median family-wise error
+rate is 0.28 for Krizan and Baron's (2007) experimental condition
+\texttt{NoOutgroupScenario1}~\cite{Krizan2007}.  
 
 \begin{figure}
 
@@ -823,8 +811,7 @@ two.
   \centering
   \includegraphics[width=1.1\textwidth]{Figures/Results/fwer_fdr_synthesis.pdf}
     
-\end{figure}
-
+\end{figure} 
 
 
 \subsection{Minimum $d^*$ for FWER of 0.05}

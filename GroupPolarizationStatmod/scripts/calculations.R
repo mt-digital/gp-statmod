@@ -9,16 +9,6 @@
 source("src/util.R")
 
 
-fraction_at_or_above = function(measure = "FWER", significance_val = 0.5, 
-                                base_rate = 0.1, power = 0.8, value = 0.75) {
-
-  # Load data. Copied from scripts/plot/analysis.R
-  tbl <- calc_fdr_vs_significance(significance_vals = c(significance_val)) 
-
-  return (mean(tbl[, measure] >= value))
-}
-
-
 # Create a CSV list of quantile calculations that may be included in publications.
 quantiles_tbl = function(tex_output_file = "paper/tex/quantile_table.tex", 
                          q_resolution = 0.05, 
@@ -80,3 +70,8 @@ quantiles_tbl = function(tex_output_file = "paper/tex/quantile_table.tex",
   return (q_tbl)
 }
 
+
+all_calcuations <- function() {
+  fwer_fdr_synthesis_data()
+  quantiles_tbl()
+}
