@@ -26,23 +26,29 @@ cohens_d <- function(pre_mean_estimate, post_mean_estimate, pre_sd, post_sd) {
 # Family-wise error rate calculation using whatever ExperimentIDs are present.
 # Note probit_fits may be a tibble for avoiding reading data every calculation.
 #
-calculate_fwer = function (probit_fits = "data/probit_fits", sigval = 0.8) {
+calculate_fwer <- function (probit_fits = "data/probit_fits", sigval = 0.8) {
 
   # Load probit data if necessary.
   if (typeof(probit_fits) == "character") {
-    probit_data = load_probit_data(probit_fits)
+    probit_data <- load_probit_data(probit_fits)
   } else {
-    probit_data = probit_fits
+    probit_data <- probit_fits
   }
      
-  probit_data$Cohens_d = cohens_d(probit_data$LatentMeanPrePosteriorMean, 
+  probit_data$Cohens_d <- cohens_d(probit_data$LatentMeanPrePosteriorMean, 
                                   probit_data$LatentMeanPostPosteriorMean,
                                   probit_data$LatentMeanPrePosteriorSD, 
                                   probit_data$LatentMeanPostPosteriorSD)
 
-  probit_data$Significant = ifelse(probit_data$Cohens_d >= sigval, 1, 0)
+  # Get the sign of the hypothesized shift, where these columns come from 
+  # the original data.
+  shift_sign <- sign(probit_data$ObservedMeanPost - probit_data$ObservedMeanPre)
 
-  # return (probit_data)
+  # Only significant if it's positive in direction of shift. TODO: alternative
+  # formulation could check absolute value.
+  probit_data$Significant <- 
+    ifelse((shift_sign * probit_data$Cohens_d) >= sigval, 1, 0)
+
   ret = probit_data %>%
     group_by(ExperimentID) %>% 
     summarise(FWER = mean(Significant)) %>%

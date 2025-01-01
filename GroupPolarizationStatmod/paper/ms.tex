@@ -684,18 +684,21 @@ fraction of trials,
 with $d_{ei} > d^*$ for the $i^\text{th}$ trial for experimental
 condition $e$, written
 \begin{equation}
-  \alpha_e = \frac{1}{N_T} \sum_i^{N_T} \Theta_i,
+  \alpha_e = \frac{1}{N_T} \sum_i^{N_T} \Theta(d_{ei}; d^*),
+  \label{eq:study_aggregate}
 \end{equation}
 \noindent
 where
 \[
-  \Theta_i = 
+  \Theta(d_{ei}; d^*) = 
     \begin{cases}
       1 & \text{ if } d_{ei} > d^* \\
       0 & \text{ otherwise.}
     \end{cases}
 \]
-and $N_T = 1000$ is the number of trials.
+and $N_T = 1000$ is the number of trials. For simplicity we assume that the sign of
+$d_{ei}$ is positive, meaning a shift to greater extremisim. It is possible that
+$d_{ei}$ could be negative, indicating a shift to lesser extremity.
 
 To calculate the family-wise error rate
 for a study, $s$ which contains several experimental conditions, $e$,
@@ -703,18 +706,18 @@ for a study, $s$ which contains several experimental conditions, $e$,
   \alpha_s = \frac{1}{|s|} \sum_{e \in s} \alpha_e
 \end{equation}
 \noindent
-The grand mean across all studies for the corpus is 
+The mean across all results identified as plausibly spurious is 
 \begin{equation}
   \alpha_\mathrm{all} = \frac{1}{|E|} \sum_{e \in E} \alpha_e.
 \end{equation}
-With $\alpha$ calculated, we calculate the false discovery rate using
-Equation~\ref{eq:fdr}.
+We finally may calculate the false discovery rate by plugging this $\alpha$
+into Equation~\ref{eq:fdr} and assuming empirically-motivated values for 
+base rate, $b$, and statistical power, $W$, as well as more pessimistic and
+optimistic settings for base rate and power.
 
-
-
-We invert this procedure to find what significance value $d^*$ is necessary
-to achieve a low family-wise error rate $\alpha_e = 0.05$ for experimental
-condition, $e$. To do this we first calculate $\alpha_e(d^*)$ for a
+We close our Analysis by inverting this procedure to find what significance value
+$d^*$ is necessary to achieve a low family-wise error rate $\alpha_e = 0.05$ for
+experimental condition, $e$. To do this we first calculate $\alpha_e(d^*)$ for a
 sufficiently wide range of $d^*$. We then find the lowest $d^*$ for which
 $\alpha_e(d^*) \leq 0.05$.
 
@@ -733,13 +736,22 @@ opinions-ordinal measurement experimental design. We then analyze the family-wis
 error ($\alpha$) and false detection rate (FDR) 
 for each experimental condition and aggregated 
 up to the study level and across all studies and experimental conditions. 
-The lower twentieth percentile of $\alpha$
-We close by showing that $d^*$ must be greater than the ``high'' effect size
-$d^*=0.8$ to limit family-wise error rates to $\alpha \leq 0.05$ in all but six
-experimental conditions.
+We estimate the lower twentieth percentile of experimental conditions 
+have \emph{at least} $\alpha \leq 0.16$, 
+with median $\alpha \geq 0.27$ and upper eightieth percentile with $\alpha \geq
+0.40$ (Table~\ref{tab:quantiles}\mt{A.  –but don't have A and B; TODO: separate
+FWER and FDR tables, only use 0, 20, 50, 80, 100 for probs. Rename 0 -> min, 100 ->
+max.}). For the fiftieth and eightieth percentiles this
+corresponds to false discovery rates of 0.75 and 0.82, respectively. 
+We emphasize that these estimates and others detailed below are lower bounds on
+$\alpha$ and FDR since we are using what is likely an overgeneralized,
+underspecified statistical model that does not account for all the potential
+variance in experimental outcomes, which would increase error rates.
+We close our Analysis by calculating which $d^*$ limits family-wise error rates to
+$\alpha \leq 0.05$. This is greater than $d^* = 0.8$, classically taken to 
+represent ``high'' significance, in all but six experimental conditions.
 
-
-\subsection{Nearly all group polarization detections are plausibly false}
+\subsection{Nearly all group polarization detections are plausibly spurious}
 
 We used our formal distribution model of group polarization experiments
 to identify plausible latent simple consensus distributions that generate spurious
@@ -747,60 +759,90 @@ group polarization in observed ordinal distributions
 in the asymptotic case of taking $N \to \infty$ ordinal measurements.
 Across the ten studies we analyzed, we excluded 3 out of 60 experimental
 conditions that did not claim to be positive findings of group polarization.
-Of the remaining 57, we identified plausible $\beta$ that generate spurious
+Of the remaining 57, we identified simple consensus $\beta$ that generate spurious
 group polarization in 54 experimental conditions. In the other three, we did
 identify $\beta$ that generate spurious group polarization, but the initial
-simulated distributions were highly polarized. Two of these
-simulations of experimental conditions from Schkade, et al., (2010) because
+simulated distributions were highly polarized. We rejected $\beta$ generated for
+two spurious group polarization from Schkade, et al., (2010) because
 the histogram plots of the observed opinion distributions are not
 polarized~\cite[Figure 1, p. 234]{Schkade2010}. The other condition where we
-rejected candidate $\beta$ was in a question about a ``bad teacher'' in Myers
-(1975)~\cite{Myers1975a}, where lower values signify increasingly 
-worse impressions of the teacher and higher values signify increasingly good
-impressions. It is unlikely that any participants would rate a ``bad teacher''
-as good, so we excluded this from our analysis as well. This exclusion may be
-overly generous since Myers (1975) did not provide details beyond mean values
-and opinion shifts, and the article was published before the importance
-of open data best practices was recognized.
+found but rejected spurious group polarization $\beta$ was in a question 
+about a ``bad teacher'' in Myers (1975)~\cite{Myers1975a}, where lower values
+signify increasingly worse impressions of the teacher and higher values signify
+increasingly good impressions. It is unlikely that a
+``bad teacher'' would be rated as good in this case, so we excluded this 
+from our analysis as well. This exclusion may be overly generous since Myers (1975)
+did not provide details beyond mean values and opinion shifts, and the article was
+published before open data practices.
 
 \begin{table}[ht]
-  \caption{yo}
+  \caption{{\textbf{Quantiles for the two error-rate measures under different
+  significance values.}\mt{Working on splitting in two and having more base rate
+and power conditions.}}}
   \label{tab:quantiles}
-\rotatebox{90} {\textbf{Quantiles for the two error-rate measures under different
-  significance values.}\mt{Not sure about the best way to format; probably don't
-  need this in the main text, but could be valuable in supplement?}}
+\rotatebox{90} {
   \input{tex/quantile_table.tex}
-  
+}
 \end{table}
 
-\subsection{Half of experiments exceed a 75\% false discovery rate at ``medium'' significance}
+\subsection{Half of experiments exceed a 70\% false discovery rate at ``medium'' significance}
 
-We simulated trials from each experimental condition, $e$, 
-by sampling and binning pre- and
-post-deliberation latent opinions from distributions with parameters identified
-with the $N\to\infty$ model as causing plausibly spurious group
-polarization. For each $e$,
-we drew a number of samples equal to the number of participants in 
-the original experiments, $N_\mathrm{emp}$. To estimate
-family-wise error and false detection rates, we fit an ordered probit
-model to the simulated observations and obtained estimates of the group polarization
-effect size, $d$ (Equation~\ref{eq:cohens}). If the effect size was greater than a
-significance value, $d > d^*$, then by definition there was a detection $D$ of group 
-polarization,
-even though there was no effect by design, written $\neg E$. 
-The family-wise error rate is $\Pr(D|\neg E)$, calculated as the frequency with which $d > d^*$ out of 1000
-simulation trials. The false detection rate is the family-wise error rate scaled
-using the base rate of effects and the statistical power (Equation~\ref{eq:fdr}). We
-test three difference significance values, $d = 0.2,~0.5$ and $0.8$, corresponding
-to what Cohen prescribed to use for ``low'', ``medium'', and ``high'' significance.
+We simulated trials from each experimental condition, $e$, by sampling and binning
+pre- and post-deliberation latent opinions from distributions with parameters
+identified with the $N\to\infty$ model as causing plausibly spurious group
+polarization. For each $e$, we drew a number of samples equal to the number of
+participants in the original experiments, $N_\mathrm{emp}$. To estimate family-wise
+error and false detection rates, we fit an ordered probit model to the simulated
+observations and obtained estimates of the group polarization effect size, $d$
+(Equation~\ref{eq:cohens}). If the effect size was greater than a significance
+value, $d > d^*$, then by definition there was a detection $D$ of group
+polarization, even though there was no effect by design, written $\neg E$.  The
+family-wise error rate is $\Pr(D|\neg E)$, calculated as the frequency with which $d
+> d^*$ out of 1000 simulation trials. The false detection rate is the family-wise
+error rate scaled using the base rate of effects and the statistical power
+(Equation~\ref{eq:fdr}). We test three difference significance values, $d =
+0.2,~0.5$ and $0.8$, corresponding to what Cohen prescribed to use for ``low'',
+``medium'', and ``high'' significance. If not otherwise noted, we set the base
+rate to be $b=0.1$ and the power $W = 0.8$ as metascience parameters to calculate 
+the false discovery rate (Equation~\ref{eq:fdr}). Note that if the family-wise error
+rate is low at $\alpha = 0.05$, the false discovery rate is $\fdr = 0.36$.
 
-Family-wise error rates (Figure~\ref{fig:fwer_fdr_synthesis} and
-Table~\ref{tab:quantiles}) varied from a minimum of one in ten for the
+Different conditions yield different effect size distributions
+(Figure~\ref{fig:effect_size_distros}), which 
+determine the magnitude of error rates and difference between the error rates for low,
+medium, and high significance values $d^*=0.2,0.5,0.8$ magnitude of error rates 
+(Figure~\ref{fig:fwer_fdr_synthesis}B). 
+Family-wise error rates varied from a minimum of one in ten for the
 \texttt{Feminists-Experimental} condition from Myers (1975)~\cite{Myers1975a}
 to a maximum of two in three for the \texttt{COSprings-CivilUnions} condition from
-Schkade, Sunstein, and Hastie (2010)~\cite{Schkade2010}. The median family-wise error
+Schkade, Sunstein, and Hastie (2010)~\cite{Schkade2010} under medium
+significance effect size $d^* = 0.5$ (Figure~\ref{fig:fwer_fdr_synthesis} and
+Table~\ref{tab:quantiles}). The median family-wise error
 rate is 0.28 for Krizan and Baron's (2007) experimental condition
-\texttt{NoOutgroupScenario1}~\cite{Krizan2007}.  
+\texttt{NoOutgroupScenario1}~\cite{Krizan2007}. This translated to a minimum
+false detection rate of 0.52 for the Myers (1975) condition, a maximum false
+detection rate of 0.88 for the Schkade, et al., (2010) condition, and a median false
+detection rate of 0.75 for the Krizan and Baron (2007) condition. 
+
+In the conditions
+with lower family-wise error rates, there were several conditions where using the low 
+significance value $\alpha$ resulted in a much greater error rate than the medium or 
+high significance values. In the ten conditions with the lowest $\alpha$ for 
+$d^* = 0.5$, with $\alpha$ near 0.1, five of these conditions have $\alpha > 0.25$
+when $d^* = 0.2$ corresponding to a small effect size. For low $\alpha$, the
+difference in false detection rates for each $d^*$ value are more widely
+distributed, following the distribution of $\alpha$, meaning that 
+a modest increase in $d^*$ can have greater effects on the false discovery rate. In
+the conditions above the 50th percentile, $\alpha$ approaches and exceeds one in
+two, even when requiring ``high'' significance with $d^*=0.8$. With $d^* = 0.8$,
+$\alpha$ approaches and exceeds one in four, with four near one in two. When 
+requiring ``low'' signifance, 
+
+Experimental designs within each study or article tend to share certain
+characteristics, such as the number of bins in the ordinal measurement design
+or the number of participants per condition. Therefore, the 
+average false detection rate across experimental trials within a study
+(Equation~\ref{eq:study_aggregate}) show that 
 
 \begin{figure}
 
@@ -809,25 +851,35 @@ rate is 0.28 for Krizan and Baron's (2007) experimental condition
   \label{fig:fwer_fdr_synthesis}
 
   \centering
-  \includegraphics[width=1.1\textwidth]{Figures/Results/fwer_fdr_synthesis.pdf}
-    
+  \includegraphics[width=1.1\textwidth]{Figures/Analysis/fwer_fdr_synthesis.pdf}
 \end{figure} 
 
+\begin{itemize}
+  \item 
+    Other $b$ and $W$ values in quantiles.
+  \item
+    Note that there were many ``significant'' results---in the wrong direction
+    (Figure~\ref{fig:OrdinalBoxplot}).
+\end{itemize}
 
 \subsection{Minimum $d^*$ for FWER of 0.05}
 
 Solving the inverse problem of which $d^*$ achieves a low family-wise error rate,
 which drives the false detection rate. Here we present our calculations to find
-$d^*$ that achieve $\alpha(d^*) = 0.05$, a commonly-assumed parameter value of
-metascience. 
+$d^*$ that achieve $\alpha(d^*) = 0.05$. 
 
 
 \begin{figure}
-  \caption{\textbf{Significance value, $d^*$, to limit family-wise error 
-  rate of 0.05 for each identified study.} \mt{Does this make sense? Order by the
-rankings in fdr\_vs\_experiment plots to better understand/compare.}}
+  \caption{
+    \textbf{Significance value, $d^*$, to limit family-wise error 
+    rate of 0.05 for each identified study.} The Moscovici and Zavalloni (1969)
+    ``Americans'' question would require the greatest $d^*$ to achieve $\alpha \leq
+    0.05$, even though it does not have the highest error rates. This is because of
+    larger outliers in simulated $d$ for this condition compared to others with
+    greater error rates (Figure~\ref{fig:OrdinalBoxplot}).
+  }
   \centering
-    \includegraphics[width=0.75\textwidth]{Figures/Results/sigval_for_low_fwer.pdf}
+    \includegraphics[width=0.75\textwidth]{Figures/Analysis/sigval_for_low_fwer.pdf}
   \label{fig:sigval_for_low_fwer}
 \end{figure}
 
@@ -897,55 +949,46 @@ in 1-2 sentences summarize the paper.}
 
 \appendix
 
-% \section{Figures}
+\renewcommand{\thefigure}{A\arabic{figure}}
 
-% \begin{figure}
-%   \caption{
-%     Boxplots visualizing the distribution of Cohen's $d$ values (x-axis in
-%     A and B) inferred through a metric linear model over 1000 simulation 
-%     trials for each experimental condition (y-axis in A and B). All conditions
-%     have many trials that result in non-zero Cohen's $d$ values with number of
-%     simulated participants, $N$, set to their empirical values reported in the
-%     associated journal article (A). However, when the number of simulated
-%     participants is increased to $10N$, there are several conditions that 
-%     indeed yield distributions closer to $d = 0$ as expected, however some
-%     conditions have $d$ distributions centered on a nonzero mean with little to
-%     no overlap with $d=0$; variance in $d$ decreases as expected
-%     across experimental conditions (B).
-%   }  
-%   \label{fig:MetricBoxplots}
-%   \centering
-%   \begin{subfigure}[]{0.9\textwidth}
-%     % \hspace{-7.5em} 
-%     \centering
-%     \textsf{\large \textbf{A}, empirical $N$} \\
-%     \includegraphics[width=\textwidth]{Figures/boxplots/metric_cohens.pdf}
-%     \label{fig:MetricBoxplot_N}
-%   \end{subfigure} \\
-% \end{figure}
-% \begin{figure}\ContinuedFloat
-%   \begin{subfigure}[]{0.9\textwidth}
-%     % \hspace{-5.5em} 
-%     \centering
-%     \textsf{\large \textbf{B}, 10 $\times$ empirical $N$} \\
-%     \includegraphics[width=\textwidth]{Figures/boxplots/10N_metric_cohens.pdf}
-%     \label{fig:MetricBoxplot_10N}
-%   \end{subfigure}
-% \end{figure}
+\setcounter{figure}{0}
 
+\clearpage
 
-% \begin{figure}
-%   \caption{Boxplot of Cohen's $d$ for the ordered probit model over 100
-%     simulation trias for each experimental condition (y-axis in A and B). Each
-%     trial represents a possible outcome of a group polarization experiment where
-%     the true opinion shift is zero. The mean across trials is closer to 0 than
-%     in the metric case, but many simulated zero-shift experiments still result in
-%     an observed shift. This illustrates the weak statistical power of these group
-%     polarization experiments.}
-%   \label{fig:OrdinalBoxplot}
-%   \centering
-%     \includegraphics[width=0.9\textwidth]{Figures/boxplots/ordinal_cohens.pdf}
-% \end{figure}
+%%%%%%%%%% Supplement %%%%%%%%%%
+\pagebreak
+\begin{center}
+  \textbf{\Large \textsf{Minority-group incubators and majority-group
+reservoirs support the diffusion of climate change adaptations (Supplementary Material)}}
+\end{center}
+
+%%%%%%%%%% Prefix a "S" to all equations, figures, tables and reset the counter %%%%%%%%%%
+\setcounter{equation}{1}
+\setcounter{figure}{0}
+\setcounter{section}{0}
+\setcounter{table}{0}
+\setcounter{page}{1}
+\makeatletter
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thepage}{S\arabic{page}}
+
+\section{Analysis}
+
+\begin{figure}
+  \caption{Boxplot of Cohen's $d$ for the ordered probit model over 1000
+    simulation trias for each experimental condition (y-axis in A and B). Each
+    trial represents a possible outcome of a group polarization experiment where
+    the true opinion shift is zero. The mean across trials is closer to 0 than
+    in the metric case, but many simulated zero-shift experiments still result in
+    an observed shift. This illustrates the weak statistical power of these group
+    polarization experiments.}
+  \label{fig:OrdinalBoxplot}
+  \centering
+    \includegraphics[width=1.0\textwidth]{Figures/Analysis/ordinal_cohens.pdf}
+\end{figure}
 
 
 \end{document}

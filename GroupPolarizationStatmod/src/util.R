@@ -10,6 +10,7 @@ library(readr)
 library(tidyr)
 library(fs)
 
+
 load_probit_data = function(probit_fits_dir = "data/probit_fits", 
                             sync_file = "data/probit_fits/all.csv",
                             overwrite = FALSE) {
@@ -28,5 +29,4 @@ load_probit_data = function(probit_fits_dir = "data/probit_fits",
 
   return (ret)
 }
-
 

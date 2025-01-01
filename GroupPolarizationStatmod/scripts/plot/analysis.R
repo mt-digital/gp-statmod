@@ -19,7 +19,7 @@ source("scripts/analysis.R")
 
 mytheme = theme(
   axis.line = element_line(), legend.key=element_rect(fill = NA),
-  text = element_text(size=16),# family = 'PT Sans'),
+  text = element_text(size=18),# family = 'PT Sans'),
   # legend.key.width = unit(2, 'cm'),
   # legend.key.size = unit(1.5, 'lines'),
   panel.background = element_rect(fill = "white"),
@@ -34,7 +34,7 @@ rhg_cols_10 <- rev(c("#771C19", "#AA3929", "#E25033", "#F27314", "#F8A31B",
 
 plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
                                 sync_file = "data/probit_fits/all.csv",
-                                output_file = "paper/Figures/ordinal_cohens.pdf",
+                                output_file = "paper/Figures/Analysis/ordinal_cohens.pdf",
                                 overwrite = FALSE) {
   
   # df <- dir_ls(ordinal_data_dir, glob = "*.csv") %>%
@@ -56,7 +56,7 @@ plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
 
 
 
-plot_fdr = function(save_path = "paper/Figures/fdr_vs_experiment.pdf", 
+plot_fdr = function(save_path = "paper/Figures/Analysis/fdr_vs_experiment.pdf", 
                     aggregate = FALSE, use_non_identified = FALSE,
                     default_fwer = 0.05,
                     base_rate = 0.1, power = 0.8, 
@@ -80,12 +80,9 @@ plot_fdr = function(save_path = "paper/Figures/fdr_vs_experiment.pdf",
 plot_fdr_aggregated = function(tbl, focal_sig_val, 
                                save_path, default_fwer = 0.05,
                                use_non_identified = FALSE) {
-
   
   tbl = 
     as_tibble(aggregate_fdr_vs_sig(tbl, use_non_identified, default_fwer))
-      # mutate(StudyID = fct_reorder(StudyID, FWER
-    
 
   tbl_foc = 
     filter(tbl, SigVal == focal_sig_val) %>%
@@ -117,8 +114,10 @@ plot_fdr_aggregated = function(tbl, focal_sig_val,
     ggplot(tbl_foc, aes(x = FWER, y = StudyID, fill = StudyID)) +
       geom_hline(yintercept = 1.5, linetype = "dashed", linewidth = 0.25) +
       geom_bar(aes(fill = StudyID, color = StudyID), stat = "identity", width = 0.1) +
-      geom_point(aes(x = FWER, y = StudyID, shape = SigVal, color = StudyID), tbl, size = 6) + 
-      geom_point(aes(x = FDR, y = StudyID, shape = SigVal, color = StudyID), fill = "transparent", 
+      geom_point(aes(x = FWER, y = StudyID, shape = SigVal, color = StudyID), 
+                 tbl, size = 6) + 
+      geom_point(aes(x = FDR, y = StudyID, shape = SigVal, color = StudyID), 
+                 fill = "transparent", 
                  tbl, size = 6) + 
 
       xlim(c(0, 1)) +
@@ -126,16 +125,20 @@ plot_fdr_aggregated = function(tbl, focal_sig_val,
       ylab("Study ID") +
       labs(shape = TeX("Significance, $d^*$")) +
       labs(fill = "Study ID", color = "Study ID") +
-      scale_shape_manual(values = c(24, 22, 21), labels = c("Low, 0.2", "Medium, 0.5", "High, 0.8"))  +
-      guides(shape = guide_legend(reverse = TRUE), color = guide_legend(reverse = TRUE), 
+      scale_shape_manual(values = c(24, 22, 21), 
+                         labels = c("Low, 0.2", "Medium, 0.5", "High, 0.8"))  +
+      guides(shape = guide_legend(reverse = TRUE), 
+             color = guide_legend(reverse = TRUE), 
              fill = guide_legend(reverse = TRUE))  +
-      scale_fill_manual(values = rhg_cols) + scale_color_manual(values = rhg_cols) + 
+      scale_fill_manual(values = rhg_cols) + 
+      scale_color_manual(values = rhg_cols) + 
       mytheme
 
   ggsave(save_path, p, width = 9.5, height = 10)
 
   return (tbl_all)
 }
+
 
 plot_fdr_nonaggregated = function(tbl, focal_sig_val, save_path) {
   
@@ -170,7 +173,7 @@ plot_fdr_nonaggregated = function(tbl, focal_sig_val, save_path) {
 
 
 plot_sigval_for_low_fwer = function(target_fwer = 0.05, 
-                                    save_path = "paper/Figures/sigval_for_low_fwer.pdf",
+                                    save_path = "paper/Figures/Analysis/sigval_for_low_fwer.pdf",
                                     probit_fits_dir = "data/probit_fits",
                                     focal_sig_val = 0.5,
                                     base_rate = 0.1, power = 0.8, 
@@ -220,10 +223,10 @@ plot_sigval_for_low_fwer = function(target_fwer = 0.05,
 
 plot_fdr()
 
-plot_fdr(aggregate = TRUE, save_path = "paper/Figures/fdr_vs_study.pdf")
+plot_fdr(aggregate = TRUE, save_path = "paper/Figures/Analysis/fdr_vs_study.pdf")
 
 plot_fdr(aggregate = TRUE, 
-         save_path = "paper/Figures/fdr_vs_study_w_nonid.pdf", 
+         save_path = "paper/Figures/Analysis/fdr_vs_study_w_nonid.pdf", 
          use_non_identified = TRUE)
 
 plot_sigval_for_low_fwer()
