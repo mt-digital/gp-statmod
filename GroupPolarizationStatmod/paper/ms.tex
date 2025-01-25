@@ -86,7 +86,7 @@ does not imply epistemic reliability.
 \renewcommand*\contentsname{Table of contents}
 {
 \hypersetup{linkcolor=gray}
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
 \tableofcontents
 }
 
@@ -780,12 +780,10 @@ published before open data practices.
 
 \begin{table}[ht]
   \caption{{\textbf{Quantiles for the two error-rate measures under different
-  significance values.}\mt{Working on splitting in two and having more base rate
-and power conditions.}}}
+  significance values.}}}
   \label{tab:quantiles}
-\rotatebox{90} {
-  \input{tex/quantile_table.tex}
-}
+  \centering
+  \input{tex/quantile_table_min_20_50_80_max.tex}
 \end{table}
 
 \subsection{Half of experiments exceed a 70\% false discovery rate at ``medium'' significance}
@@ -865,8 +863,11 @@ average false detection rate across experimental trials within a study
     (Figure~\ref{fig:OrdinalBoxplot}).
 \end{itemize}
 
-\subsection{Minimum $d^*$ for FWER of 0.05}
+\subsection{High significance values ($d^*$) often necessary for FWER of 0.05}
 
+Our simulations can be used a different way, in this case to calculate what
+significance value $d^*$ limits the family-wise error rate to the low value of
+0.05. 
 Solving the inverse problem of which $d^*$ achieves a low family-wise error rate,
 which drives the false detection rate. Here we present our calculations to find
 $d^*$ that achieve $\alpha(d^*) = 0.05$. 
@@ -961,8 +962,7 @@ in 1-2 sentences summarize the paper.}
 %%%%%%%%%% Supplement %%%%%%%%%%
 \pagebreak
 \begin{center}
-  \textbf{\Large \textsf{Minority-group incubators and majority-group
-reservoirs support the diffusion of climate change adaptations (Supplementary Material)}}
+  \textbf{\Large \textsf{Group polarization replications may be marred by high false discovery rates (Supplementary Material)}}
 \end{center}
 
 %%%%%%%%%% Prefix a "S" to all equations, figures, tables and reset the counter %%%%%%%%%%

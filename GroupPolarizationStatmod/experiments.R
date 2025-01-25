@@ -6,7 +6,7 @@
 # require(glue)
 require(MASS)
 
-source("JAGSModels.R")
+
 
 ## INITIALIZE JAGS PARAMETERS (Following Kruschke (2015) DBDA2E-utilities.R)'
 # 
@@ -96,12 +96,12 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
     } else {
       lim <- 3
     }
-    # for (rowIdx in 1:nrow(studiesDf))
+    
     for (rowIdx in 1:lim)
     {
         row <- studiesDf[rowIdx, ]
-        #if (row$Include && row$Plausible && row$MinBinValue > 0)
-        if (row$Include && row$Plausible)  # && row$MinBinValue > 0)
+        
+        if (row$Include && row$Plausible)  
         {
             N <- row$N; firstBinValue <- row$MinBinValue; 
             nBins <- row$MaxBinValue - row$MinBinValue + 1; 
@@ -125,48 +125,81 @@ makeBayesianFitTable <- function(studies.data.csv = "data/StudiesAnalysis.csv",
                         "\n**************************************************\n\n",
                         sep=""))
             
-            # tryCatch({
+            # Get summary of ordered probit fit to simulated pre-deliberation data.
             suPre <- summary(
                 calculateBayesian(N, firstBinValue, nBins, latentMean, latentSdPre)
             )
 
+            # Get summary of ordered probit fit to simulated post-deliberation data.
             suPost <- summary(
                 calculateBayesian(N, firstBinValue, nBins, latentMean, latentSdPost)
             )
 
+            # Extract the posterior estimates for pre-...
             muPrePost = suPre["mu",]
+            # ...and post-deliberation latent opinion means.
             muPostPost = suPost["mu",]
 
+            # Add row for this experimental condition extracting several variables
+            # from the posterior estimates for pre- and post-deliberation latent
+            # opinion means and variances.
             tibbleRow <- tibble_row(
+                
+                # Metadata and parameters read from the `row` from `studiesDf`.
                 TreatmentTag = row$TreatmentTag, ArticleTag = row$ArticleTag,
                 N = N, 
                 MinBinValue = firstBinValue, 
                 MaxBinValue = firstBinValue + nBins - 1, 
                 ObservedMeanPre = row$ObservedMeanPre,
                 ObservedMeanPost = row$ObservedMeanPost,
-                LatentMean = latentMean, LatentSDPre = latentSdPre, 
+                LatentMean = latentMean, 
+                LatentSDPre = latentSdPre, 
                 LatentSDPost = latentSdPost, 
                 
+                # Extract pre-deliberation latent opinion posterior measures.
                 LatentMeanPrePosteriorLower95 = muPrePost["Lower95"],
                 LatentMeanPrePosteriorMedian = muPrePost["Median"],
                 LatentMeanPrePosteriorUpper95 = muPrePost["Upper95"],
                 LatentMeanPrePosteriorMean = muPrePost["Mean"],
                 LatentMeanPrePosteriorSD = muPrePost["SD"],
 
+                # Extract post-deliberation latent opinion posterior measures.
                 LatentMeanPostPosteriorLower95 = muPostPost["Lower95"],
                 LatentMeanPostPosteriorMedian = muPostPost["Median"],
                 LatentMeanPostPosteriorUpper95 = muPostPost["Upper95"],
                 LatentMeanPostPosteriorMean = muPostPost["Mean"],
                 LatentMeanPostPosteriorSD = muPostPost["SD"]
             )
-
+            
+            # Add newly-created row to output dataframe (actually tibble?).
             outputDf <- add_row(outputDf, tibbleRow)
         }
     }
 
     write.csv(outputDf, output.csv)
+    
     return (outputDf)
 }
+
+
+makeJAGSModelData <- function(N, firstBinValue, nBins, latentMean, latentSd)  # Pre, latentSdPost)
+{
+  thetaVec = as.vector(matrix(NA, ncol=nBins - 1, nrow=1))
+  thetaVec[1] = firstBinValue + 0.5
+  thetaVec[nBins - 1] = (firstBinValue + nBins - 1.5)  # e.g. fbv=1, nbins=10, this val is 9.5
+  
+  opinions = simulatedObservation(N, firstBinValue, nBins, latentMean, latentSd)
+  
+  modelDataList = list(
+    N = N,
+    o = opinions,
+    thetaVec = thetaVec,
+    nBins = nBins
+  )
+  
+  return (modelDataList)
+}
+
 
 calculateBayesian <- function(N, firstBinValue, nBins, latentMean, latentSd)
 {
