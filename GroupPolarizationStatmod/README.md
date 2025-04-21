@@ -96,7 +96,13 @@ presentation:
 4.  **Present results in a table and plots for individual experiments and
     aggregated to the study level and over all experiments in all studies.**
 
-5.  **Make illustration of the large-\$N\$ model**
+    -   Quantiles table made using source("scripts/calculations.R");
+        \`quantiles_tbl\`
+
+5.  **Make illustration of the large-N model of spurious group polarization from
+    simple consensus.**
+
+    -   
 
 ### Identify plausibly false detections
 
