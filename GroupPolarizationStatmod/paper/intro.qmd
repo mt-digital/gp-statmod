@@ -1,6 +1,6 @@
 ---
-title: "Group Polarization Revisited"
-author: "Your Name"
+title: "If the Null Fits, You Must Acquit: Ubiquitous False Detections of Group Polarization"
+author: "Matt Turner"
 format:
   pdf:
     documentclass: article
