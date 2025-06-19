@@ -1,0 +1,19 @@
+---
+title: "Group Polarization Revisited"
+author: "Your Name"
+format:
+  pdf:
+    documentclass: article
+    keep-tex: true
+bibliography: 
+  - this.bib
+  - /Users/mt/workspace/Writing/library.bib
+output: pdf
+---
+
+# Introduction
+
+Group polarization is one of the most widely cited but unevenly evidenced phenomena in social psychology...
+
+*Write like you mean it.*  
+*You're not drafting — you're building.*

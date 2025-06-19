@@ -62,7 +62,7 @@ presentation:
     to which ordered probit models are fit to estimate best-case scenario
     family-wise error rates and false discovery rates.**
 
-    -    At the top level for generating the analysis here, see
+    -   At the top level for generating the analysis here, see
         [`bayesian_fit_trial.sh`](/bayesian_fit_trial.sh) , a slurm submission
         script that requests resources and runs the function
         `singleBayesianFitTrial` [`in experiments.R`](/experiments.R).
