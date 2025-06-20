@@ -1,7 +1,18 @@
 ---
-title: "If the Null Fits, You Must Acquit: Ubiquitous False Detections of Group Polarization"
+title: "If the Null Fits, You Must Omit: Ubiquitous False Detections of Group Polarization"
 author: "Matt Turner"
 format:
+  html:
+    toc: true
+    include-in-header: header.html
+    theme: 
+      dark:
+        - darkly 
+        - theme-dark.scss
+      light:
+        - theme-light.scss
+    fontsize: 0.9em
+    linestretch: 1.2
   pdf:
     documentclass: article
     keep-tex: true
@@ -11,9 +22,104 @@ bibliography:
 output: pdf
 ---
 
+## Abstract {.unnumbered}
+
+*Group polarization* is the name for a form of consensus where
+members of a like-minded group become, on average, more extreme in their
+opinions after discussing a topic. Group polarization is important because
+it may increase social and political tensions if moderates become more
+extreme. Decades of studies have replicated detections of group
+polarization, typically using an ordinal scale to measure opinions.
+However, these studies did not account for ordinal measurements, which can
+result in spurious detections of opinion change.  Lacking original data we
+can still calculate the probability that a published detection of group
+polarization was spurious, i.e., to calculate the \emph{false detection
+rate}.  Across 54 group polarization experimental conditions from ten
+representative journal articles, we calculated false detection rates to be
+between 0.52 and 0.88, with a median of 0.75, using a generative model of
+group polarization experiments seeded with empirical data.  
+We also use our model to develop experimental designs that
+achieve an acceptable false discovery rate.  Much of group polarization
+research may be unreliable. This analysis can help change that by enabling others to avoid this
+hidden pitfall. More
+broadly this work demonstrates one important way that replication success alone
+does not imply epistemic reliability.
+
+
+
 # Introduction
 
-Group polarization is one of the most widely cited but unevenly evidenced phenomena in social psychology...
+> In our introductory social psychology course, 
+we have for many years used the [group polarization experimental paradigm] as
+a laboratory exercise. The exercise works beautifully, but one must be
+careful to forewarn a class that [group polarization] does not occur with every 
+group...and that the effect is not large [@Brown1986].
 
-*Write like you mean it.*  
-*You're not drafting — you're building.*
+
+> One of the most robust findings in social psychology is that of attitude polarization  following discussion with like-minded others [@Cooper2001].
+
+
+> A medium effect size is conceived as one large enough to be visible to the naked eye. [@CohenBook1988]
+
+If an extremist's opinion falls and it is measured with a Likert scale, will it
+make a noise? The answer had better be yes if we want to properly measure opinion
+change. Accurate measurements are critical
+for developing rigorous and reliable methods to promote more stable,
+sustainable, responsive, and efficient governments and institutions
+[@Mason2018UncivilAgreementBook;@Klein2020]. Unfortunately, social and
+behavioral scientists have often used statistical methods 
+that distort
+opinion change when it's measured on an ordinal, Likert-style scale (e.g. -3
+indicates "Strongly disagree", +3 indicates "Strongly agree", and 0 is
+neutral) [@Liddell2018]. 
+This includes a phenomenon called *group polarization* that
+former Obama White House official and law professor Cass Sunstein relied on to 
+explain why "people become extremists" and why "political and
+cultural polarization" is "so pervasive in America", as the publisher summarizes [@Sunstein2009]. Sunstein suggests group polarization research provides a "clue" to explaining how
+"facism...student radicalism...Islamic terrorism...[t]he Rwandan
+genocide...[e]thnic Conflict...acts of torture and humiliation by American soldiers at Abu Ghraib", and more (p. 1). 
+
+This work is motivated by a core conviction that better thinking leads to better
+science. Theoretical clarity, careful measurement, and principled statistical
+modeling are not academic luxuries, but essential tools for empirical science.
+Theoretical and statistical confusions in the group polarization literature have
+lain dormant, undermining measurements of opinion change in group polarization
+unbeknownst to generations of researchers [@Brown1986].
+
+**🧭 Next session, 6/20: Map paragraph set bridging theory to methods — experiments → ordinal pitfalls → null-consistency model → power analysis → transition to results**
+
+## Bridge: From Philosophy to Mechanics {.unnumbered}
+
+<!-- 🧭 Writing plan for next session -->
+
+### Experimental structure of group polarization studies
+
+- Brief overview of how group polarization experiments are typically designed  
+- Emphasize reliance on **pre/post ordinal opinion measures**  
+- Highlight the assumption that ordinal differences reflect latent opinion shifts  
+
+### The ordinal-continuous mismatch problem
+
+- Explain why ordinal measurements do **not** uniquely reflect latent shifts  
+- Use an example or intuition (e.g., compressing/shrinking variance without changing means)  
+- Show how this opens the door to *null-consistent but polarization-looking* results  
+
+### Description of the null-consistency modeling procedure
+
+- Introduce the generative model with fixed latent mean and changing variance  
+- Explain what counts as a plausible fit and how the model reverse-engineers the observation  
+- Clarify that this is a *constructive falsification tool*, not a probabilistic inference  
+
+### Implications for statistical power and detection credibility
+
+- Discuss how, even if the detection is real, underpowered studies can't distinguish it from null  
+- Mention use of Bayesian ordered probit models to test for minimum detectable effect sizes  
+- Preview that even with ideal modeling, many studies likely lack sufficient power  
+
+### Transition to empirical review and FDR estimation
+
+- Signal that the next section tests this logic across all experimental conditions  
+- Frame the upcoming analysis as assessing the **robustness** of published detections under this new lens  
+
+
+The null-consistency procedure functions as a test of model indistinguishability: it demonstrates that a reported group polarization effect could plausibly arise from a stable-latent process combined with changing opinion precision. This logic echoes foundational concerns in causal inference, where two competing models—one causal, one not—can imply the same observed data distribution and are therefore empirically indistinguishable without further assumptions [@pearl2000causality;@spirtes2000causation]. In such cases, inference from observation to mechanism is invalid. Similarly, in psychometrics, it is well known that different configurations of latent traits and response thresholds can yield identical observed ordinal patterns, making the true structure unidentifiable without additional constraints [@borsboom2005measuring]. The present approach does not attempt to estimate the probability of false detection, but rather shows that under ordinal measurement, a null model can reproduce the observed pattern—rendering the result non-diagnostic of a true latent shift. This establishes a stringent standard: an effect must not only be detected, but shown to be incompatible with plausible null-generating mechanisms.
