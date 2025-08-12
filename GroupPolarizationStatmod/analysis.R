@@ -130,13 +130,15 @@ make_metric_cohens_d_table <- function(studiesAnalysisDfPath = "data/StudiesAnal
 }
 
 summarizeTTestFitTable <- function(fitTablePath = "data/output/TtestFitTable.csv",
-                                   summaryTTablePath = "data/output/TtestSummaryTable.csv",
+                                   summaryTTablePath = 
+                                     "data/output/TtestSummaryTable.csv",
                                    significanceVal = 0.1)
 {
   fitTableDf <- 
     read.csv(fitTablePath) %>%
     group_by(ArticleTag, TreatmentTag, ObservedShift, LatentSDPre, LatentSDPost, ExpectedPower) %>%
-    summarize(FractionSignificant = mean(tTestPvalue < significanceVal), .groups='keep')
+    summarize(FractionSignificant = mean(tTestPvalue < significanceVal), 
+              .groups='keep')
   
   write.csv(fitTableDf, summaryTTablePath, row.names = FALSE)
   
