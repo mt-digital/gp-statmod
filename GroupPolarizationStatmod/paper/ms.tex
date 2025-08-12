@@ -123,6 +123,15 @@ A medium effect size is conceived as one large enough to be visible to the naked
 % continuous opinions (model variables and parameters are given in
 % Table~\ref{tab:modelVariables}).
 
+\begin{figure}
+  \centering
+    \includegraphics[width=0.8\textwidth]{Figures/Model/data-model-flow.png}
+  \caption{\textbf{Workflow of the GP-stats simulation and analysis pipeline
+  for estimating false detection rates under null-consistent conditions.} Colored boxes indicate file types: teal = R scripts, blue = data files, orange = plotting scripts, cyan = Slurm batch script. Arrows show the flow from parameter estimation (hillclimbing or Shiny app) to Bayesian null model fitting on the cluster, aggregation of simulated results, and final visualization.}
+  \label{fig:}
+\end{figure}
+
+
 Metascience frames our analysis since metascientific theory provides a framework for
 our goal of calculating the false discovery rate across experimental conditions,
 journal articles, and the ten-paper corpus. The false discovery rate is then
