@@ -58,202 +58,103 @@ terrorism\ldots{[}t{]}he Rwandan genocide\ldots{[}e{]}thnic
 Conflict\ldots acts of torture and humiliation by American soldiers at
 Abu Ghraib'', and more (p.~1).
 
-\begin{itemize}
-\tightlist
-\item
-  We demonstrate here that there is a pervasive problem observed over
-  decades of group polarization research where faulty statistical
-  methods and incomplete reporting that should force the retraction of
-  these studies from the canon. Effectively, then, empirical support for
-  the theoretical concept \emph{group polarization} stops being so: the
-  epistemic integrity of \emph{group polarization} is undermined with
-  its empirical foundation losing mass.
-\end{itemize}
+% \begin{itemize}
+% \tightlist
+% \item
+We developed a generative model of opinion change to identify, if possible,
+null opinion change models that could spuriously appear like group polarization
+when naively measured using a Likert scale without accounting for the measurement procedure. 
+We further applied our method to estimate the family-wise error rate of
+detections of group polarization in a corpus of ten influential papers from 
+across several decades and from various theoretical traditions. We turn this criticism of past
+blunders constructive by providing a procedure to calculate what Cohen's $d$ should be
+used to guarantee a family-wise error rate (i.e., Type I error rate) of 5\% or less.
 
-We complement this critical analysis with a prescriptive analysis to
-demonstrate that more appropriate statistical models do indeed lower the
-false discovery rate by committing fewer false positive detections of
-group polarization under a null model with shrinking opinion variance.
-Recently, statistical best-practice is to use Bayesian models of
-statistics, where social dynamics and opinion-reporting behaviors are
-represented as causally-dependent probability distributions, where a
-sample taken from one distribution (e.g., the opinion distribution of a
-group in a group polarization experiment) acts as an input parameter to
-another distribution (e.g., that represents the
-individually-heterogeneous distortion of opinions when reported on an
-ordinal scale). Our models follow current best practices in
-psychometrics, social science, and Bayesian inference (Liddell and
-Kruschke 2018; Kruschke 2015; McElreath 2020; Deffner et al. 2024), but
-consolidate them in a new, useful way that enables the retroactive
-discovery of null model parameters that generate spurious group
-polarization, forcing published evidence for group polarization to be
-classified as non-identifiable, and removed from evidence that can be
-said to support group polarization.
+We calculate the severity of the problem in two steps. In the first step we 
+provide proof by example that there exists a null opinion change model in terms of \emph{latent, continuous}
+psychological opinions that looks like group polarization when measured via participant behavior, i.e.,
+by their response on an \emph{ordinal survey scale}. If such a null model is found, this means that we cannot
+rule out a null effect, given the published data. This means, therefore, that the published detection is
+just as likely false as it is true, so we say it is a \emph{plausibly false detection of group polarization},
+or a \emph{plausibly spurious detection} for short. 
+
+In the second step of the analysis of whether, we simulate observations
+of group polarization experiments where participant opinions are drawn from the 
+null model distributions identified in the first step,
+then these are measured on a Likert scale for simulated group polarization survey
+responses on an ordinal scale. We then calculate the
+family-wise error rate (i.e., Type I error rate) and false detection rate using
+various effect sizes to determine significance of the effect in terms of Cohen's $d$.
+The family-wise error rate is defined as the probability that a known null 
+effect is detected as significant. We use this to then estimate the *false detection rate*, which is the
+probability that a detection of an effect is a false one, which depends on the relative prevalence of
+true and false positive detections in the literature.
+Finally, we put our model to constructive use to show what Cohen's $d$ must be set to
+to limit the family-wise error rate to 5\%, denoted $d*$. This will not help rescue any of
+the published results here found to be plausibly spurious. But, it provides a measure of the weakness of
+the published experimental designs independent of their shared fatal failure to 
+account for the measurement procedure: greater $d*$ indicates weaker designs.
+
+We find that 95\% (54 of 57) of group polarization detections are plausibly spurious.
+In other words, empirical support for group polarization has been seriously undermined
+just by removing these results from the count of group polarization replications.
+There is no reason to expect other papers to be more reliable. (Summarize other
+two findings, 1. FWER/FDR and 2. $d*$ for FWER < 5\%)
 
 Our methods can be turned on any data-driven social science analysis of
 data where participants report a latent, subjective psychological
 variable (mood, physiological state, etc.), and where various theories
 supposedly battle it out to best represent the phenomenon of interest
-via NHST performed on ordinal observations with weak, informal
-theoretical models to motivate the studies. This may just be the first
+via null-hypothesis significance testing using ordinal data as continuous. 
+This may just be the first
 of many bricks to fall since \emph{all 68} of the articles that
 mentioned the word ``Likert'' and analyzed ordinal data used metric
 models to detect latent psychological variable change across three
 influential psychology journals, \emph{Psychological Science}, the
 \emph{Journal of Experimental Psychology: General}, and the
 \emph{Journal of Personality and Social Psychology} (Liddell and
-Kruschke 2018).
+Kruschke 2018). This further confirms that replication is far from the only
+foundational crisis that behavioral science faces\cite{Yarkoni2022,Turner2022}. 
 
-This work is motivated by a core conviction that better thinking leads
-to better science. Theoretical clarity, careful measurement, and
-principled statistical modeling are not academic luxuries, but essential
-tools for empirical science. Theoretical and statistical confusions in
-the group polarization literature have lain dormant, undermining
-measurements of opinion change in group polarization unbeknownst to
-generations of researchers (Brown 1986).
+Replication is not enough:
+strong, mechanistic models must be developed to be able to predict Type I and II
+error rates \emph{ahead of time}, as we demonstrate here. We only demonstrate how to
+calculate expected Type I error rates for a measurement design, i.e., the rate of false 
+positives. Low statistical power exacerbates false detection rates. So, to be confident in replication,
+a pre-registered measurement design should use this style of simulation to 
+estimate the statistical power. Tangled, weak, informal
+verbal models of complex psychological and social phenomena like those that motivated
+empirical studies of group polarization tend to be vulnerable
+to stastical weaknesses. It is difficult to incorporate prior knowledge such
+as experiment structure without a sufficiently rigorous and appropriate 
+formal system \cite{Smaldino2017,Smaldino2020,Flake2020,Deffner2024}.
 
-\subsection{Identifiability and the Illusion of
-Change}\label{identifiability-and-the-illusion-of-change}
+\subsection{Group polarization research}
 
-\begin{itemize}
-\tightlist
-\item
-  Many group polarization studies report opinion change based on
-  pre/post differences, but assume a transparent mapping between
-  observed scores and latent beliefs.
-\item
-  Yet ordinal opinion data can mask deeper structural ambiguities that
-  invalidate these assumptions.
-\item
-  In what follows, we first describe the basic structure of group
-  polarization experiments, then explain how ordinal measurement can
-  lead to illusory shifts.
-\item
-  Finally, we introduce a null-consistency modeling procedure that
-  operationalizes this insight, and show how it informs the credibility
-  of reported effects.
-\end{itemize}
+(DO THE MINIMUM AFTER EVERYTHING ELSE)
 
-\subsubsection{Experimental structure of group polarization
-studies}\label{experimental-structure-of-group-polarization-studies}
+To situate this current paper it will help to introduce some relevant research
+traditions and common experimental designs in group polarization, using the ten
+studies included in our corpus as touchstones. To begin, *group polarization*
+is defined as...(continue basic definition with some examples from our corpus).
 
-\begin{itemize}
-\tightlist
-\item
-  Most group polarization experiments follow a familiar structure:
-  measure individual opinions, allow group discussion, then re-measure.
-\item
-  The central claim is that like-minded individuals become more extreme
-  after deliberation.
-\item
-  Crucially, opinions are typically measured with Likert-style ordinal
-  scales (e.g., from ``Strongly disagree'' to ``Strongly agree'').
-\item
-  Analyses often treat these as interval-scaled, calculating mean
-  differences and testing for significance.
-\end{itemize}
+Paragraph dos: 
+Common experimental, measurement, and statistical procedures to induce and
+detect group polarization
 
-\subsubsection{The ordinal-continuous mismatch
-problem}\label{the-ordinal-continuous-mismatch-problem}
+Paragraph tres: How this procedure has been used in the great pointless theoretical milieu
+that raged for decades with apparently no strong determination on the outcome
+or even what the fight was all about.
 
-\begin{itemize}
-\tightlist
-\item
-  Ordinal scores do not have a fixed interval structure --- they
-  represent ranked categories, not true distances.
-\item
-  A given change in score may reflect a shift in opinion, increased
-  certainty, or both.
-\item
-  For example, if opinions become more tightly clustered (lower
-  variance) post-deliberation, the group mean can appear to shift even
-  when the latent mean remains unchanged.
-\item
-  This opens the door to \emph{null-consistent detections} --- apparent
-  effects that emerge from measurement artifacts rather than real
-  opinion movement.
-\end{itemize}
+Paragraph quatro e final: our corpus.
 
-\subsubsection{Description of the null-consistency modeling
-procedure}\label{description-of-the-null-consistency-modeling-procedure}
 
-\begin{itemize}
-\tightlist
-\item
-  We formalize this concern using a generative model that holds the
-  latent opinion mean constant while allowing variance to shrink.
-\item
-  The goal is to test whether an observed group polarization result
-  could arise from such a stable-mean, shifting-variance process.
-\item
-  If this model can reproduce the pre/post measurement pattern, the
-  observed result is non-diagnostic --- it is consistent with a null
-  hypothesis of no true change.
-\item
-  This is a form of constructive falsification: it doesn't prove the
-  effect is false, but shows it is not uniquely explained by change.
-\end{itemize}
+\subsection{Overview}
 
-\subsubsection{Implications for statistical power and detection
-credibility}\label{implications-for-statistical-power-and-detection-credibility}
-
-\begin{itemize}
-\tightlist
-\item
-  Even if an effect is real, detecting it reliably requires statistical
-  power --- the ability to distinguish true shifts from noise or
-  artifacts.
-\item
-  Studies using ordinal measures and small samples may be especially
-  vulnerable to false positives under the null.
-\item
-  To assess this, we fit Bayesian ordered probit models to simulated
-  data and estimate the power to detect effects of various sizes.
-\end{itemize}
-
-\subsubsection{Transition to empirical review and FDR
-estimation}\label{transition-to-empirical-review-and-fdr-estimation}
-
-\begin{itemize}
-\tightlist
-\item
-  Having established a model-based definition of null-consistent
-  detection, we now apply it to published group polarization
-  experiments.
-\item
-  By combining this logic with simulations seeded from published data,
-  we estimate false discovery rates across conditions.
-\item
-  This isn't a judgment about whether past detections were true. It's a
-  demonstration of how to estimate false detection rates
-  properly---using models that actually fit the structure of the data.
-  We calculate FWER and FDR for the original study designs at three
-  effect size levels---small, medium, and large---based on Cohen's
-  guidelines (Cohen 1988, Ch. 2.2.3) and Bayesian methods from Liddell
-  and Kruschke (Liddell and Kruschke 2018). The verdict is clear: even
-  if these studies had used better models, most still wouldn't have had
-  the power to rule out false positives. That makes replication a weak
-  signal of reliability. If future group polarization studies want to
-  produce meaningful result need stronger designs---and that starts with
-  a clean break from outdated statistical habits.
-\end{itemize}
-
-The null-consistency procedure functions as a test of model
-indistinguishability: it demonstrates that a reported group polarization
-effect could plausibly arise from a stable-latent process combined with
-changing opinion precision. This logic echoes foundational concerns in
-causal inference, where two competing models---one causal, one not---can
-imply the same observed data distribution and are therefore empirically
-indistinguishable without further assumptions (Pearl 2000; Spirtes,
-Glymour, and Scheines 2000). In such cases, inference from observation
-to mechanism is invalid. Similarly, in psychometrics, it is well known
-that different configurations of latent traits and response thresholds
-can yield identical observed ordinal patterns, making the true structure
-unidentifiable without additional constraints (Borsboom 2005). The
-present approach does not attempt to estimate the probability of false
-detection, but rather shows that under ordinal measurement, a null model
-can reproduce the observed pattern---rendering the result non-diagnostic
-of a true latent shift. This establishes a stringent standard: an effect
-must not only be detected, but shown to be incompatible with plausible
-null-generating mechanisms.
-
+In the next section, we introduce the various formal and computational Methods 
+used to obtain our findings outlined above. We then explain our findings in detail in the
+Analysis section. We close with a Discussion of how this is not a defeat, but
+a new beginning for group polariation, given that there are good reasons to expect
+group polarization to occur. We also explain how to expanding this analysis to
+examine other published studies on group polarization and across social and behavioral
+science disciplines.
