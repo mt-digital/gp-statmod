@@ -5,19 +5,11 @@ library(dplyr)
 source("model.R")  # for binProb function used in ordinal plot function below.
 
 
-# mytheme = theme(
-#   axis.line = element_line(), legend.key=element_rect(fill = NA),
-#   text = element_text(size=16),# family = 'PT Sans'),
-#   # legend.key.width = unit(2, 'cm'),
-#   # legend.key.size = unit(1.5, 'lines'),
-#   panel.background = element_rect(fill = "white"),
-#   panel.grid.major.x = element_line(color = "lightgrey", linewidth = 0.1, linetype = 2)
-# )
-  mytheme = theme(
-    panel.border = element_blank(), axis.line = element_line(), 
-    text = element_text(size=16, family = 'PT Sans'), 
-    panel.background = element_rect(fill = "white")
-  )
+mytheme <- theme(
+  panel.border = element_blank(), axis.line = element_line(), 
+  text = element_text(size=16, family = 'PT Sans'), 
+  panel.background = element_rect(fill = "white")
+)
 
 plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin, 
                                        bins, bin_colors, # xlim = c(-6.0, 6.0), 
@@ -162,40 +154,27 @@ make_distros_consensus_figure =
 }
 
 
-# Run figure-making routines using data from CaseStudies.xlsx
-# Get schkade2010 data
+# Run figure-making routines using real seed data from a plausibly false detection.
 case_studies_tbl = read_csv("data/StudiesAnalysis.csv")
 
-# XXX note that the analyzed study CSV uses column name "ArticleTag" not StudyID
-# and "TreatmentTag" not ExperimentID. 
-# TODO Not sure right now where this change is done, need to find out
-# schkade2010 = filter(case_studies_tbl, ArticleTag == "Schkade2010" &
-#                      TreatmentTag == "COSprings-CivilUnions")
-                         
-# mu = schkade2010$LatentMean
-# sigma_pre = schkade2010$LatentSDPre
-# sigma_post = schkade2010$LatentSDPost
-# min_bin = schkade2010$MinBinValue
-# max_bin = schkade2010$MaxBinValue
-# bins = min_bin:max_bin
-
-
 # Trying Moscovici "Americans" as example to match other model figure.
-moscovici1969 = filter(case_studies_tbl, 
-                     ArticleTag == "Moscovici1969" & 
+moscovici1969 <- filter(case_studies_tbl, 
+                       ArticleTag == "Moscovici1969" & 
                        TreatmentTag == "Americans")
                          
-mu = moscovici1969$LatentMean
-sigma_pre = moscovici1969$LatentSDPre
-sigma_post = moscovici1969$LatentSDPost
-min_bin = moscovici1969$MinBinValue
-max_bin = moscovici1969$MaxBinValue
-bins = min_bin:max_bin
+mu <- moscovici1969$LatentMean
+sigma_pre <- moscovici1969$LatentSDPre
+sigma_post <- moscovici1969$LatentSDPost
+min_bin <- moscovici1969$MinBinValue
+max_bin <- moscovici1969$MaxBinValue
+bins <- min_bin:max_bin
 
-rhg_cols_10 <- rev(c("#771C19", "#AA3929", "#E25033", "#F27314", "#F8A31B", 
-              "#E2C59F", "#B6C5CC", "#8E9CA3", "#556670", "#556AAA"))
+rhg_cols_10 <- 
+  rev(c("#771C19", "#AA3929", "#E25033", "#F27314", "#F8A31B", 
+        "#E2C59F", "#B6C5CC", "#8E9CA3", "#556670", "#556AAA"))
 
 bin_colors = rhg_cols_10[1:7]
 
-make_distros_consensus_figure(mu, sigma_pre, sigma_post, 
-                              min_bin, max_bin, bins, bin_colors, max_prob = 0.4)
+make_distros_consensus_figure(
+  mu, sigma_pre, sigma_post, min_bin, max_bin, bins, bin_colors, max_prob = 0.4
+)

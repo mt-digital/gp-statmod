@@ -37,8 +37,6 @@ plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
                                 output_file = "paper/Figures/Analysis/ordinal_cohens.pdf",
                                 overwrite = FALSE) {
   
-  # df <- dir_ls(ordinal_data_dir, glob = "*.csv") %>%
-  #   read_csv() %>% unite(ExperimentID, ArticleTag, TreatmentTag)
   df <- load_probit_data(probit_fits_dir, sync_file, overwrite)
   
   df$Cohens_d <- cohens_d(df$LatentMeanPrePosteriorMean, df$LatentMeanPostPosteriorMean,
@@ -190,29 +188,27 @@ plot_sigval_for_low_fwer = function(target_fwer = 0.05,
   study_id_fct = levels(pre_tbl_focal$StudyID)
 
   tbl = sigval_for_low_fwer(pre_tbl) %>%
-      # calc_fdr_vs_significance(significance_vals = significance_vals)
-    # ) %>%
     mutate(ExperimentID = as.factor(paste(StudyID, ExperimentID, sep = "_")),
-           SigVal = as.numeric(as.character(SigVal))) #%>%
-  #     mutate(StudyID = fct_reorder(StudyID, FWER, mean), 
-  #            ExperimentID = fct_reorder(ExperimentID, FWER, mean))
-
-  # tbl_med = filter(
+           SigVal = as.numeric(as.character(SigVal))) 
+  
   # Then plot the result.
   p = ggplot(tbl, aes(x = SigVal, y = ExperimentID, fill = StudyID, color = StudyID)) +
       geom_vline(xintercept = c(0.2, 0.5, 0.8), linetype = "dashed", 
                  linewidth = 0.25, color = "darkgrey") + 
-      geom_bar(aes(fill = StudyID, color = StudyID), stat = "identity", width = 0.15)  +
-      geom_point(aes(fill = StudyID, color = StudyID), shape = 18, size = 5)  +
-      xlab(TeX("Significance $d^*$ for $\\alpha \\leq 0.05")) + 
+      geom_bar(aes(fill = StudyID, color = StudyID), 
+               stat = "identity", width = 0.15)  +
+      geom_point(aes(fill = StudyID, color = StudyID), shape = 18, size = 5) +
+      xlab(TeX("Significance $d^*$ for $\\alpha \\leq 0.05")) +
       ylab("Experiment ID") +
       scale_x_continuous(breaks = c(0.2, 0.5, 0.8, 1.1, 1.5, 2.0, 2.5)) +
-      scale_fill_manual(breaks = study_id_fct, values = rhg_cols_10) + scale_color_manual(breaks = study_id_fct, values = rhg_cols_10) + 
-      guides(shape = guide_legend(reverse = TRUE), color = guide_legend(reverse = TRUE), 
+      scale_fill_manual(breaks = study_id_fct, values = rhg_cols_10) +
+      scale_color_manual(breaks = study_id_fct, values = rhg_cols_10) +
+      guides(shape = guide_legend(reverse = TRUE), 
+             color = guide_legend(reverse = TRUE),
              fill = guide_legend(reverse = TRUE)) +
-      mytheme 
+      mytheme
         
-   ggsave(save_path, p, width = 9.5, height = 10) 
+   ggsave(save_path, p, width = 9.5, height = 10)
 
    return (p)
 }
