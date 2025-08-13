@@ -58,59 +58,84 @@ terrorism\ldots{[}t{]}he Rwandan genocide\ldots{[}e{]}thnic
 Conflict\ldots acts of torture and humiliation by American soldiers at
 Abu Ghraib'', and more (p.~1).
 
-\begin{itemize}
-\tightlist
-\item
-  We demonstrate here that there is a pervasive problem observed over
-  decades of group polarization research where faulty statistical
-  methods and incomplete reporting that should force the retraction of
-  these studies from the canon. Effectively, then, empirical support for
-  the theoretical concept \emph{group polarization} stops being so: the
-  epistemic integrity of \emph{group polarization} is undermined with
-  its empirical foundation losing mass.
-\end{itemize}
+% \begin{itemize}
+% \tightlist
+% \item
+We developed a generative model of opinion change to identify, if possible,
+null opinion change models that could spuriously appear like group polarization
+when naively measured using a Likert scale without accounting for the measurement procedure. 
+We further applied our method to estimate the family-wise error rate of
+detections of group polarization in a corpus of ten influential papers from 
+across several decades and from various theoretical traditions. We turn this criticism of past
+blunders constructive by providing a procedure to calculate what Cohen's $d$ should be
+used to guarantee a family-wise error rate (i.e., Type I error rate) of 5\% or less.
 
-We complement this critical analysis with a prescriptive analysis to
-demonstrate that more appropriate statistical models do indeed lower the
-false discovery rate by committing fewer false positive detections of
-group polarization under a null model with shrinking opinion variance.
-Recently, statistical best-practice is to use Bayesian models of
-statistics, where social dynamics and opinion-reporting behaviors are
-represented as causally-dependent probability distributions, where a
-sample taken from one distribution (e.g., the opinion distribution of a
-group in a group polarization experiment) acts as an input parameter to
-another distribution (e.g., that represents the
-individually-heterogeneous distortion of opinions when reported on an
-ordinal scale). Our models follow current best practices in
-psychometrics, social science, and Bayesian inference (Liddell and
-Kruschke 2018; Kruschke 2015; McElreath 2020; Deffner et al. 2024), but
-consolidate them in a new, useful way that enables the retroactive
-discovery of null model parameters that generate spurious group
-polarization, forcing published evidence for group polarization to be
-classified as non-identifiable, and removed from evidence that can be
-said to support group polarization.
+We calculate the severity of the problem in two steps. In the first step we 
+provide proof by example that there exists a null opinion change model in terms of \emph{latent, continuous}
+psychological opinions that looks like group polarization when measured via participant behavior, i.e.,
+by their response on an \emph{ordinal survey scale}. If such a null model is found, this means that we cannot
+rule out a null effect, given the published data. This means, therefore, that the published detection is
+just as likely false as it is true, so we say it is a \emph{plausibly false detection of group polarization},
+or a \emph{plausibly spurious detection} for short. 
+
+In the second step of the analysis of whether, we simulate observations
+of group polarization experiments where participant opinions are drawn from the 
+null model distributions identified in the first step,
+then these are measured on a Likert scale for simulated group polarization survey
+responses on an ordinal scale. We then calculate the
+family-wise error rate (i.e., Type I error rate) and false detection rate using
+various effect sizes to determine significance of the effect in terms of Cohen's $d$.
+The family-wise error rate is defined as the probability that a known null 
+effect is detected as significant. We use this to then estimate the *false detection rate*, which is the
+probability that a detection of an effect is a false one, which depends on the relative prevalence of
+true and false positive detections in the literature.
+Finally, we put our model to constructive use to show what Cohen's $d$ must be set to
+to limit the family-wise error rate to 5\%, denoted $d*$. This will not help rescue any of
+the published results here found to be plausibly spurious. But, it provides a measure of the weakness of
+the published experimental designs independent of their shared fatal failure to 
+account for the measurement procedure: greater $d*$ indicates weaker designs.
+
+We find that 95\% (54 of 57) of group polarization detections are plausibly spurious.
+In other words, empirical support for group polarization has been seriously undermined
+just by removing these results from the count of group polarization replications.
+There is no reason to expect other papers to be more reliable. (Summarize other
+two findings, 1. FWER/FDR and 2. $d*$ for FWER < 5\%)
 
 Our methods can be turned on any data-driven social science analysis of
 data where participants report a latent, subjective psychological
 variable (mood, physiological state, etc.), and where various theories
 supposedly battle it out to best represent the phenomenon of interest
-via NHST performed on ordinal observations with weak, informal
-theoretical models to motivate the studies. This may just be the first
+via null-hypothesis significance testing using ordinal data as continuous. 
+This may just be the first
 of many bricks to fall since \emph{all 68} of the articles that
 mentioned the word ``Likert'' and analyzed ordinal data used metric
 models to detect latent psychological variable change across three
 influential psychology journals, \emph{Psychological Science}, the
 \emph{Journal of Experimental Psychology: General}, and the
 \emph{Journal of Personality and Social Psychology} (Liddell and
-Kruschke 2018).
+Kruschke 2018). This further confirms that replication is far from the only
+foundational crisis that behavioral science faces\cite{Yarkoni2022,Turner2022}. 
 
-This work is motivated by a core conviction that better thinking leads
-to better science. Theoretical clarity, careful measurement, and
-principled statistical modeling are not academic luxuries, but essential
-tools for empirical science. Theoretical and statistical confusions in
-the group polarization literature have lain dormant, undermining
-measurements of opinion change in group polarization unbeknownst to
-generations of researchers (Brown 1986).
+Replication is not enough:
+strong, mechanistic models must be developed to be able to predict Type I and II
+error rates *ahead of time*, as we demonstrate here. We only demonstrate how to
+calculate expected Type I error rates for a measurement design, i.e., the rate of false 
+positives. Low statistical power exacerbates false detection rates. So, to be confident in replication,
+a pre-registered measurement design should use this style of simulation to 
+estimate the statistical power. Tangled, weak, informal
+verbal models of complex psychological and social phenomena like those that motivated
+empirical studies of group polarization tend to be vulnerable
+to stastical weaknesses. It is difficult to incorporate prior knowledge such
+as experiment structure without a sufficiently rigorous and appropriate 
+formal system \cite{Smaldino2017,Smaldino2020,Flake2020,Deffner2024}.
+
+% This work is motivated by a core conviction that better thinking leads
+% to better science. Theoretical clarity, careful measurement, and
+% principled statistical modeling are not academic luxuries, but essential
+% tools for empirical science. Theoretical and statistical confusions in
+% the group polarization literature have lain dormant, undermining
+% measurements of opinion change in group polarization unbeknownst to
+% generations of researchers (Brown 1986).
 
 \subsection{Identifiability and the Illusion of
 Change}\label{identifiability-and-the-illusion-of-change}
