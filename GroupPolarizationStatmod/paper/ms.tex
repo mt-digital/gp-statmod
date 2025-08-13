@@ -123,9 +123,14 @@ A medium effect size is conceived as one large enough to be visible to the naked
 
 \begin{figure}
   \centering
-    \includegraphics[width=0.8\textwidth]{Figures/Model/data-model-flow.png}
+    % \includegraphics[width=0.8\textwidth]{Figures/Model/data-model-flow.png}
+    \includegraphics[width=\textwidth]{Figures/Model/data-model-flow-w-webapp.pdf}
   \caption{\textbf{Workflow of the GP-stats simulation and analysis pipeline
-  for estimating false detection rates under null-consistent conditions.} Colored boxes indicate file types: teal = R scripts, blue = data files, orange = plotting scripts, cyan = Slurm batch script. Arrows show the flow from parameter estimation (hillclimbing or Shiny app) to Bayesian null model fitting on the cluster, aggregation of simulated results, and final visualization.}
+  for estimating false detection rates under null-consistent conditions.} Colored boxes indicate file types: teal = R scripts, blue = data files, orange = plotting scripts, cyan
+= Slurm batch script. Arrows show the flow from parameter estimation (hillclimbing or Shiny app) to Bayesian null model fitting on the cluster, aggregation of simulated results,
+and final visualization. (D) shows the web app interface that takes researcher guesses at
+simple consensus models that generate observations, and the app passes the guess to initialize
+the hillclimbing search algorithm for finding spurious group polarization.}
   \label{fig:data-model-flow.png}
 \end{figure}
 
@@ -359,20 +364,20 @@ repository\footnote{\url{https://github.com/mt-digital/gp-statmod/blob/main/Grou
 \end{algorithm}
 
 
-\begin{figure}
-  \caption{\textbf{Shiny web application for user-guided hillclimbing to find
-  parameters that generate spurious group polarization.} This web application enables users to
-create new analyses of experimental conditions from published studies. Users 
-provide initial guesses for the algorithm to use as starting points in 
-finding variances that generate spurious group polarization. Users inspect 
-model fits provided by the algorithm, adjusting parameters if necessary, and
-mark an experimental condition as ``Plausibly spurious'' if a reasonable fit
-is indeed found.\mt{Maybe add some A, B, C guides to the figure and include
-in parentheses here to go with the text?}}
-  \centering
-    \includegraphics[width=0.75\textwidth]{Figures/Model/WebApp.png}
-  \label{fig:webapp}
-\end{figure}
+% \begin{figure}
+%   \caption{\textbf{Shiny web application for user-guided hillclimbing to find
+%   parameters that generate spurious group polarization.} This web application enables users to
+% create new analyses of experimental conditions from published studies. Users 
+% provide initial guesses for the algorithm to use as starting points in 
+% finding variances that generate spurious group polarization. Users inspect 
+% model fits provided by the algorithm, adjusting parameters if necessary, and
+% mark an experimental condition as ``Plausibly spurious'' if a reasonable fit
+% is indeed found.\mt{Maybe add some A, B, C guides to the figure and include
+% in parentheses here to go with the text?}}
+%   \centering
+%     \includegraphics[width=0.75\textwidth]{Figures/Model/WebApp.png}
+%   \label{fig:webapp}
+% \end{figure}
 
 
 Note that so far, we have only identified cases where spurious group polarization plausibly
