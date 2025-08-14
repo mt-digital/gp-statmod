@@ -119,7 +119,39 @@ A medium effect size is conceived as one large enough to be visible to the naked
 
 \section{Methods}\label{methods}
 
-(METHODS OVERVIEW)
+To find examples of plausibly spurious group polarization we guess at what
+latent mean, combined with a latent pre- and post-deliberation 
+latent standard deviations, could generate it. We calculate the observed group
+polarization for these latent parameters by transforming the latent pre- and
+post-deliberation distributions from continuous normal distributions to ordinal
+"observations" by integrating over each ordinal bin, then calculating the observed
+mean for each experiment *phase*, i.e., both the pre- and post-deliberation phases. 
+If the null model can generate group polarization in this case, then the detection
+is labelled *plausibly false*, i.e., *plausibly spurious*, and we call the 
+generating latent parameters the *plausible null parameters*. 
+
+To evaluate whether the plausible null parameters we identify could realistically
+fool a significance test, we implemented a generative simulation of each plausibly
+false detection of group polarization and calculated the *family-wise error rate
+(FWER)* and the *false discovery rate (FDR)*. We use the published number of
+participants $N$ for each of the 54 conditions that yielded plausibly false
+detections of group polarization. The FWER is also known as the Type I
+error, or the false positive rate: it is the probability that a detection of an
+effect occurs given that in reality there was a null effect.  The FDR is the
+probability that a published positive detection of an effect is a false positive,
+i.e., a detection of a null effect. High FWER and FDR for an experimental condition
+indicates that its design is weak, since we identify only one of perhaps infinitely
+many latent parameter combinations that can generate spurious group polarization. 
+
+We use this setup to demonstrate how *adversarial* style testing of experimental
+designs with counterfactual null models can be used to estimate important
+metascience parameters. In this study we use our FWER calculations to estimate
+the minimum Cohen's $d$ that should be used to determine whether an effect is
+``significant'' or not that will limit the FWER to 5\%. In the Discussion we
+sketch how our model can then be extended to rigorously calculate statistical power,
+i.e., the probability that a significant effect is detected given that there 
+is indeed a significant effect.
+
 
 \subsection{Probability theory of spurious group polarization}
 
