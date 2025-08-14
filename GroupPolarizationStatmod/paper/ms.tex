@@ -119,125 +119,9 @@ A medium effect size is conceived as one large enough to be visible to the naked
 
 \section{Methods}\label{methods}
 
+(METHODS OVERVIEW)
 
-
-\begin{figure}
-  \centering
-    % \includegraphics[width=0.8\textwidth]{Figures/Model/data-model-flow.png}
-    \includegraphics[width=\textwidth]{Figures/Model/data-model-flow-w-webapp.pdf}
-  \caption{\textbf{Workflow of the GP-stats simulation and analysis pipeline
-  for estimating false detection rates under null-consistent conditions.} Colored boxes indicate file types: teal = R scripts, blue = data files, orange = plotting scripts, cyan
-= Slurm batch script. Arrows show the flow from parameter estimation (hillclimbing or Shiny app) to Bayesian null model fitting on the cluster, aggregation of simulated results,
-and final visualization. (D) shows the web app interface that takes researcher guesses at
-simple consensus models that generate observations, and the app passes the guess to initialize
-the hillclimbing search algorithm for finding spurious group polarization.}
-  \label{fig:data-model-flow.png}
-\end{figure}
-
-
-Metascience frames our analysis since metascientific theory provides a framework for
-our goal of calculating the false discovery rate across experimental conditions,
-journal articles, and the ten-paper corpus. The false discovery rate is then
-the Type I error rate relative to the rate of positive discoveries, true or false.
-We calculate via simulation and data fitting
-the Type I error rate for the experimental designs used in experimental conditions
-that, under a preliminary large-$N$ model analysis, generated group
-polarization upon ordinal measurement of simple consensus latent opinion 
-distributions. These can then be aggregated to estimate the false discovery rate
-for each journal article and for the ten-article corpus, which is representative of the
-false discovery rate for group polarization studies. 
-
-\subsection{Metascience of the false detection rate in group polarization}
-
-The false detection rate is the scaled probability that a detection, $D$, of
-an effect, $E$, is in fact a false detection and there is \emph{not} an effect,
-denoted $\neg E$. The probability that a detection $D$ has occurred when there
-was no effect, i.e. when $\neg E$, is denoted $\alpha = \Pr(D | \neg E)$.
-This is known as the Type I or family-wise error rate. To calculate the 
-false detection rate ($\fdr$), one must compare $\alpha$ to the statistical power,
-the probability of a detection when there is an effect, denoted $W = \Pr(D | E)$.
-Both these values must be scaled by the rate at which effects occur, denoted $b$.
-Using the notation outlined above, the false detection rate is
-\begin{equation}
-  \fdr = \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
-  \label{eq:fdr}
-\end{equation}
-
-
-In group polarization, $E$ represents the group polarization \emph{effect}, and
-$\neg E$ represents its absence. Simple consensus is one way for group polarization
-to be absent, i.e., simple consensus is one form of $\neg E$. The presence of
-an effect $E$ is independent of whether an effect was \emph{detected}, 
-represented by $D$ if it was detected and $\neg D$ if not. 
-
-The group polarization studies are journal articles that present
-the results of multiple experiments to support some hypothesis. To organize
-the presentation of false detection rates across the ten studies in our
-analysis, we first will organize false detection rates by experiment, where
-we created `ExperimentID` tags for each of the sixty experiments across ten
-studies. We also created `StudyID` tags for each of the ten journal articles
-with the key `{Author}{Year}`, e.g., \texttt{Schkade2010} for Schkade, et al.,
-(2010) \cite{Schkade2010}. 
-
-We calculate $\alpha = \Pr(D | \neg E)$ through simulation for experimental
-conditions, 
-and use optimistic values of
-$b=0.1$~\cite{Ioannidis2005,McElreath2015} and $W=0.8$~\cite{Smaldino2016NatSel}
-in the main text and in the compare with more pessimistic, yet realistic, estimates
-of these values, as well as even more optimistic estimates. 
-
-\subsection{How study design can induce false detections of group polarization}
-\label{subsec:false-detections}
-
-
-An opinion is never measured directly, only a behavior that indicates an opinion
-in a behavioral experiment or survey.  For example, the location of a mark
-that a participant makes is measured, not the complex neural activity that
-underlies forming opinions (Figure~\ref{fig:experiment_model}A) \mt{Some of this
-needs to be Intro'd}.
-Theoretically, an internal opinion in the form of neural activity is a
-\textit{latent opinion}, from the Latin \emph{latentem} meaning ``lie
-hidden''.  Participants report \text{observed opinions}, typically as one of
-a finite number of ranked, successive integer values that form the
-\emph{selection set}. The minimum possible value in the selection set might
-mean ``strongly disagree'' and the maximum value represents ``strongly
-agree''.
-
-% \begin{wrapfigure}{r}{0.5\textwidth}
-\begin{figure}
-  \caption{\textbf{Opinion measurement model and spurious group polarization.} 
-  Latent model participant opinions are drawn from a normal distribution with the
-  listed parameters (A,C). The pre-deliberation latent distribution has high
-  variance, but appears polarized when measured via integration (A).  The latent
-  distribution's variance is expected to decrease during deliberation (B) via
-  consensus, but in this example the latent mean is static, 
-$\mupre = \mupost$. However, when the post-deliberation distribution is measured,
-the simulated observed mean increases, i.e., spurious
-group polarization occurs (C).}
-  \centering
-  \includegraphics[width=0.65\textwidth]{Figures/Model/latent-ordinal-distros.pdf}
-  \label{fig:distros}
-\end{figure}
-% \end{wrapfigure}
-
-Group polarization experiments share a common experimental design where,
-first, participant opinions are gathered on a topic of interest. Next, groups
-are formed that have some initial opinion extremism. Participants deliberate
-or discuss the topic for some set time. After the set time, participants
-again give their opinion. Group polarization is said to occur if the
-mean group opinion became more extreme, i.e., if the magnitude of the mean
-group opinion is greater \emph{post-deliberation} compared to
-\emph{pre-deliberation}. For example,
-\cite{Moscovici1969} asked Parisian high school students to indicate their
-degree of agreement with the statement, ``American economic aid is always
-used for political pressure'' (Figure~\ref{fig:experiment_model}A). There
-were seven options in the selection set, -3 indicating ``strongly disagree'',
-+3 indicating ``strongly agree'', and 0 was neutral. Moscovici and Zavalloni
-report that the mean pre-deliberation opinion was -0.61 and the mean
-post-deliberation opinion was -1.09 (Moscovici and Zavalloni, 1969; Table 4,
-p. 132). This is a -0.48 shift to more extreme disagreement with the 
-statement, reported by Moscovici and Zavalloni as statistically significant
-in Table 5 on p. 132.
+\subsection{Probability theory of spurious group polarization}
 
 We formalize this experimental design in the $N\to\infty$ case where the
 distribution of ordinal measurements is created by integrating continuous latent
@@ -392,6 +276,73 @@ polarization. This process itself does not tell us the false detection rate.
 We use the identified simple consensus parameters to define pre- and post-deliberation
 latent opinion distributions in simulated trials of group polarization 
 experiments.
+
+\begin{figure}
+  \centering
+    % \includegraphics[width=0.8\textwidth]{Figures/Model/data-model-flow.png}
+    \includegraphics[width=\textwidth]{Figures/Model/data-model-flow-w-webapp.pdf}
+  \caption{\textbf{Workflow of the GP-stats simulation and analysis pipeline
+  for estimating false detection rates under null-consistent conditions.} Colored boxes indicate file types: teal = R scripts, blue = data files, orange = plotting scripts, cyan
+= Slurm batch script. Arrows show the flow from parameter estimation (hillclimbing or Shiny app) to Bayesian null model fitting on the cluster, aggregation of simulated results,
+and final visualization. (D) shows the web app interface that takes researcher guesses at
+simple consensus models that generate observations, and the app passes the guess to initialize
+the hillclimbing search algorithm for finding spurious group polarization.}
+  \label{fig:data-model-flow.png}
+\end{figure}
+
+
+
+\subsection{Metascience of the false detection rate in group polarization}
+
+Metascience provides a framework for
+calculating the false discovery rate across experimental conditions,
+aggregated to the level of journal articles and the ten-paper corpus. 
+The false discovery rate is then the Type I error rate relative to the rate of
+positive discoveries, true or false.
+We calculate via simulation and data fitting
+the Type I error rate for the experimental designs used in experimental conditions
+that, under a preliminary large-$N$ model analysis, generated group
+polarization upon ordinal measurement of simple consensus latent opinion 
+distributions. These can then be aggregated to estimate the false discovery rate
+for each journal article and for the ten-article corpus, which is representative of the
+false discovery rate for group polarization studies. 
+
+The false detection rate is the scaled probability that a detection, $D$, of
+an effect, $E$, is in fact a false detection and there is \emph{not} an effect,
+denoted $\neg E$. The probability that a detection $D$ has occurred when there
+was no effect, i.e. when $\neg E$, is denoted $\alpha = \Pr(D | \neg E)$.
+This is known as the Type I or family-wise error rate. To calculate the 
+false detection rate ($\fdr$), one must compare $\alpha$ to the statistical power,
+the probability of a detection when there is an effect, denoted $W = \Pr(D | E)$.
+Both these values must be scaled by the rate at which effects occur, denoted $b$.
+Using the notation outlined above, the false detection rate is
+\begin{equation}
+  \fdr = \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
+  \label{eq:fdr}
+\end{equation}
+
+In group polarization, $E$ represents the group polarization \emph{effect}, and
+$\neg E$ represents its absence. Simple consensus is one way for group polarization
+to be absent, i.e., simple consensus is one form of $\neg E$. The presence of
+an effect $E$ is independent of whether an effect was \emph{detected}, 
+represented by $D$ if it was detected and $\neg D$ if not. 
+
+The group polarization studies are journal articles that present
+the results of multiple experiments to support some hypothesis. To organize
+the presentation of false detection rates across the ten studies in our
+analysis, we first will organize false detection rates by experiment, where
+we created `ExperimentID` tags for each of the sixty experiments across ten
+studies. We also created `StudyID` tags for each of the ten journal articles
+with the key `{Author}{Year}`, e.g., \texttt{Schkade2010} for Schkade, et al.,
+(2010) \cite{Schkade2010}. 
+
+We calculate $\alpha = \Pr(D | \neg E)$ through simulation for experimental
+conditions, 
+and use optimistic values of
+$b=0.1$~\cite{Ioannidis2005,McElreath2015} and $W=0.8$~\cite{Smaldino2016NatSel}
+in the main text and in the compare with more pessimistic, yet realistic, estimates
+of these values, as well as even more optimistic estimates. 
+
 
 
 \subsection{Estimating and limiting false detection rates}

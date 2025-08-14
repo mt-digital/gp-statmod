@@ -34,19 +34,21 @@ rhg_cols_10 <- rev(c("#771C19", "#AA3929", "#E25033", "#F27314", "#F8A31B",
 
 plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
                                 sync_file = "data/probit_fits/all.csv",
-                                output_file = "paper/Figures/Analysis/ordinal_cohens.pdf",
+                                output_file = 
+                                  "paper/Figures/Analysis/ordinal_cohens.pdf",
                                 overwrite = FALSE) {
   
   df <- load_probit_data(probit_fits_dir, sync_file, overwrite)
   
-  df$Cohens_d <- cohens_d(df$LatentMeanPrePosteriorMean, df$LatentMeanPostPosteriorMean,
-                          df$LatentMeanPrePosteriorSD, df$LatentMeanPostPosteriorSD)
+  df$Cohens_d <- cohens_d(df$LatentMeanPrePosteriorMean, 
+                          df$LatentMeanPostPosteriorMean,
+                          df$LatentMeanPrePosteriorSD, 
+                          df$LatentMeanPostPosteriorSD)
   
   ggplot(df, mapping = aes(x = Cohens_d, y = ExperimentID)) + 
     geom_vline(xintercept = 0, color = "red") + 
     geom_vline(xintercept = c(-1, 1), color="red", linetype="dotted") + 
-    geom_boxplot() #+
-    # xlim(-2.0, 2.0)
+    geom_boxplot() 
   
   ggsave(output_file)
 }
@@ -221,8 +223,8 @@ plot_fdr()
 
 plot_fdr(aggregate = TRUE, save_path = "paper/Figures/Analysis/fdr_vs_study.pdf")
 
-plot_fdr(aggregate = TRUE, 
-         save_path = "paper/Figures/Analysis/fdr_vs_study_w_nonid.pdf", 
+plot_fdr(aggregate = TRUE,
+         save_path = "paper/Figures/Analysis/fdr_vs_study_w_nonid.pdf",
          use_non_identified = TRUE)
 
 plot_sigval_for_low_fwer()
