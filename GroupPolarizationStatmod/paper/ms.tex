@@ -244,20 +244,20 @@ identify a constant latent mean, $\mu$, and latent variances $\sigmapre$ and
 $\sigmapost$ that generate observation distributions\mt{define earlier?} with
 reported mean pre- and post-deliberation opinions and resulting shift $s$ (calculated
 using Equation~\ref{eq:group-polarization}). Define the collection of these
-parameters $\beta = \{\mu, \sigmapre, \sigmapost\}$. We identify $\beta$ through a
-hillclimbing optimization algorithm that finds $\beta$ that minimizes the difference
+parameters $\lambda = \{\mu, \sigmapre, \sigmapost\}$. We identify $\lambda$ through a
+hillclimbing optimization algorithm that finds $\lambda$ that minimizes the difference
 between reported pre- and post-deliberation mean opinions and simulated ones
 calculated with Equation~\ref{eq:meanobs}. 
 
-The algorithm to find $\beta$ holds $\mu$ constant while searching for $\sigmapre$
+The algorithm to find $\lambda$ holds $\mu$ constant while searching for $\sigmapre$
 and $\sigmapost$ that generate observed $\meanobspre$ and $\meanobspost$, within a
 tolerance of $\pm10^{-3}$ (Algorithm~\ref{alg:hillclimbing}). 
 The algorithm requires a researcher to specify an initial
-guess for $\beta$ and auxiliary parameter settings, which generally vary between
+guess for $\lambda$ and auxiliary parameter settings, which generally vary between
 experimental conditions.  Furthermore, the algorithm does not always produce
-reasonable distributions with a given $\beta$, and sometimes it does not produce
+reasonable distributions with a given $\lambda$, and sometimes it does not produce
 spurious group polarization.  Therefore, it is necessary to sanity check the latent
-and ordinal opinion distributions for the $\beta$ found by the algorithm. If all is
+and ordinal opinion distributions for the $\lambda$ found by the algorithm. If all is
 well, the experimental condition can be marked as plausibly spurious.  To tame the
 complexity involved in data entry and model fitting for each of these sixty
 experimental conditions, we developed a web application to input data from control
@@ -316,7 +316,7 @@ Note that so far, we have only identified cases where spurious group polarizatio
 occurs in the asymptotic case where $N\to\infty$ ($N$ being the number of participants).
 Experimental conditions yielding plausibly spurious group polarization warrant 
 some suspicion. If there exists set of latent simple consensus 
-parameters $\beta$ that create binned (Equation~\ref{eq:ordinal-frequency})
+parameters $\lambda$ that create binned (Equation~\ref{eq:ordinal-frequency})
 opinion distributions that naively seem to be group polarized, then the means
 of at least some samples from these distibutions with empirical numbers of 
 participants would also appear to be shifted consistent with group
@@ -399,7 +399,7 @@ To calculate the false detection rate we begin by simulating
 pre- and post-deliberation 
 opinions by drawing $N_e$ samples from normal latent opinion
 distributions that generated spurious group polarization, i.e., with
-parameters labelled $\beta_e$ found in the hillclimbing step. Binning these
+parameters labelled $\lambda_e$ found in the hillclimbing step. Binning these
 random values simulates observations. $N_e$ is the number
 of participants in experimental condition $e$. Each trial $i$ of $N_e$
 simulated pre- and post-deliberation observations is then inspected to see
@@ -496,14 +496,14 @@ group polarization in observed ordinal distributions
 in the asymptotic case of taking $N \to \infty$ ordinal measurements.
 Across the ten studies we analyzed, we excluded 3 out of 60 experimental
 conditions that did not claim to be positive findings of group polarization.
-Of the remaining 57, we identified simple consensus $\beta$ that generate spurious
+Of the remaining 57, we identified simple consensus $\lambda$ that generate spurious
 group polarization in 54 experimental conditions. In the other three, we did
-identify $\beta$ that generate spurious group polarization, but the initial
-simulated distributions were highly polarized. We rejected $\beta$ generated for
+identify $\lambda$ that generate spurious group polarization, but the initial
+simulated distributions were highly polarized. We rejected $\lambda$ generated for
 two spurious group polarization from Schkade, et al., (2010) because
 the histogram plots of the observed opinion distributions are not
 polarized~\cite[Figure 1, p. 234]{Schkade2010}. The other condition where we
-found but rejected spurious group polarization $\beta$ was in a question 
+found but rejected spurious group polarization $\lambda$ was in a question 
 about a ``bad teacher'' in Myers (1975)~\cite{Myers1975a}, where lower values
 signify increasingly worse impressions of the teacher and higher values signify
 increasingly good impressions. It is unlikely that a
