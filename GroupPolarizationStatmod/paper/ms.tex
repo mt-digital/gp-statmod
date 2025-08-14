@@ -461,32 +461,39 @@ $\alpha_e(d^*) \leq 0.05$.
 
 \section{Analysis}\label{analysis}
 
-Our analysis estimates how the probability that a published detection of group
-polarization is actually a false detection. We first identified latent opinion
-parameters that yield spurious group polarization in an asymptotic $N\to\infty$
-model. This gives us our first suggestion that experimental conditions may be
-plausibly false. Briefly, we identified latent opinion distribution parameters
-that generated spurious group polarization in 54 out of 57 experimental
-conditions. In other words, 95\% of all group polarization detections are
-plausibly spurious due to ceiling artifacts from the continuous latent
-opinions-ordinal measurement experimental design. We then analyze the family-wise
-error ($\alpha$) and false detection rate (FDR) 
-for each experimental condition and aggregated 
-up to the study level and across all studies and experimental conditions. 
-We estimate the lower twentieth percentile of experimental conditions 
-have \emph{at least} $\alpha \leq 0.16$, 
-with median $\alpha \geq 0.27$ and upper eightieth percentile with $\alpha \geq
-0.40$ (Table~\ref{tab:quantiles}\mt{A.  –but don't have A and B; TODO: separate
-FWER and FDR tables, only use 0, 20, 50, 80, 100 for probs. Rename 0 -> min, 100 ->
-max.}). For the fiftieth and eightieth percentiles this
-corresponds to false discovery rates of 0.75 and 0.82, respectively. 
-We emphasize that these estimates and others detailed below are lower bounds on
-$\alpha$ and FDR since we are using what is likely an overgeneralized,
-underspecified statistical model that does not account for all the potential
-variance in experimental outcomes, which would increase error rates.
-We close our Analysis by calculating which $d^*$ limits family-wise error rates to
-$\alpha \leq 0.05$. This is greater than $d^* = 0.8$, classically taken to 
-represent ``high'' significance, in all but six experimental conditions.
+We now present our determinations of whether published detections of group
+polarization are plausibly spurious and calculate the best-case false detection
+rate for each experimental design in the corpus. We found that 95\% of all
+detections of group polarization are plausibly false, 54 out of 57. We estimate the
+best-case median false detection rate to be 72\% for those 54 experimental
+conditions. All but seven of the 54 designs were found to require a $d^* > 0.8$
+for ``significant'' Cohen's $d$ to limit the family-wise error rate to 5\%.
+
+% We first identified latent opinion
+% parameters that yield spurious group polarization in an asymptotic $N\to\infty$
+% model. This gives us our first suggestion that experimental conditions may be
+% plausibly false. Briefly, we identified latent opinion distribution parameters
+% that generated spurious group polarization in 54 out of 57 experimental
+% conditions. In other words, 95\% of all group polarization detections are
+% plausibly spurious due to ceiling artifacts from the continuous latent
+% opinions-ordinal measurement experimental design. We then analyze the family-wise
+% error ($\alpha$) and false detection rate (FDR) 
+% for each experimental condition and aggregated 
+% up to the study level and across all studies and experimental conditions. 
+% We estimate the lower twentieth percentile of experimental conditions 
+% have \emph{at least} $\alpha \leq 0.16$, 
+% with median $\alpha \geq 0.27$ and upper eightieth percentile with $\alpha \geq
+% 0.40$ (Table~\ref{tab:quantiles}\mt{A.  –but don't have A and B; TODO: separate
+% FWER and FDR tables, only use 0, 20, 50, 80, 100 for probs. Rename 0 -> min, 100 ->
+% max.}). For the fiftieth and eightieth percentiles this
+% corresponds to false discovery rates of 0.75 and 0.82, respectively. 
+% We emphasize that these estimates and others detailed below are lower bounds on
+% $\alpha$ and FDR since we are using what is likely an overgeneralized,
+% underspecified statistical model that does not account for all the potential
+% variance in experimental outcomes, which would increase error rates.
+% We close our Analysis by calculating which $d^*$ limits family-wise error rates to
+% $\alpha \leq 0.05$. This is greater than $d^* = 0.8$, classically taken to 
+% represent ``high'' significance, in all but six experimental conditions.
 
 \subsection{Nearly all group polarization detections are plausibly spurious}
 
