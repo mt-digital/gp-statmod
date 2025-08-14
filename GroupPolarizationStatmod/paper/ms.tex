@@ -238,9 +238,9 @@ repository\footnote{\url{https://github.com/mt-digital/gp-statmod/blob/main/Grou
       \If {$\Delta' - \Delta < 0$}
         \State $\sigma \gets \sigma'$
           \Comment{Update $\sigma$ if the error is less than before.}
+        \State $\Delta \gets \bar{o}(\mu, \sigma) - \bar{\mathbf{o}}$
+          \Comment{Update simulation error if $\sigma$ is updated.}
       \EndIf
-      \State $\Delta \gets \bar{o}(\mu, \sigma) - \bar{\mathbf{o}}$
-        \Comment{Update simulation error if $\sigma$ is updated.}
     \EndWhile \\
 
     \Return $\sigma$
