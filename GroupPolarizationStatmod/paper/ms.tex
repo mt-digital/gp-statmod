@@ -56,7 +56,7 @@
 % \vspace{2em}
 \affil[*]{\small Correspondence: \href{mailto:maturner@stanford.edu}{maturner@stanford.edu}}
 
-\date{}
+\date{\today}
 \begin{document}
 \maketitle
 % \begin{abstract}
@@ -119,7 +119,39 @@ A medium effect size is conceived as one large enough to be visible to the naked
 
 \section{Methods}\label{methods}
 
-(METHODS OVERVIEW)
+To find examples of plausibly spurious group polarization we guess at what latent
+mean, combined with a latent pre- and post-deliberation latent standard deviations,
+could generate it. We calculate the observed group polarization for these latent
+parameters by transforming the latent pre- and post-deliberation distributions from
+continuous normal distributions to ordinal ``observations'' by integrating over each
+ordinal bin, then calculating the observed mean for each experiment \emph{phase},
+i.e., both the pre- and post-deliberation phases.  If the null model can generate
+group polarization in this case, then the detection is labelled \emph{plausibly
+false}, i.e., \emph{plausibly spurious}, and we call the generating latent
+parameters the \emph{plausible null parameters}. 
+
+To evaluate whether the plausible null parameters we identify could realistically
+fool a significance test, we implemented a generative simulation of each plausibly
+false detection of group polarization and calculated the \emph{family-wise error rate
+(FWER)} and the \emph{false discovery rate (FDR)}. We use the published number of
+participants $N$ for each of the 54 conditions that yielded plausibly false
+detections of group polarization. The FWER is also known as the Type I
+error, or the false positive rate: it is the probability that a detection of an
+effect occurs given that in reality there was a null effect.  The FDR is the
+probability that a published positive detection of an effect is a false positive,
+i.e., a detection of a null effect. High FWER and FDR for an experimental condition
+indicates that its design is weak, since we identify only one of perhaps infinitely
+many latent parameter combinations that can generate spurious group polarization. 
+
+We use this setup to demonstrate how \emph{adversarial} style testing of experimental
+designs with counterfactual null models can be used to estimate important
+metascience parameters. In this study we use our FWER calculations to estimate
+the minimum Cohen's $d$ that should be used to determine whether an effect is
+``significant'' or not that will limit the FWER to 5\%. In the Discussion we
+sketch how our model can then be extended to rigorously calculate statistical power,
+i.e., the probability that a significant effect is detected given that there 
+is indeed a significant effect.
+
 
 \subsection{Probability theory of spurious group polarization}
 
@@ -168,7 +200,7 @@ is (Figure~\ref{fig:distros})
 We can now define spurious group polarization and give examples of when it occurs.
 First, the observed group polarization opinion shift is
 \begin{equation}
-  s = \meanobs_\mathrm{post} - \meanobs_\mathrm{pre}~,
+  g = \meanobs_\mathrm{post} - \meanobs_\mathrm{pre}~,
   \label{eq:group-polarization}
 \end{equation}
 \noindent
@@ -178,16 +210,32 @@ where the expected value of observed opinions at time $t$ is
   \label{eq:meanobs}
 \end{equation}
 \noindent
-\emph{Spurious} group polarization is when mean observed opinions seem to increase in 
-extremity when the latent mean is held constant. We simulate spurious
-group polarization by setting $\mupre = \mupost = \mu$ and setting the variances
-to values known to induce spurious group polarization. 
-We explain how to find a constant latent mean, $\mu$, and pre- and post-deliberation
-variances, $\sigmapre$ and $\sigmapost$, respectively, that generate spurious 
-detections of group polarization in the next section. 
-% We describe how we find $\mu$,
-% $\sigmapre$ and $\sigmapost$ next in Section~\ref{sec:finding-variances}.
 
+\emph{Spurious} group polarization is when mean observed opinions seem to increase in 
+extremity when the latent mean is held constant. Call the collection of
+latent null model distribution parameters $\lambda = (\mu, \sigma_{pre}, \sigma_{post})$.
+The group polarization opinion shift can then be written as a function of $\lambda$,
+$g(\lambda)$. Formally, then, spurious group polarization is plausible if 
+there exists at least one $\lambda$ for which $g(\lambda) = g_{pub} > 0$, where
+$g_{pub}$ is the published group polarization shift value.
+
+Next, we explain how to find a set of latent null parameters, $\lambda$, that
+generate spurious group polarization when naively measured on an ordinal scale.
+
+\begin{figure}
+  \caption{\textbf{Opinion measurement model and spurious group polarization.} 
+  Latent model participant opinions are drawn from a normal distribution with the
+  listed parameters (A,C). The pre-deliberation latent distribution has high
+  variance, but appears polarized when measured via integration (A).  The latent
+  distribution's variance is expected to decrease during deliberation (B) via
+  consensus, but in this example the latent mean is static, 
+$\mupre = \mupost$. However, when the post-deliberation distribution is measured,
+the simulated observed mean increases, i.e., spurious
+group polarization occurs (C).}
+  \centering
+  \includegraphics[width=0.95\textwidth]{Figures/Model/latent-ordinal-distros.pdf}
+  \label{fig:distros}
+\end{figure}
 
 \subsection{Web app controls algorithm to find parameters inducing spurious group polarization} 
 
@@ -196,20 +244,20 @@ identify a constant latent mean, $\mu$, and latent variances $\sigmapre$ and
 $\sigmapost$ that generate observation distributions\mt{define earlier?} with
 reported mean pre- and post-deliberation opinions and resulting shift $s$ (calculated
 using Equation~\ref{eq:group-polarization}). Define the collection of these
-parameters $\beta = \{\mu, \sigmapre, \sigmapost\}$. We identify $\beta$ through a
-hillclimbing optimization algorithm that finds $\beta$ that minimizes the difference
+parameters $\lambda = \{\mu, \sigmapre, \sigmapost\}$. We identify $\lambda$ through a
+hillclimbing optimization algorithm that finds $\lambda$ that minimizes the difference
 between reported pre- and post-deliberation mean opinions and simulated ones
 calculated with Equation~\ref{eq:meanobs}. 
 
-The algorithm to find $\beta$ holds $\mu$ constant while searching for $\sigmapre$
+The algorithm to find $\lambda$ holds $\mu$ constant while searching for $\sigmapre$
 and $\sigmapost$ that generate observed $\meanobspre$ and $\meanobspost$, within a
 tolerance of $\pm10^{-3}$ (Algorithm~\ref{alg:hillclimbing}). 
 The algorithm requires a researcher to specify an initial
-guess for $\beta$ and auxiliary parameter settings, which generally vary between
+guess for $\lambda$ and auxiliary parameter settings, which generally vary between
 experimental conditions.  Furthermore, the algorithm does not always produce
-reasonable distributions with a given $\beta$, and sometimes it does not produce
+reasonable distributions with a given $\lambda$, and sometimes it does not produce
 spurious group polarization.  Therefore, it is necessary to sanity check the latent
-and ordinal opinion distributions for the $\beta$ found by the algorithm. If all is
+and ordinal opinion distributions for the $\lambda$ found by the algorithm. If all is
 well, the experimental condition can be marked as plausibly spurious.  To tame the
 complexity involved in data entry and model fitting for each of these sixty
 experimental conditions, we developed a web application to input data from control
@@ -268,7 +316,7 @@ Note that so far, we have only identified cases where spurious group polarizatio
 occurs in the asymptotic case where $N\to\infty$ ($N$ being the number of participants).
 Experimental conditions yielding plausibly spurious group polarization warrant 
 some suspicion. If there exists set of latent simple consensus 
-parameters $\beta$ that create binned (Equation~\ref{eq:ordinal-frequency})
+parameters $\lambda$ that create binned (Equation~\ref{eq:ordinal-frequency})
 opinion distributions that naively seem to be group polarized, then the means
 of at least some samples from these distibutions with empirical numbers of 
 participants would also appear to be shifted consistent with group
@@ -351,7 +399,7 @@ To calculate the false detection rate we begin by simulating
 pre- and post-deliberation 
 opinions by drawing $N_e$ samples from normal latent opinion
 distributions that generated spurious group polarization, i.e., with
-parameters labelled $\beta_e$ found in the hillclimbing step. Binning these
+parameters labelled $\lambda_e$ found in the hillclimbing step. Binning these
 random values simulates observations. $N_e$ is the number
 of participants in experimental condition $e$. Each trial $i$ of $N_e$
 simulated pre- and post-deliberation observations is then inspected to see
@@ -448,14 +496,14 @@ group polarization in observed ordinal distributions
 in the asymptotic case of taking $N \to \infty$ ordinal measurements.
 Across the ten studies we analyzed, we excluded 3 out of 60 experimental
 conditions that did not claim to be positive findings of group polarization.
-Of the remaining 57, we identified simple consensus $\beta$ that generate spurious
+Of the remaining 57, we identified simple consensus $\lambda$ that generate spurious
 group polarization in 54 experimental conditions. In the other three, we did
-identify $\beta$ that generate spurious group polarization, but the initial
-simulated distributions were highly polarized. We rejected $\beta$ generated for
+identify $\lambda$ that generate spurious group polarization, but the initial
+simulated distributions were highly polarized. We rejected $\lambda$ generated for
 two spurious group polarization from Schkade, et al., (2010) because
 the histogram plots of the observed opinion distributions are not
 polarized~\cite[Figure 1, p. 234]{Schkade2010}. The other condition where we
-found but rejected spurious group polarization $\beta$ was in a question 
+found but rejected spurious group polarization $\lambda$ was in a question 
 about a ``bad teacher'' in Myers (1975)~\cite{Myers1975a}, where lower values
 signify increasingly worse impressions of the teacher and higher values signify
 increasingly good impressions. It is unlikely that a
