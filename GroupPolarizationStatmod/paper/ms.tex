@@ -218,6 +218,9 @@ The group polarization opinion shift can then be written as a function of $\lamb
 $g(\lambda)$. Formally, then, spurious group polarization is plausible if 
 there exists at least one $\lambda$ for which $g(\lambda) = g_{pub} > 0$, where
 $g_{pub}$ is the published group polarization shift value.
+This could be thought of as sampling the observed ordinal distributions 
+$N \to \infty$, collecting ordinal measurements of samples from 
+each latent distribution corresponding to each phase, pre- and post-deliberation.
 
 Next, we explain how to find a set of latent null parameters, $\lambda$, that
 generate spurious group polarization when naively measured on an ordinal scale.
@@ -237,16 +240,14 @@ group polarization occurs (C).}
   \label{fig:distros}
 \end{figure}
 
-\subsection{Web app controls algorithm to find parameters inducing spurious group polarization} 
+\subsection{Interactive algorithm to find parameters inducing spurious group polarization} 
 
-To calculate the false discovery rate for each experimental condition, we first must
-identify a constant latent mean, $\mu$, and latent variances $\sigmapre$ and
-$\sigmapost$ that generate observation distributions\mt{define earlier?} with
-reported mean pre- and post-deliberation opinions and resulting shift $s$ (calculated
-using Equation~\ref{eq:group-polarization}). Define the collection of these
-parameters $\lambda = \{\mu, \sigmapre, \sigmapost\}$. We identify $\lambda$ through a
-hillclimbing optimization algorithm that finds $\lambda$ that minimizes the difference
-between reported pre- and post-deliberation mean opinions and simulated ones
+To identify plausibly false detections of group polarization, we searched numerically
+for latent parameters $\lambda = (\mu, \sigmapre, and \sigmapost)$ that generate
+spurious group polarization, as explained immediately above. We developed an *ad hoc*
+hillclimbing-style algorithm that finds $\lambda$ that finds $\lambda$ by minimizing
+the difference between published group polarization shifts $g_pub$ and calculated shifts,
+$g_\lambda$.
 calculated with Equation~\ref{eq:meanobs}. 
 
 The algorithm to find $\lambda$ holds $\mu$ constant while searching for $\sigmapre$
@@ -469,44 +470,18 @@ best-case median false detection rate to be 72\% for those 54 experimental
 conditions. All but seven of the 54 designs were found to require a $d^* > 0.8$
 for ``significant'' Cohen's $d$ to limit the family-wise error rate to 5\%.
 
-% We first identified latent opinion
-% parameters that yield spurious group polarization in an asymptotic $N\to\infty$
-% model. This gives us our first suggestion that experimental conditions may be
-% plausibly false. Briefly, we identified latent opinion distribution parameters
-% that generated spurious group polarization in 54 out of 57 experimental
-% conditions. In other words, 95\% of all group polarization detections are
-% plausibly spurious due to ceiling artifacts from the continuous latent
-% opinions-ordinal measurement experimental design. We then analyze the family-wise
-% error ($\alpha$) and false detection rate (FDR) 
-% for each experimental condition and aggregated 
-% up to the study level and across all studies and experimental conditions. 
-% We estimate the lower twentieth percentile of experimental conditions 
-% have \emph{at least} $\alpha \leq 0.16$, 
-% with median $\alpha \geq 0.27$ and upper eightieth percentile with $\alpha \geq
-% 0.40$ (Table~\ref{tab:quantiles}\mt{A.  –but don't have A and B; TODO: separate
-% FWER and FDR tables, only use 0, 20, 50, 80, 100 for probs. Rename 0 -> min, 100 ->
-% max.}). For the fiftieth and eightieth percentiles this
-% corresponds to false discovery rates of 0.75 and 0.82, respectively. 
-% We emphasize that these estimates and others detailed below are lower bounds on
-% $\alpha$ and FDR since we are using what is likely an overgeneralized,
-% underspecified statistical model that does not account for all the potential
-% variance in experimental outcomes, which would increase error rates.
-% We close our Analysis by calculating which $d^*$ limits family-wise error rates to
-% $\alpha \leq 0.05$. This is greater than $d^* = 0.8$, classically taken to 
-% represent ``high'' significance, in all but six experimental conditions.
 
 \subsection{Nearly all group polarization detections are plausibly spurious}
 
-We used our formal distribution model of group polarization experiments
-to identify plausible latent simple consensus distributions that generate spurious
-group polarization in observed ordinal distributions 
-in the asymptotic case of taking $N \to \infty$ ordinal measurements.
-Across the ten studies we analyzed, we excluded 3 out of 60 experimental
-conditions that did not claim to be positive findings of group polarization.
+
+% We used our formal distribution model of group polarization experiments
+% to identify plausible latent simple consensus distributions that generate spurious
+% group polarization in 
 Of the remaining 57, we identified simple consensus $\lambda$ that generate spurious
 group polarization in 54 experimental conditions. In the other three, we did
 identify $\lambda$ that generate spurious group polarization, but the initial
-simulated distributions were highly polarized. We rejected $\lambda$ generated for
+simulated distributions were highly polarized. 
+We rejected $\lambda$ generated for
 two spurious group polarization from Schkade, et al., (2010) because
 the histogram plots of the observed opinion distributions are not
 polarized~\cite[Figure 1, p. 234]{Schkade2010}. The other condition where we
@@ -517,7 +492,18 @@ increasingly good impressions. It is unlikely that a
 ``bad teacher'' would be rated as good in this case, so we excluded this 
 from our analysis as well. This exclusion may be overly generous since Myers (1975)
 did not provide details beyond mean values and opinion shifts, and the article was
-published before open data practices.
+published before open data practices. Our corpus had a total of 60 experimental conditions, but we excluded 3 out of 60 
+that did not claim to be positive findings of group polarization.
+
+- Address sigmas, note differences
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{Figures/3.1/latent-sd-cdf.png}
+    \caption{\textbf{}}
+  \label{fig:}
+\end{figure}
+
 
 
 \subsection{Half of experiments exceed a 70\% false discovery rate at ``medium'' significance}

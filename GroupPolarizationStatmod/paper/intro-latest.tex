@@ -61,13 +61,16 @@ Abu Ghraib'', and more (p.~1).
 % \begin{itemize}
 % \tightlist
 % \item
+
 We developed a generative model of opinion change to identify, if possible,
-null opinion change models that could spuriously appear like group polarization
-when naively measured using a Likert scale without accounting for the measurement procedure. 
-We further applied our method to estimate the family-wise error rate of
-detections of group polarization in a corpus of ten influential papers from 
-across several decades and from various theoretical traditions. We turn this criticism of past
-blunders constructive by providing a procedure to calculate what Cohen's $d$ should be
+\emph{simple consensus} latent distributions that could spuriously appear like group polarization.
+This type of problem is known to happen when ordinal measurements are taken of continuous data
+without statistically accounting for the measurement procedure itself~\cite{Liddell2018}.
+We further applied our method to estimate a best-case probability that 
+a published detection of group polarization is false, across 57 experimental
+conditions in a corpus of ten journal articles curated for their prominence and
+representativeness of group polarization research. 
+We turn this criticism of past blunders constructive by providing a procedure to calculate what Cohen's $d$ should be
 used to guarantee a family-wise error rate (i.e., Type I error rate) of 5\% or less.
 
 We calculate the severity of the problem in two steps. In the first step we 
@@ -129,9 +132,14 @@ to stastical weaknesses. It is difficult to incorporate prior knowledge such
 as experiment structure without a sufficiently rigorous and appropriate 
 formal system \cite{Smaldino2017,Smaldino2020,Flake2020,Deffner2024}.
 
-\subsection{Group polarization research}
+\subsection{Group polarization}
 
 (DO THE MINIMUM AFTER EVERYTHING ELSE)
+
+- Group polarization is a type of \emph{consensus}. \emph\emph{Simple consesus} is consensus where
+\emph{only} the opinion variance of a group changes, not the mean opinion of the group.
+
+\subsubsection{Group polarization research}
 
 To situate this current paper it will help to introduce some relevant research
 traditions and common experimental designs in group polarization, using the ten
@@ -142,9 +150,8 @@ Paragraph dos:
 Common experimental, measurement, and statistical procedures to induce and
 detect group polarization
 
-\subsection{How study design can induce false detections of group polarization}
+\subsubsection{Failure to account for the measurement process can induce false detections}
 \label{ssubsec:false-detections}
-
 
 An opinion is never measured directly, only a behavior that indicates an opinion
 in a behavioral experiment or survey.  For example, the location of a mark
