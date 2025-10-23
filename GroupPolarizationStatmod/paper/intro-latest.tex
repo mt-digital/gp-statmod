@@ -1,256 +1,94 @@
 \subsection*{Abstract}\label{abstract}
 \addcontentsline{toc}{subsection}{Abstract}
 
-\emph{Group polarization} is the name for a form of consensus where
-members of a like-minded group become, on average, more extreme in their
-opinions after discussing a topic. Group polarization is important
-because it may increase social and political tensions if moderates
-become more extreme. Decades of studies have replicated detections of
-group polarization, typically using an ordinal scale to measure
-opinions. However, these studies did not account for ordinal
-measurements, which can result in spurious detections of opinion change.
-Lacking original data we can still calculate the probability that a
-published detection of group polarization was spurious, i.e., to
-calculate the \emph{false detection rate}. Across 54 group polarization
-experimental conditions from ten representative journal articles, we
-calculated false detection rates to be between 0.52 and 0.88, with a
-median of 0.75, using a generative model of group polarization
-experiments seeded with empirical data. We also use our model to develop
-experimental designs that achieve an acceptable false discovery rate.
-Much of group polarization research may be unreliable. This analysis can
-help change that by enabling others to avoid this hidden pitfall. More
-broadly this work demonstrates one important way that replication
-success alone does not imply epistemic reliability.
+Echo chambers seem to cause radicalization—and radicalization is risky.
+Radicalization undermines institutions by reducing their diversity, 
+which in turn impairs their adaptability.  Social psychologists and others study
+echo chambers experimentally using \emph{group polarization} experiments.
+Researchers induce \emph{group polarization} by first asking experiment
+participants their opinions on some topic, then grouping them together if
+they agree in spirit, but not degree. The participants then discuss the topic
+in their groups. Their opinions are then re-measured. Group polarization is
+when the average group opinion increases. But there’s a fatal problem:
+participants report opinions on ordinal scales, but this has never been
+accounted for statistically. This can cause apparent group polarization in
+observations even if the average latent opinion—the one in people’s
+heads—doesn’t change, due to ceiling effects. Here we prove that across ten
+journal articles spanning five decades that 54 of 57 reported polarization effects are plausibly false due to this artifact, and thus cannot be counted as replications. Our method can be used to evaluate any experimental design that measures latent change with ordinal scales. Given how destructive radicalization can be, we must get this right.
+
 
 \section{Introduction}\label{introduction}
 
-\begin{quote}
-In our introductory social psychology course, we have for many years
-used the {[}group polarization experimental paradigm{]} as a laboratory
-exercise. The exercise works beautifully, but one must be careful to
-forewarn a class that {[}group polarization{]} does not occur with every
-group\ldots and that the effect is not large (Brown 1986).
-\end{quote}
+If an extremist’s opinion falls and it is measured with a Likert scale, will
+it make a noise? The answer is often no~\cite{Liddell2018,Turner2020}. This
+means a group’s opinions can appear to radicalize over time even when no real
+shift occurs. The problem matters because Likert and other ordinal scales are
+ubiquitous in research on opinion change and radicalization across the social
+and cognitive sciences~\cite{Liddell2018}. One influential framework in this
+area is group polarization—the idea that discussion among like-minded people
+pushes opinions toward extremes, producing ``echo chambers.'' Cass Sunstein, a
+Harvard Law professor and former White House administrator, has written
+extensively on the topic~\cite{Sunstein2019}, claiming that group
+polarization is a scientific law—a regular, quantitative relationship that
+will always be observed when certain assumptions are
+met~\cite{Cartwright1999}. Yet Roger Brown himself noted in Social Psychology
+that group polarization ``does not occur with every group'' and that ``the
+effect is not large.'' Given the influence of this theory and the hundreds of
+claimed ``replications,'' it is essential to ask whether many of these findings
+may instead be measurement artifacts—spurious effects created when the
+``neutral'' point of the measurement scale fails to align with the group’s own
+center of opinion.
 
-\begin{quote}
-One of the most robust findings in social psychology is that of attitude
-polarization following discussion with like-minded others (Cooper,
-Kelly, and Weaver 2001).
-\end{quote}
+The group polarization hypothesis is that discussion within a group of
+likeminded people causes the group's average opinion to increase, or
+\emph{polarize}~\cite{Brown1986,Brown2000}.
+Group polarization experiments therefore attempt to
+polarize groups as follows: first, participants report their opinion on
+some topic or prompt chosen by the experimenters in advance. Second, 
+participants are put into likeminded groups to
+discuss the topic. Following discussion, participants again report their
+opinions on the topic. Group polarization is defined as an increase in
+the average opinion following discussion. If the group polarized, and we 
+assume that people in the group found consensus—meaning their opinions agreed
+more after the discussion than before—then initially moderate opinions must have
+increased more than more extreme ones.
 
-\begin{quote}
-  The good thing about science is that it's true, whether or not you believe
-  it (Neil de Grasse Tyson t-shirt, 2010's).
-\end{quote}
+We are sad to report that 95\% of experimental reports of group polarization
+across sixty published experimental conditions cannot be counted as
+replications. We explain here how evidence of group polarization is undermined
+by a basic measurement flaw that obscures opinion change among extremists.
+This opens the possibility that what seems to be group polarization could just
+be \emph{mere agreement}, with no change in mean opinion, if only increases in
+opinion were measured but not decreases.  To evaluate whether the empirical
+record reflects genuine opinion change or merely measurement artifacts, I
+simulated published experiments under conditions of mere agreement. Each
+simulation reproduced the core elements of published designs—pre-discussion
+survey, group interaction, post-discussion survey—while holding the latent
+mean opinion constant. Because the original datasets are lost and published
+results rarely provide enough information to reconstruct them, we cannot know
+whether any reported effect reflects a real shift or a measurement artifact.
+When distinct latent processes can generate indistinguishable results, the
+effect is non-identifiable—and no claim of replication can stand.
 
+A relatively simple step could fix the problem: re-center the post-discussion
+scale on each group’s own pre-discussion mean, aligning measurement with the
+group’s frame rather than an arbitrary external ``neutral.'' This adjustment
+restores the basic condition for inference: measuring change within a
+consistent frame of reference. 
 
-If an extremist's opinion falls and it is measured with a Likert scale, will
-it make a noise? The answer had better be yes if we want to properly measure
-opinion change. Accurate measurements of opinion change when tracking
-opinions and beliefs over time in surveys and experiments is critical to
-design more, sustainable, responsive, and efficient governments,
-institutions, and policies (Mason 2018; Klein 2020). One important social
-psychology paradigm for explaining opinion change is called \emph{group
-polarization}.  Former Obama White House administrator of Information and
-Regulatory affairs, and current Harvard Law School professor, Cass Sunstein
-writes that the scientific ``law of group polarization''~\cite{Sunstein1999}
-provides a ``clue'' to explaining how ``facism\ldots student
-radicalism\ldots Islamic terrorism\ldots{[}t{]}he Rwandan
-genocide\ldots{[}e{]}thnic Conflict\ldots acts of torture and humiliation by
-American soldiers at Abu Ghraib'', and more \cite[p. 1]{Sunstein2009}.
-
-We report here that, unfortunately, many studies of group polarization 
-used an ordinal, Likert-style, measurement scale but failed to account 
-for this fact.  
-Naive measurement procedures like this are known to induce
-both false positive and negative detections of changes in opinion, 
-belief, or similar \emph{latent} psychological entities, i.e., unobservable
-theoretical variables~\cite{Liddell2018,Turner2020}.
-Ordinal scales are ordered, integer-valued responses that represent both
-degree and polarity of opinion, e.g., ~-3
-indicates ``Strongly disagree'', +3 indicates ``Strongly agree'', 0
-is neutral, with intermediate numbers indicating different degrees of
-disagreement or agreement, depending on the sign. 
-
-To answer the question posed above in the paper's lead sentence, it is
-entirely possible that ordinal scales will not detect all changes in extreme
-opinions. For example, consider the 7-point Likert scale described above. 
-If an extremist's latent opinion changes
-from -5 to -4, but they map their latent opinion onto the closest integer
-option, they will report -3 each time: such opinion shifts towards
-moderation would not be detected. On the other hand, a latent opinion shift
-from -1 to -2 would be detected. 
-Considering a group composed of two individuals whose opinions changed like 
-that, their mean latent opinion did not change: it is -3 in both the pre-
-and post-deliberation phases. We call this \emph{simple consensus}, where
-individuals' opinions agreed more following deliberation, but the mean
-opinion stayed constant. In statistical terms, the \emph{mean} opinion
-stayed the same and the \emph{variance} decreased. 
-The 7-point Likert scale, however, spuriously measures a change in 
-mean opinion from $\frac{1}{2}(-3 + -1) = -2$ to $\frac{1}{2}(-3 + -2) =
--2.5$. In other words, we have a false detection of group polarization where
-the mean opinion seems to shift from -2 to -2.5.  The same logic applies to
-groups with more than two people.
-
-We developed a generative model of opinion change to identify, if possible,
-two opinion distributions representing \emph{simple consensus} that seem to
-be \emph{group polarization} when transformed to an ordinal measurement
-scale.  latent distributions that could spuriously appear like group
-polarization.  This type of problem is known to happen when ordinal
-measurements are taken of continuous data without statistically accounting
-for the measurement procedure itself~\cite{Liddell2018}.  We further applied
-our method to estimate a best-case probability that a published detection of
-group polarization is false, across 57 experimental conditions in a corpus
-of ten journal articles curated for their prominence and representativeness
-of group polarization research.  We turn this criticism of past blunders
-constructive by providing a procedure to calculate what Cohen's $d$ should
-be used to guarantee a family-wise error rate (i.e., Type I error rate) of
-5\% or less.
-
-We calculate the severity of the problem in two steps. In the first step we
-provide proof by example that there exists a null opinion change model in
-terms of \emph{latent, continuous} psychological opinions that looks like
-group polarization when measured via participant behavior, i.e., by their
-response on an \emph{ordinal survey scale}. If such a null model is found,
-this means that we cannot rule out a null effect, given the published data.
-This means, therefore, that the published detection is just as likely false
-as it is true, so we say it is a \emph{plausibly false detection of group
-polarization}, or a \emph{plausibly spurious detection} for short. 
-
-In the second step of the analysis of whether, we simulate observations of
-group polarization experiments where participant opinions are drawn from the
-null model distributions identified in the first step, then these are
-measured on a Likert scale for simulated group polarization survey responses
-on an ordinal scale. We then calculate the family-wise error rate (i.e.,
-Type I error rate) and false detection rate using various effect sizes to
-determine significance of the effect in terms of Cohen's $d$.  The
-family-wise error rate is defined as the probability that a known null
-effect is detected as significant. We use this to then estimate the *false
-detection rate*, which is the probability that a detection of an effect is a
-false one, which depends on the relative prevalence of true and false
-positive detections in the literature.  Finally, we put our model to
-constructive use to show what Cohen's $d$ must be set to to limit the
-family-wise error rate to 5\%, denoted $d*$. This will not help rescue any
-of the published results here found to be plausibly spurious. But, it
-provides a measure of the weakness of the published experimental designs
-independent of their shared fatal failure to account for the measurement
-procedure: greater $d*$ indicates weaker designs.
-
-We find that 95\% (54 of 57) of group polarization detections are plausibly
-spurious.  In other words, empirical support for group polarization has been
-seriously undermined just by removing these results from the count of group
-polarization replications.  There is no reason to expect other papers to be
-more reliable. (Summarize other two findings, 1. FWER/FDR and 2. $d*$ for
-FWER < 5\%)
-
-Group polarization is not the only phenomenon in the social and behavioral
-sciences to naively ignore measurement procedures.  Liddell and Kruschke
-found that the measurment procedures of experimental designs are rarely, if
-ever, accounted for by social psychology researchers in their systematic
-review of select social psychology journals. Our work is important, then,
-both to develop rigorous group polarization studies and provide a template
-for re-analyzing pre-crisis social and behavioral research.  Our methods can
-be turned on any data-driven social science analysis of data where
-participants report a latent, subjective psychological variable (mood,
-physiological state, etc.), and where various theories supposedly battle it
-out to best represent the phenomenon of interest via null-hypothesis
-significance testing using ordinal data as continuous.  This may just be the
-first of many bricks to fall since \emph{all 68} of the articles that
-mentioned the word ``Likert'' and analyzed ordinal data used metric models
-to detect latent psychological variable change across three influential
-psychology journals, \emph{Psychological Science}, the \emph{Journal of
-Experimental Psychology: General}, and the \emph{Journal of Personality and
-Social Psychology} (Liddell and Kruschke 2018). This further confirms that
-replication is far from the only foundational crisis that behavioral science
-faces\cite{Yarkoni2022,Turner2022}. 
+But even if this measurement problem is fixed,
+it is one of several severe problems in this kind of social science: Unstable
+opinions, unmodeled input variance, and incommensurate experimental designs
+all uniquely undermine any cumulative insight group polarization might
+claim—problems known about and ignored for decades~\cite{Cartwright1973}. No
+degree of scientific lawfulness can be established without evidence gathered
+from rigorously modeled, commensurate experiments~\cite{Cartwright1999}.
 
 
+\subsection{Group polarization research}
 
-
-\subsection{Group polarization research and corpus}
-
-To situate this current paper it will help to introduce some relevant
-research traditions and common experimental designs in group polarization,
-using the ten studies included in our corpus as touchstones. To begin,
-*group polarization* is defined as...(continue basic definition with some
-examples from our corpus).
-
-Paragraph dos: Common experimental, measurement, and statistical procedures
-to induce and detect group polarization
-
-\subsection{Failure to account for the measurement process can induce
-false detections} \label{ssubsec:false-detections}
-
-To see how failing to account for the measurement procedure could be a
-problem, let's step back to sketch a \emph{model} of group polarization
-experimental design.  This just means we are going to pick some key
-components and processes that we assume are important together. This does
-not mean other factors are not important.  We do this to focus on one
-complex system by \emph{screening out} interactions with several other
-complex systems. This piecemeal process may seem slow, but it has proven
-useful in more mature sciences like physics and biology. 
-
-Group polarization experiments share a common experimental design where,
-first, participant opinions are gathered on a topic of interest. Next,
-groups are formed that have some initial opinion extremism. Participants
-deliberate or discuss the topic for some set time. After the set time,
-participants again give their opinion. Group polarization is said to occur
-if the mean group opinion became more extreme, i.e., if the magnitude of the
-mean group opinion is greater \emph{post-deliberation} compared to
-\emph{pre-deliberation}. For example, \cite{Moscovici1969} asked Parisian
-high school students to indicate their degree of agreement with the
-statement, ``American economic aid is always used for political pressure''.
-There were seven options in the selection set, -3 indicating ``strongly
-disagree'', +3 indicating ``strongly agree'', and 0 was neutral. Moscovici
-and Zavalloni report that the mean pre-deliberation opinion was -0.61 and
-the mean post-deliberation opinion was -1.09 (Moscovici and Zavalloni, 1969;
-Table 4, p. 132). This is a -0.48 shift to more extreme disagreement with
-the statement, reported by Moscovici and Zavalloni as statistically
-significant in Table 5 on p. 132. Sometimes group polarization research uses
-significance testing for determining group polarization, but Moscovici and
-Zavalloni, and others, just report a bare difference in mean opinion. This
-alone should make modern researchers think twice before including it and
-others as canon, but apparently this has gone unnoticed.
-
-Note that only \emph{behaviors} are measured in this experiment, and not
-\emph{opinions}.  Instead, the participant (paid by the job, not the hour)
-navigates their mouse to hover over a radio button in an online survey, or
-voices their opinion by phone to a survey caller. The \emph{latent}, complex
-neural activity that underlies opinion formation and expression via
-different behaviors is unseen and, so far, unknown. We call internal
-opinions \textit{latent opinions}, from the Latin \emph{latentem} meaning
-``lie hidden''.  In other words, we cannot measure neurobiological activity
-and infer a participant's opinion.  We only ever measure participant
-behavior that signals the participant's opinion. Note this presupposes that
-the participant's opinion is that behavior best matches their opinion on the
-deliberation topic. 
-
-The problem arises when we try to compare average \emph{measured} opinion
-between phases, when instead the \emph{latent} opinion is the one that would
-prove group polarization occurred.  In fact, the problem seems to be that
-they are assumed to be identical. However, group polarization of latent
-opinions, or other psycho-social dynamics, are known to get distorted when
-measured with an ordinal scale~\cite{Liddell2018,Turner2020}. Recall that
-theoretically group polarization is one type of consensus, where extremism
-and agreement both increase, meaning the magnitude of the mean opinion in
-the group increases while the variance decreases. We distinguish group
-polarization from what we call \emph{simple consensus} 
-
-
-of If we represent the latent distribution
-
-(PREVIOUS TWO PARAGRAPHS SET UP THIS FINAL PARAGRAPH: CONTINUE TO USE
-MOSCOVICI 1969 TO EXPLAIN IN THE SIMPLEST TERMS HOW FAILING TO ACCOUNT FOR
-MEASUREMENT PROCEDURE CAN LEAD TO FALSE POSITIVES; see Figure
-\ref{fig:distros})
-
-
-\subsection{Overview}
-
-In the next section, we introduce the various formal and computational
-Methods used to obtain our findings outlined above. We then explain our
-findings in detail in the Analysis section. We close with a Discussion of
-how this is not a defeat, but a new beginning for group polariation, given
-that there are good reasons to expect group polarization to occur. We also
-explain how to expanding this analysis to examine other published studies on
-group polarization and across social and behavioral science disciplines.
+Group polarization research began in the 1960s, which grew rapidly with
+funding from the National Institutes of Mental Health (NIMH), and widespread interest
+in what was then a surprising new science of radicalization.
+Dorian Cartwright (1973) reviewed the first NIMH grants and at the time said,
+`` ''.
