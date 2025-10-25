@@ -6,6 +6,15 @@
 \documentclass[
   abstract]{article}
 
+\usepackage{floatrow}
+\DeclareFloatFont{small}{\small}% "scriptsize" is defined by floatrow, "tiny" not
+\floatsetup[table]{font=small}
+
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{array}
+
 \usepackage{amsmath,amssymb}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
