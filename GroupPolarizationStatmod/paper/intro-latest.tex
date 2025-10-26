@@ -33,11 +33,14 @@ polarization is a scientific law—a regular, quantitative relationship that
 will always be observed when certain assumptions are
 met~\cite{Cartwright1999}. Yet Roger Brown himself noted in Social Psychology
 that group polarization ``does not occur with every group'' and that ``the
-effect is not large.'' Given the influence of this theory and the hundreds of
-claimed ``replications,'' it is essential to ask whether many of these findings
-may instead be measurement artifacts—spurious effects created when the
+effect is not large''~\cite{Brown1986}. 
+Given the influence of this theory and the hundreds of claimed ``replications'' of
+group polarization, it is essential to ask whether any of these replications may
+instead be \emph{measurement artifacts}—spurious effects created when the
 ``neutral'' point of the measurement scale fails to align with the group’s own
-center of opinion.
+center of opinion. The science of opinion change has a central role in designing new
+methods for social organization and social change to face pressing existential
+challenges~\cite{Galesic2021,Galesic2023}.
 
 The group polarization hypothesis is that discussion within a group of
 likeminded people causes the group's average opinion to increase, or
@@ -140,133 +143,110 @@ decisions scheme hypothesis, predicting that social connectivity within a
 group could amplify group polarization \cite{Friedkin1999}.
 
 
-\subsection{Study Corpus}
+\subsection{Study Corpus} 
 
 We selected ten representative journal articles with sixty total experimental
 conditions among them. For a representative sample of group polarization
-research across decades, we selected two articles for each of five article
+research across decades, we two articles for three of the five article
 categories: \emph{Social Comparisons}, \emph{Persuasive Arguments},
-\emph{Self-Categorization}, \emph{Social Decisions}, and \emph{Politics}. The
-first four of these categories reference the theoretical tradition that the
-authors were trying to prove right—the fifth, \emph{Politics}, was the
-subject matter of the studies, but the two studies took no clear side in the
-group polarization theory wars. This resulted in a representative sample of
-group polarization research over time, as well: one article is from 1969,
-four are from the 1970s, . Information about our corpus is summarized below
-(Table~\ref{tab:articles}).  Please see the Supplemental Information 
+ and \emph{Politics}. We included three \emph{Self-Categorization} studies and one \emph{Social Decisions}.
+All but the \emph{Politics} category refers to the theoretical tradition that the
+authors were trying to prove right—the two \emph{Politics} articles were agnostic
+to group psychology theories. This resulted in a representative sample research
+over time, as well: we have one study from 1969,
+four from the 1970s, three from the 1990s, one from 2007 and one from 2010. 
+Information about our corpus is summarized below with references 
+(Table~\ref{tab:articles}).  
+
+\include{article-table.tex}
+
+Each study used subtly different experimental methods that make it difficult
+to build cumulative general knowledge. But all of the studies share one thing
+in common: they all measure participant opinions on an ordinal scale. We start
+with a non-technical review of how ordinal opinion measurements work in group
+polarization, and then how the distributions of measurements are analyzed to
+determine if group opinions became polarized. Then we can explain our
+close-reading analysis to extract the necessary experimental design parameters
+we need to simulate all the experiments in our corpus. 
+
+The corpus contains
+sixty different experimental conditions in the ten corpus journal articles. We 
+simulate experiments for all 57 experimental conditions reported to have 
+replicated group polarization, out of 60 total conditions (three were
+null control conditions). 
+
+Using simulations we will estimate the number of these 57 replications that
+must be retracted because null-polarization simulations appear polarized due
+to measurement artifacts. We collect experiment design parameters that fill out 
+details of the simulation model of group polarization experiments. 
+
+\subsection{Ordinal Opinion Measurements: Problems and Simulations}
+
+In studies of group polarization, opinion measurements are typically ordinal,
+reflecting ordered positions rather than measurable distances between them—
+Moscovici and Zavalloni (1969) gave participants a seven-point scale, from
+“strongly disagree” (-3) to “strongly agree” (+3) to report their opinions.
+Burnstein and Vinokur (1975) used a ten-point scale from 1 to 10 representing
+“the lowest odds of success acceptable” to try a certain behavior, where 1
+means 10\%.  In these and every other survey-based group polarization study I
+know, the reported opinions on the ordinal scale—with discrete numbered
+bins—were treated as if they were continuous-valued, or in other words as if
+they were the internal mental opinion value itself, whatever that might be
+neurobiologically. 
+
+Note that ordinal scales clip all latent opinions with a magnitude greater
+than the magnitude of its extreme values. This can make null-polarization
+outcomes look like group polarization. Consider the following example 
+with a group of just two people to see why: say they start with latent
+opinions of 2.1 and 4.7, which they report as +2 and +3, let's say, on Moscovici
+and Zavalloni's scale that tops out at +3. If they then discuss the topic and their
+opinions move toward one another by 1 each, then their latent opinions would be 3.1
+and 3.7. Before and after discussion the latent mean was a constant 3.4. 
+When reported on an ordinal scale, both opinions are now +3—the average measured
+opinion \emph{spuriously increased} from 2.75 to 3.0!
+
+To determine whether a replication must be retracted, we developed a model to
+simulate measurements of null-polarizations, labelled \emph{mere agreement}, where
+the mean group opinion stays constant, but variance decreases. In other words,
+simulated participants report more agreement following discussion, 
+but they do not become radicalized.  
+
+The simulations are seeded by actual group polarization experiment parameters.
+We copied the pre- and post-discussion opinion means reported in each article.
+There is no original data available for any of the experiments. Sometimes more
+information was available about the pre- and post-discussion
+distributions—we used this information to decide whether replications plausibly 
+have null-polarization. We recorded all available data with a guide to finding it in
+its original article in the file `StudiesAnalysis.csv`, available with the
+Supplemental Information or to view/download on
+GitHub\footnote{\url{https://github.com/mt-digital/gp-statmod/GroupPolarizationStatmod/data/StudiesAnalysis.csv}}.
 
 
-% \begin{table}[ht] 
-  
-%   \caption{\textbf{Journal articles in our corpus.}}
-%   \label{tab:articles} 
+\subsection{Research Overview}
 
-%   \centering 
-%   \rowcolors{2}{white}{gray!7}
-%   \begin{tabular}{m{1.35in} m{2.45in}
-%     m{1.3in} m{0.85in}}
+We collected original data across 10 journal articles to show that 95\% of 
+the replications reported must be retracted due to non-identifiability with a
+null-polarization model. These replications cannot be salvaged because the
+original data is no longer available, and thus cannot be re-analyzed with a 
+better statistical model that properly accounts for the measurement procedure. 
 
-%     \toprule
+In the Analysis we go further: we use simulations to show that 
+the experimental designs in our corpus are beset by high false positive rates 
+\emph{even with a better statistical model}. The only way to reduce false
+positive rates with the experimental designs used in the papers is to increase
+the significance threshold (in terms of Cohen's $d$ as explained in more
+detail in the Methods).
 
-%     \textbf{Authors (Year)}& \textbf{Title} & \textbf{Journal} &
-%     \textbf{Category} \\
+Group polarization was taken as one of the most reliable group effects in social
+science—but we showed it is impossible to distinguish 95\% of group
+polarization detections from a null-polarization model. This means 54
+replications must be retracted—and recall that this was a selection of the
+highest quality, most representative group polarization research. 
+To understand group polarization, new
+methods will be required. 
 
-%     \midrule 
-%     Moscovici \& Zavalloni (1969) & The Group as a Polarizer of
-%     Attitudes & \emph{JPSP} & Politics \\ 
-%     Schkade, Sunstein, \& Hastie (2010) & When
-%     Deliberation Produces Extremism & \emph{Critical~Review} & Politics \\
-
-%     Bishop \& Myers (1970) & Discussion Effects on Racial Attitudes &
-%     \emph{Science} & Social Comp's \\ 
-%     Myers (1975) & Discussion-Induced Attitude Polarization & 
-%     \emph{Human Relations} & Social Comp's \\
-
-%     Burnstein \& Vinokur (1973) & Testing Two Classes of Theories About Group
-%     Induced Shifts In Individual Choice & \emph{JESP} & Persuasive Arg's \\
-%     Burnstein \& Vinokur (1975) & What a person thinks upon learning he has
-%     chosen differently from others: Nice evidence for the
-%     persuasive-arguments\ldots & \emph{JESP} & Persuasive Arg's \\
-
-%     Abrams, et al., (1990) & Knowing What to Think by Knowing Who You Are:
-%     Self‐Categorization and the Nature of Norm Formation\ldots & 
-%     \emph{Brit. J. of Soc. Psych.} & Self-Categ'n \\
-%     Hogg, Turner, \& Davidson (1990) & Polarized Norms and Social Frames of 
-%     Reference: A Test of the Self-Categorization Theory of Group 
-%     Polarization & \emph{B. \& Appl. Soc. Psych.} & Self-Categ'n \\
-%     Krizan \& Baron (2007) & Group Polarization and Choice Dilemmas: How
-%     Important is Self-Categorization? & \emph{Eur. J. of Soc. Psych.} &
-%     Self-Categ'n \\
-
-%     Friedkin (1999) & Choice Shifts \& Group Polarization & 
-%     \emph{Amer. Soc.  Rev.} & Soc'l Decisions \\
-
-
-% \bottomrule
-% \end{tabular}
-% \end{table}
-\begin{table}[ht]
-\centering
-\caption{\textbf{Journal articles in our corpus.}}
-\label{tab:articles}
-
-\begin{tabular}{m{0.9in} m{1.35in} m{2.45in} m{1.3in}}
-\toprule
-\textbf{Category} & \textbf{Authors (Year)} & \textbf{Title} & \textbf{Journal} \\
-\midrule
-
-\rowcolor{gray!10}
-\multirowcell{2}{Politics} 
-  & Moscovici \& Zavalloni (1969) & The Group as a Polarizer of Attitudes & \emph{JPSP} \\
-\rowcolor{gray!10}
-  & Schkade, Sunstein, \& Hastie (2010) & When Deliberation Produces Extremism & \emph{Critical~Review} \\[0.2em]
-
-\rowcolor{gray!5}
-\multirowcell{2}{Social Comp's \vspace{0.7em}}
-% \multirowcell{2}{Social Comp's}
-  & Bishop \& Myers (1970) & Discussion Effects on Racial Attitudes & \emph{Science} \\[0.2em]
-\rowcolor{gray!5}
-  & Myers (1975) & Discussion-Induced Attitude Polarization & \emph{Human Relations} \\[0.3em]
-
-\rowcolor{gray!10}
-\multirowcell{2}{Persuasive Arg's}
-  & Burnstein \& Vinokur (1973) & Testing Two Classes of Theories About Group Induced Shifts In Individual Choice & \emph{JESP} \\
-\rowcolor{gray!10}
-  & Burnstein \& Vinokur (1975) & What a person thinks upon learning he has chosen differently from others: Nice evidence for the persuasive-arguments\ldots & \emph{JESP} \\
-
-\rowcolor{gray!5}
-\multirowcell{3}{Self-Categ'n}
-  & Abrams, et al., (1990) & Knowing What to Think by Knowing Who You Are: Self‐Categorization and the Nature of Norm Formation\ldots & \emph{Brit. J. of Soc. Psy.} \\
-\rowcolor{gray!5}
-  & Hogg, Turner, \& Davidson (1990) & Polarized Norms and Social Frames of Reference: A Test of the Self-Categorization Theory of Group Polarization & \emph{B. \& Appl. Soc. Psy.} \\
-\rowcolor{gray!5}
-  & Krizan \& Baron (2007) & Group Polarization and Choice Dilemmas: How Important is Self-Categorization? & \emph{Eur. J. of Soc. Psy.} \\
-
-\rowcolor{gray!10}
-\multirowcell{1}{Soc'l Decisions}
-  & Friedkin (1999) & Choice Shifts \& Group Polarization & \emph{Amer. Soc. Rev.} \\
-
-\bottomrule
-\end{tabular}
-\end{table}
-
-
-
-
-\subsection{Measurement procedure}
-
-In studies of group polarization, opinion measurements are typically ordinal, reflecting
-ordered positions rather than measurable distances between them—
-Moscovici and Zavalloni (1969) gave participants a seven-point scale, from “strongly disagree” (-3) to “strongly agree” (+3) to report their opinions.
-Burnstein and Vinokur (1975) used a ten-point
-scale from 1 to 10 representing “the lowest odds of success acceptable” to
-try a certain behavior, where 1 means 10\%.  In these and every other survey-based group polarization study I know, the reported opinions on the ordinal scale—with discrete numbered bins—were treated as if they were continuous-valued, or in other words as if they were the internal mental opinion value itself, whatever that might be neurobiologically. 
-
-Note how ordinal scales clip all latent opinions with a magnitude greater than the
-magnitude of its extreme values. 
-lead to false positives because ordinal scales cannot track changes in
-extreme opinions beyond the ceiling of the measurement scale—this approach is
-ubiquitous in social psychology and survey research, not at all limited to
-group polarization.
-
-
+This sort of error threatens our ability to construct a
+cumulative science of opinion change, social influence, and social change
+generally. We need reliable social science as the foundation for new
+strategies for social organization capable of reversing decline and powering
+sustainable futures. We have a long way to go.
