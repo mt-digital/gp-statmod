@@ -6,6 +6,15 @@
 \documentclass[
   abstract]{article}
 
+\usepackage{floatrow}
+\DeclareFloatFont{small}{\small}% "scriptsize" is defined by floatrow, "tiny" not
+\floatsetup[table]{font=small}
+
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{array}
+
 \usepackage{amsmath,amssymb}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -125,6 +134,54 @@ sketch how our model can then be extended to rigorously calculate statistical po
 i.e., the probability that a significant effect is detected given that there 
 is indeed a significant effect.
 
+\begin{table}[h]
+  \caption{\textbf{Latent psychological variables and distributions.}}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $\omega_{i,t}$ & Latent opinion of individual $i$ at time $t$ & $\mathbb{R}$ \\
+    $\mu_t$ & Mean latent opinion at time $t$ (constant in null-polarization) & $\mathbb{R}$ \\
+    $\sigma_t$ & Variance of observed opnions at time $t$ & $\mathbb{R}$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+  \caption{\textbf{Experimental design and numerical model parameters.}}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $B$ & Number of bins & $5,6,7,\ldots$ \\
+    $\theta_b$ & The $B+1$ threshold values that separate bins & 
+      e.g., $-\infty, -,\ldots$ \\
+    $b$ & Bin index & $0,1,2,\ldots$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+  \caption{\textbf{Simulated observed variables.}}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $\meanobst$ & Mean of all reported opinions (Eq. \ref{eq:meanobs}) & $\mathbb{R}$ \\
+    $g$ & Observed group opinion polarization (Eq. \ref{eq:group-polarization})
+        & $\mathbb{R}$ \\
+    $d$ & Cohen's $d$ used as significance threshold 
+        & $\mathbb{R}$ \\
+    $\alpha_e,\alpha_s,\alpha_{\text{all}}$ & Family-wise/Type I error rate
+    for an experiment, study, or across all experiments
+             & $[0, 1]$ \\
+    FDR & False discovery rate
+        & $[0, 1]$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+
 
 \subsection{Probability theory of spurious group polarization}
 
@@ -138,7 +195,7 @@ pre-deliberation mean and variance (and similar for \emph{post}-deliberation).
 The latent opinion of participant $i$ at time $t$ is drawn from a normal 
 distribution in the model, 
 \begin{equation} 
-  o_{i,t} \sim p(o; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
+  \omega_{i,t} \sim p(\omega; \mu_t, \sigma_t) = \mathcal{N}(\mu_t, \sigma_t).
   \label{eq:opinionDistribution} 
 \end{equation} 
 \noindent 
@@ -148,54 +205,60 @@ aggregations of neurobiological activity.
 The measurement process with $N\to\infty$ participants is simulated by 
 integrating the latent opinion distribution between ordinal bin thresholds, 
 of which there are $B+1$, where $B$ is the number of opinion bins, with sequential
-integer values $b$. In the Moscovici and Zavalloni (1969) example, $b \in
-\{-3,-2,\ldots,2,3\}$ and $B = 7$.
+integer values $b \in \{0, B\}$. In the Moscovici and Zavalloni (1969)
+example, the thresholds are \in
+\{-\infty,-2.5,-1.5,\ldots,2.5,\infty\}$, with $B = 7$.
 Bin $b$ is defined by its lower and upper continuous-valued thresholds, 
 $\theta_{b-1}$ and
 $\theta_{b}$, respectively. Thresholds are given by the following equations
-(and visualized as dotted lines in Figure~\ref{fig:distros}).
+(visualized as dotted lines in Figure~\ref{fig:distros}).
 \begin{equation}
 \theta_b = \begin{cases}
   -\infty         & \text{ if } b=0 \\
   \infty          & \text{ if } b=B \\
-  b + \frac{1}{2} & \text{ otherwise.}
+  \theta_{\text{Base}} + \frac{b}{2} & \text{ otherwise.}
 \end{cases}
 \end{equation}
 \noindent
+In the Moscovici and Zavalloni example, the base bin value is
+$\theta_{\text{Base}} = -3$.
 With thresholds defined, the frequency of ordinal measurment $b$ at time $t$ 
 is (Figure~\ref{fig:distros})
 \begin{equation}
-  p(b;~\mu_t, \sigma_t, B) = \int_{\theta_{b-1}}^{\theta_b} p(o; \mu_t, \sigma_t)
-  do.
+  p(b;~\mu_t, \sigma_t, B) = \int_{\theta_{b-1}}^{\theta_b} p(\omega; \mu_t, \sigma_t)
+  d\omega.
   \label{eq:ordinal-frequency}
 \end{equation}
 
-We can now define spurious group polarization and give examples of when it occurs.
-First, the observed group polarization opinion shift is
-\begin{equation}
-  g = \meanobs_\mathrm{post} - \meanobs_\mathrm{pre}~,
-  \label{eq:group-polarization}
-\end{equation}
-\noindent
-where the expected value of observed opinions at time $t$ is
+We can now define spurious group polarization and give examples of when it
+occurs. First, the expected value of observed opinions at time $t$ is
 \begin{equation}
   \meanobst = \frac{1}{B} \sum_{b=1}^B b \cdot p(b; \mu_t, \sigma_t, B).
   \label{eq:meanobs}
 \end{equation}
 \noindent
+The observed group polarization opinion shift is then
+\begin{equation}
+  g = \meanobs_\mathrm{post} - \meanobs_\mathrm{pre}.
+  \label{eq:group-polarization}
+\end{equation}
+\noindent
 
-\emph{Spurious} group polarization is when mean observed opinions seem to increase in 
-extremity when the latent mean is held constant. Call the collection of
-latent null model distribution parameters $\lambda = (\mu, \sigma_{pre}, \sigma_{post})$.
-The group polarization opinion shift can then be written as a function of $\lambda$,
-$g(\lambda)$. Formally, then, spurious group polarization is plausible if 
-there exists at least one $\lambda$ for which $g(\lambda) = g_{pub} > 0$, where
+Measurement artifacts can make null-polarization spuriously appear like group
+polarization. To see how, we will build up a formal model of the
+process. Consider a collection of
+null-polarization latent opinion distribution parameters $\nu = (\mu, \sigma_{pre}, \sigma_{post})$.
+The group polarization opinion shift can then be written as a function of
+$\nu$,
+$g(\nu)$. 
+
+If we can find ..... $\nu$ for which $g(\nu) = g_{pub} > 0$, where
 $g_{pub}$ is the published group polarization shift value.
 This could be thought of as sampling the observed ordinal distributions 
 $N \to \infty$, collecting ordinal measurements of samples from 
 each latent distribution corresponding to each phase, pre- and post-deliberation.
 
-Next, we explain how to find a set of latent null parameters, $\lambda$, that
+Next, we explain how to find a set of latent null parameters, $\nu$, that
 generate spurious group polarization when naively measured on an ordinal scale.
 
 \begin{figure}
@@ -216,22 +279,22 @@ group polarization occurs (C).}
 \subsection{Interactive algorithm to find parameters inducing spurious group polarization} 
 
 To identify plausibly false detections of group polarization, we searched numerically
-for latent parameters $\lambda = (\mu, \sigmapre, and \sigmapost)$ that generate
+for latent parameters $\nu = (\mu, \sigmapre, and \sigmapost)$ that generate
 spurious group polarization, as explained immediately above. We developed an *ad hoc*
-hillclimbing-style algorithm that finds $\lambda$ that finds $\lambda$ by minimizing
+hillclimbing-style algorithm that finds $\nu$ that finds $\nu$ by minimizing
 the difference between published group polarization shifts $g_pub$ and calculated shifts,
-$g_\lambda$.
+$g_\nu$.
 calculated with Equation~\ref{eq:meanobs}. 
 
-The algorithm to find $\lambda$ holds $\mu$ constant while searching for $\sigmapre$
+The algorithm to find $\nu$ holds $\mu$ constant while searching for $\sigmapre$
 and $\sigmapost$ that generate observed $\meanobspre$ and $\meanobspost$, within a
 tolerance of $\pm10^{-3}$ (Algorithm~\ref{alg:hillclimbing}). 
 The algorithm requires a researcher to specify an initial
-guess for $\lambda$ and auxiliary parameter settings, which generally vary between
+guess for $\nu$ and auxiliary parameter settings, which generally vary between
 experimental conditions.  Furthermore, the algorithm does not always produce
-reasonable distributions with a given $\lambda$, and sometimes it does not produce
+reasonable distributions with a given $\nu$, and sometimes it does not produce
 spurious group polarization.  Therefore, it is necessary to sanity check the latent
-and ordinal opinion distributions for the $\lambda$ found by the algorithm. If all is
+and ordinal opinion distributions for the $\nu$ found by the algorithm. If all is
 well, the experimental condition can be marked as plausibly spurious.  To tame the
 complexity involved in data entry and model fitting for each of these sixty
 experimental conditions, we developed a web application to input data from control
@@ -290,7 +353,7 @@ Note that so far, we have only identified cases where spurious group polarizatio
 occurs in the asymptotic case where $N\to\infty$ ($N$ being the number of participants).
 Experimental conditions yielding plausibly spurious group polarization warrant 
 some suspicion. If there exists set of latent simple consensus 
-parameters $\lambda$ that create binned (Equation~\ref{eq:ordinal-frequency})
+parameters $\nu$ that create binned (Equation~\ref{eq:ordinal-frequency})
 opinion distributions that naively seem to be group polarized, then the means
 of at least some samples from these distibutions with empirical numbers of 
 participants would also appear to be shifted consistent with group
@@ -373,7 +436,7 @@ To calculate the false detection rate we begin by simulating
 pre- and post-deliberation 
 opinions by drawing $N_e$ samples from normal latent opinion
 distributions that generated spurious group polarization, i.e., with
-parameters labelled $\lambda_e$ found in the hillclimbing step. Binning these
+parameters labelled $\nu_e$ found in the hillclimbing step. Binning these
 random values simulates observations. $N_e$ is the number
 of participants in experimental condition $e$. Each trial $i$ of $N_e$
 simulated pre- and post-deliberation observations is then inspected to see
@@ -450,15 +513,15 @@ for ``significant'' Cohen's $d$ to limit the family-wise error rate to 5\%.
 % We used our formal distribution model of group polarization experiments
 % to identify plausible latent simple consensus distributions that generate spurious
 % group polarization in 
-Of the remaining 57, we identified simple consensus $\lambda$ that generate spurious
+Of the remaining 57, we identified simple consensus $\nu$ that generate spurious
 group polarization in 54 experimental conditions. In the other three, we did
-identify $\lambda$ that generate spurious group polarization, but the initial
+identify $\nu$ that generate spurious group polarization, but the initial
 simulated distributions were highly polarized. 
-We rejected $\lambda$ generated for
+We rejected $\nu$ generated for
 two spurious group polarization from Schkade, et al., (2010) because
 the histogram plots of the observed opinion distributions are not
 polarized~\cite[Figure 1, p. 234]{Schkade2010}. The other condition where we
-found but rejected spurious group polarization $\lambda$ was in a question 
+found but rejected spurious group polarization $\nu$ was in a question 
 about a ``bad teacher'' in Myers (1975)~\cite{Myers1975a}, where lower values
 signify increasingly worse impressions of the teacher and higher values signify
 increasingly good impressions. It is unlikely that a

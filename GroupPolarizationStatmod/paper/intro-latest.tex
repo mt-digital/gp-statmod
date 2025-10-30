@@ -30,13 +30,18 @@ making it the science of ``echo chambers'', online or in-person communities
 composed of likeminded folks.  Cass Sunstein, a
 Harvard Law professor and former White House administrator, has written
 extensively on the topic~\cite{Sunstein2019}, claiming that group
-polarization is a scientific law—but Roger Brown (1986, Ch. 5) wrote that group polarization ``does not occur with every group'' and that ``the
-effect is not large,'' conflicting with the standard definition that lawlike
-behavior means certain observations will obtain given that specific assumptions
-are satisfied~\cite{Cartwright1999}. Given the prominence of group polarization 
-theory, we decided to analyze whether its hundreds of claimed replications
-may instead be measurement artifacts using a formal model and numerical simulations of
-group polarization experiments.
+polarization is a scientific law—a regular, quantitative relationship that
+will always be observed when certain assumptions are
+met~\cite{Cartwright1999}. Yet Roger Brown himself noted in Social Psychology
+that group polarization ``does not occur with every group'' and that ``the
+effect is not large''~\cite{Brown1986}. 
+Given the influence of this theory and the hundreds of claimed ``replications'' of
+group polarization, it is essential to ask whether any of these replications may
+instead be \emph{measurement artifacts}—spurious effects created when the
+``neutral'' point of the measurement scale fails to align with the group’s own
+center of opinion. The science of opinion change has a central role in designing new
+methods for social organization and social change to face pressing existential
+challenges~\cite{Galesic2021,Galesic2023}.
 
 The group polarization hypothesis is that discussion within a group of
 likeminded people causes the group's average opinion to increase, or
@@ -69,19 +74,35 @@ whether any reported effect reflects a real shift or a measurement artifact.
 When distinct latent processes can generate indistinguishable results, the
 effect is non-identifiable—and no claim of replication can stand.
 
-A relatively simple step could fix the problem: re-center the post-discussion
-scale on each group’s own pre-discussion mean, aligning measurement with the
-group’s frame rather than an arbitrary external ``neutral.'' This adjustment
-restores the basic condition for inference: measuring change within a
-consistent frame of reference. 
+A relatively simple step could fix the problem, we believe: measure twice
+before discussion. Before forming groups, experimenters could poll opinions
+using a scale centered arbitrarily at 0, with varying strengths of disagree
+or agree with negative and positive integers, respectively. 
+Then after likeminded groups are
+selected, measure group opinions again before they discuss, but now with the
+scale centered on the average group opinion. To keep the same number of bins,
+add more bins to express more extreme views and take away bins from
+the opposite side as necessary.
 
-But even if this measurement problem were fixed,
-there are several problems in this kind of social science: Unstable
-opinions, unmodeled input variance, and incommensurate experimental designs
-all uniquely undermine any cumulative insight group polarization might
-claim—problems known about and ignored for decades~\cite{Cartwright1973}. No
-degree of scientific lawfulness can be established without evidence gathered
-from rigorously modeled, commensurate experiments~\cite{Cartwright1999}.
+Even if this measurement problem were fixed, equally severe problems remain
+for group polarization research. First there seems to be no stable 
+``opinions'' per
+se—it is more accurate to say people construct opinions when they are
+prompted or need them for some other reason, as revealed by respondents
+answering questions differently if the framing or ordering of them changes,
+and by the fact that people respond differently to the same question over
+time. These are just a few of several potential sources of variance that were never accounted for, which is also known to generate false detections of change. 
+Finally, because group polarization experimental design was never
+standardized its research corpus cannot cumulatively or systematically tell 
+us anything general about the world—Dorian
+Cartrwright (1973) tried to alert group polarization researchers to this
+problem half a century ago~\cite{Cartwright1973}. General scientific claims
+of the existence and functioning of some scientifically induced phenomenon
+only work if the evidentiary observations were collected from
+\emph{commensurate} experiments, or in other words, only from experiments
+that share the exact same causal structure as expressed in a formal or 
+mechanistic causal model~\cite{Cartwright1999}.
+
 
 
 \subsection{Group polarization research}
@@ -123,42 +144,110 @@ decisions scheme hypothesis, predicting that social connectivity within a
 group could amplify group polarization \cite{Friedkin1999}.
 
 
-\subsection{Measurement procedure}
+\subsection{Study Corpus} 
 
-In most group polarization experiments, opinions are measured on an
-ordinal scale: Burnstein and Vinokur (1975) for example used a ten-point
-scale from 1 to 10 representing “the lowest odds of success acceptable” to
-try a certain behavior, where 1 means 10\%—Moscovici and Zavalloni (1969) gave participants a seven-point scale, from “strongly disagree” (-3) to “strongly agree” (+3) to report their opinions. In these and every other survey-based group polarization study I know, the reported opinions on the ordinal scale—with discrete numbered bins—were treated as if they were continuous-valued, or in other words as if they were the internal mental opinion value itself, whatever that might be neurobiologically. 
-Liddell and Kruschke (2018) showed that in the general case this setup can
-lead to false positives because ordinal scales cannot track changes in
-extreme opinions beyond the ceiling of the measurement scale—this approach is
-ubiquitous in social psychology and survey research, not at all limited to
-group polarization.
+We selected ten representative journal articles with sixty total experimental
+conditions among them. For a representative sample of group polarization
+research across decades, we two articles for three of the five article
+categories: \emph{Social Comparisons}, \emph{Persuasive Arguments},
+ and \emph{Politics}. We included three \emph{Self-Categorization} studies and one \emph{Social Decisions}.
+All but the \emph{Politics} category refers to the theoretical tradition that the
+authors were trying to prove right—the two \emph{Politics} articles were agnostic
+to group psychology theories. This resulted in a representative sample research
+over time, as well: we have one study from 1969,
+four from the 1970s, three from the 1990s, one from 2007 and one from 2010. 
+Information about our corpus is summarized below with references 
+(Table~\ref{tab:articles}).  
+
+\include{article-table.tex}
+
+Each study used subtly different experimental methods that make it difficult
+to build cumulative general knowledge. But all of the studies share one thing
+in common: they all measure participant opinions on an ordinal scale. We start
+with a non-technical review of how ordinal opinion measurements work in group
+polarization, and then how the distributions of measurements are analyzed to
+determine if group opinions became polarized. Then we can explain our
+close-reading analysis to extract the necessary experimental design parameters
+we need to simulate all the experiments in our corpus. 
+
+The corpus contains
+sixty different experimental conditions in the ten corpus journal articles. We 
+simulate experiments for all 57 experimental conditions reported to have 
+replicated group polarization, out of 60 total conditions (three were
+null control conditions). 
+
+Using simulations we will estimate the number of these 57 replications that
+must be retracted because null-polarization simulations appear polarized due
+to measurement artifacts. We collect experiment design parameters that fill out 
+details of the simulation model of group polarization experiments. 
+
+\subsection{Ordinal Opinion Measurements: Problems and Simulations}
+
+In studies of group polarization, opinion measurements are typically ordinal,
+reflecting ordered positions rather than measurable distances between them—
+Moscovici and Zavalloni (1969) gave participants a seven-point scale, from
+“strongly disagree” (-3) to “strongly agree” (+3) to report their opinions.
+Burnstein and Vinokur (1975) used a ten-point scale from 1 to 10 representing
+“the lowest odds of success acceptable” to try a certain behavior, where 1
+means 10\%.  In these and every other survey-based group polarization study I
+know, the reported opinions on the ordinal scale—with discrete numbered
+bins—were treated as if they were continuous-valued, or in other words as if
+they were the internal mental opinion value itself, whatever that might be
+neurobiologically. 
+
+Note that ordinal scales clip all latent opinions with a magnitude greater
+than the magnitude of its extreme values. This can make null-polarization
+outcomes look like group polarization. Consider the following example 
+with a group of just two people to see why: say they start with latent
+opinions of 2.1 and 4.7, which they report as +2 and +3, let's say, on Moscovici
+and Zavalloni's scale that tops out at +3. If they then discuss the topic and their
+opinions move toward one another by 1 each, then their latent opinions would be 3.1
+and 3.7. Before and after discussion the latent mean was a constant 3.4. 
+When reported on an ordinal scale, both opinions are now +3—the average measured
+opinion \emph{spuriously increased} from 2.75 to 3.0!
+
+To determine whether a replication must be retracted, we developed a model to
+simulate measurements of null-polarizations, labelled \emph{mere agreement}, where
+the mean group opinion stays constant, but variance decreases. In other words,
+simulated participants report more agreement following discussion, 
+but they do not become radicalized.  
+
+The simulations are seeded by actual group polarization experiment parameters.
+We copied the pre- and post-discussion opinion means reported in each article.
+There is no original data available for any of the experiments. Sometimes more
+information was available about the pre- and post-discussion
+distributions—we used this information to decide whether replications plausibly 
+have null-polarization. We recorded all available data with a guide to finding it in
+its original article in the file `StudiesAnalysis.csv`, available with the
+Supplemental Information or to view/download on
+GitHub\footnote{\url{https://github.com/mt-digital/gp-statmod/GroupPolarizationStatmod/data/StudiesAnalysis.csv}}.
 
 
-\subsection{Study Corpus}
+\subsection{Research Overview}
 
-We selected ten journal articles with sixty total experimental conditions
-across the ten. 
+We collected original data across 10 journal articles to show that 95\% of 
+the replications reported must be retracted due to non-identifiability with a
+null-polarization model. These replications cannot be salvaged because the
+original data is no longer available, and thus cannot be re-analyzed with a 
+better statistical model that properly accounts for the measurement procedure. 
 
-\begin{table}[ht]
-\caption{\textbf{Journal articles in our corpus.}}
-\centering
-\begin{tabular}{p{1in}p{3.5in}p{2in}c}
-\toprule
-Authors (Year) & Title & Journal & Category \\
-\midrule
-  Moscovici \& Zavalloni (1969) & The Group as a Polarizer of Attitudes &
-    Journal of Personality and Social Psychology & Politics \\
-    Schkade, Sunstein, \& Hastie & When Deliberation Produces Extremism & Critical Review
-                                 & Politics \\
-Burnstein \& Vinokur (1973) & Testing Two Classes of Theories About Group Induced Shifts
-In Individual Choice & Journal of Experimental Social Psychology & Persuasive Arguments \\
+In the Analysis we go further: we use simulations to show that 
+the experimental designs in our corpus are beset by high false positive rates 
+\emph{even with a better statistical model}. The only way to reduce false
+positive rates with the experimental designs used in the papers is to increase
+the significance threshold (in terms of Cohen's $d$ as explained in more
+detail in the Methods).
 
-Burnstein \& Vinokur (1975) & What a person thinks upon learning he has chosen differently from others: Nice evidence for the persuasive-arguments explanation of choice shifts & Journal of Experimental Social Psychology & Persuasive Arguments \\
-\bottomrule
-\end{tabular}
-\label{table:mr}
-\end{table}
+Group polarization was taken as one of the most reliable group effects in social
+science—but we showed it is impossible to distinguish 95\% of group
+polarization detections from a null-polarization model. This means 54
+replications must be retracted—and recall that this was a selection of the
+highest quality, most representative group polarization research. 
+To understand group polarization, new
+methods will be required. 
 
-
+This sort of error threatens our ability to construct a
+cumulative science of opinion change, social influence, and social change
+generally. We need reliable social science as the foundation for new
+strategies for social organization capable of reversing decline and powering
+sustainable futures. We have a long way to go.
