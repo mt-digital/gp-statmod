@@ -1,0 +1,112 @@
+\section{Discussion}\label{discussion}
+
+\mt{Restate results and importance and outline this section.}
+
+Since there seems to be no selection pressure on false discovery rates,
+experiment design for studying group polarization was free to evolve
+randomly. Various choices for the number of bins and other instrumental
+details may have then become entrenched in different communities defined by
+common theoretical perspectives taken by researchers in those communities.
+Therefore, when Isenberg (1986)~\cite{Isenberg1986} reports that his
+meta-analysis found more support for the persuasive arguments theory than the 
+social comparisons theory in the form of greater effect sizes. If this were
+indeed the case, perhaps it is only because some researchers hypothesizing
+persuasive arguments happened to use a measurement procedure produced more
+frequent and extreme distortions of opinion measurements. Incentive
+structures known to promote the ``evolution of bad science'' would select
+for research that ignored sticky, time-consuming statistical problems in
+favor of juicy titles and headlines for which practitioners have won several
+professional awards. Specifically, the traditional bias
+towards positive results, and against negative ones, could easily have
+provided a cultural niche in which quick but faulty group polarization
+statistical methods dominate slower, more rigorous ones.
+Now that we are aware of the problem, there must be
+intense selective pressure applied as soon and as widely as possible to 
+avoid further ``replications'' that report spurious group polarization, or
+any similar latent psychological dynamics. 
+
+We provided tools that experimenters can use. While these tools are
+potentially useful, they are still in the prototype phase that was
+sufficient for a single researcher who was also the software developer. So,
+a first step towards expanding the usefulness of the findings here is to 
+improve the software usability and make the app widely available for
+researchers in group polarization and beyond. Another step would be to go
+beyond reactionary testing of the reliability of experimental designs, and
+identify design principles that reduce the false detection rate without
+needing to adjust the Cohen's $d$ (or whatever measure) 
+used as a significance threshold. 
+
+When we used the appropriate ordered probit Bayesian statistical model, it
+still often failed to accurately identify mere agreement, instead detecting
+group polarization.  The ordered probit model we used still likely
+underestimates the variance in outcomes, which could require even larger
+sample sizes. A more rigorous analysis would include additional sources of
+variance that will likely further inflate the Type I error rate, $\alpha$,
+and the false discovery rate~\cite{Yarkoni2022}. First and foremost, there is
+variance within each experimental deliberation group; no group polarization
+study accounts for this, instead treating participants in each experimental
+condition as if they were one large group. Furthermore, survey data are known
+to be noisy~\cite{Zaller1992}. People report opinions differently over time
+for no apparent reason (i.e., opinions are \emph{unstable}).  Context
+matters: the order in which a survey question is asked, and which question
+framing is chosen among logically equivalent alternatives, can both
+significantly influence participant responses. Finally, little is known about
+the psychological process that converts latent opinions to reporting
+behaviors (e.g., clicking a radio button corresponding to an opinion).  The
+effect of accounting for these sources of variance must be understood to
+estimate $\alpha$ (and power, $W$) for the design of the next generation of
+group polarization experiments. 
+
+A simple change in measurement procedure could fix the problem identified
+here: center the post-discussion scale on each group’s own pre-discussion
+mean. This removes the assumption that all groups share a common “neutral”
+midpoint. The situation is like tossing a ball on a moving train: to the
+passengers, the ball’s speed is the same in both directions, but to an
+observer on the ground one throw appears faster and the other slower.
+Likewise, when measurement is anchored to an external scale, simple agreement
+within a group can appear as movement toward one pole. Re-centering the
+measurement frame corrects this distortion. It acknowledges that opinion
+change is relative to the observer’s reference frame—there is no fixed
+background of neutrality against which all groups can be compared. This is,
+in essence, the insight of Newtonian relativity: apparent motion depends on
+the frame from which it is measured.
+
+First we must note that there are even more, perhaps even graver problems
+with group polarization research than I discussed so far: one of note is
+opinion instability. Opinions are not generally stable—people seem to
+construct their opinions based on several factors not directly related to
+whatever underlying topic. Factors affecting reported opinions include the
+language used to frame a prompt or question; the order of questions on a
+multi-item survey; or simply when the question was asked (Kalton and Schuman,
+1982; Zaller and Feldman, 1992; Zaller 1992). Failure to account for sources
+of input variance in any experiment can lead to inflated effect sizes since
+the input variance is missing from the posterior predictions during
+statistical model fitting (Yarkoni, 2022). This further compounds the
+theoretical confusions that fill the void when theories are never formalized
+and grounded in a mathematical or computational model (Smaldino 2020; Turner
+and Smaldino, 2022).
+
+A second additional problem with group polarization research is that we literally cannot learn anything by comparing summary statistics obtained with incommensurate experimental designs—but this is exactly how group polarization research has tried to make progress. Comparing summary statistics only has explanatory power if datasets were generated under the same experimental designs—it seems this was never done or even considered in the group polarization literature. In order to compare studies, their datasets must be generated from commensurate experiments, meaning the studies must share the same predictive and statistical models and experimental design. Otherwise, such comparisons are meaningless, they literally tell us nothing, as shown by philosopher of science Nancy Cartwright in Chapter 5 of her book The Dappled World: A Study of the Boundaries of Science.
+
+
+\subsection{Humble Hearts Promote Rigorous Science}
+
+Cass Sunstein kicked off the 2000s by elevating group polarization to be a scientific law and advocating the application of group polarization research to serious real-world problems in two books (Sunstein, 2009; Sunstein, 2019) and two recent high-profile articles in Nature Human Behavior: one on the social foundations of pandemic preparedness (Van Bavel, et al., 2020) and one to “promote truth, autonomy, and democratic discourse online” (Lorenz-Spreen, Lewandowski, Sunstein, and Hertwig, 2020). Let us try to stop the spread of this bad science—and let us explore what must be done to achieve Dorian Cartwright’s vision of a rigorous science of group polarization he articulated fifty years ago.
+
+To be practically useful, science must be rigorous. Rigorous science comes most naturally when scientists remain humble, especially when they serve at the pleasure of the public, the government, or other donors. Here’s another example from Burnstein and Vinokur (1973) that we can learn from—let’s try to avoid the sort of arrogance and haughtiness that seep from these acknowledgements they wrote on p. 123:
+
+\begin{quote}
+This research was supported by a Grant from the National Institute of Mental Health (MH-16950-03) and by a Guggenheim Foundation Fellowship awarded to the first author. We gratefully acknowledge the incisive, witty, and vinous commentary provided by colleagues at the University of Provence, in particular Robert Abelson, Claude Flament, and Jean-Pierre Poitou, as well as the spirited and intelligent efforts of Livia Mezrick and Irene Graczyk, who helped us carry out the study.
+\end{quote}
+
+Science is not glamorous—it takes guts and sacrifice to achieve the technical skills and discipline to sharpen one’s prose, methods, mathematics, and computer code to the point they can really cut reality at its joints, investigate different parts, then put it all back together with a message for others about how the world really works. These days, to do rigorous social science work one must wisely curate the best of the available social science by harmonizing cross-disciplinary jargon. But disincentives still exist against careful scholarship. Prizes and professorships go to those with the most numerous publications in the right journals—period.
+
+Unpaid, anonymous reviewers are supposed to act as gatekeepers to catch problems like the ones I reviewed. But, journal article reviewers have little to gain from enforcing rigor—actually there is a lazy strategy that can pay off big for freeloaders. It’s easy to imagine a cultural norm evolving where reviewers save themselves time and energy by asking little of an author, in hopes that little will be demanded of them when the reviewer submits their next paper. This could result in a publication process that rewards the laziest and most willing to flood the zone and self-aggrandize.
+
+\subsection{Conclusion}
+
+Social science can use physics as a model discipline to transition from idiosyncratic and Balkanized to informative and united. Physics only changed the world because it is useful—it is useful only because it reliably predicts things. Physics became more useful as it became more united, finding shared representations for concepts developed independently—for example the science of optics was developed independently from the science of dynamics, but the physics of light is explained partly in analogy to a pendulum or spring—the mathematics of harmonic motion can be used to predict the motion of springs or pendulums—or why we see different colors of light through a prism. With careful, coordinated tweaks to group polarization experimental design and theoretical modeling, we will build a more rigorous theory of group polarization and its large-scale expression, echo chamber radicalization.
+
+I expect that group polarization experiments, when properly constructed and analyzed, will help sustainability campaigns optimize their social influence campaigns. We can start by developing simpler experimental designs based on formal or computational models capable of predicting outcomes in an experiment. I have developed a model that could motivate an experimental design: I showed that if extremists are more stubborn, this is sufficient to cause group polarization when likeminded groups interact over time. There is even a free stubborn extremism parameter that could be fit to data to measure the relationship between stubbornness and extremism on different issues.
+
+Group polarization research so far has mostly provided us with a checklist of what not to do. The alternative approach I outline builds on rock—the rock of rigor—and will supersede past group polarization research built on a thousand grains of inexact verbal speculation.
