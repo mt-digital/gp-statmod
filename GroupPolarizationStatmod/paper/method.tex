@@ -3,14 +3,25 @@
 Our method combines several formal and computational tools to identify which
 replications should be retracted and evaluate experimental designs across our
 corpus. The first step in the analysis is to find a reasonable pair of latent
-null-polarization distributions that appear polarized due to clipping.  To do
+null-polarization distributions that appear polarized due to clipping.  
+
+
+\subsection{Identify replications for removal}
+
+The first step is to find which replications of the 57 must be retracted 
+due to non-identifiability. We establish non-identifiability by finding one
+set of latent null-polarization opinion distributions where the mean doesn't change,
+but appear polarized when measured on the ordinal scale used in the experiment.
+
+
+To do
 this we designed a web app that allows the user to try different latent
 distribution parameters (Figure~\ref{fig:data-model-flow}) to seed a
 hillclimbing algorithm that explores latent distribution parameter space
 until it finds null parameters that look like group polarization under the
 experiment's ordinal measurement procedure, or the algorithm stops after a
 certain number of steps (Algorithm~\ref{alg:hillclimbing}). If the web app
-reports the 
+finds 
 
 
 —latent mean and pre- and post-discussion 
@@ -180,7 +191,7 @@ each latent distribution corresponding to each phase, pre- and post-deliberation
 Next, we explain how to find a set of latent null parameters, $\nu$, that
 generate spurious group polarization when naively measured on an ordinal scale.
 
-\begin{figure}
+\begin{figure}[ht]
   \caption{\textbf{Opinion measurement model and spurious group polarization.} 
   Latent model participant opinions are drawn from a normal distribution with the
   listed parameters (A,C). The pre-deliberation latent distribution has high
@@ -194,6 +205,8 @@ group polarization occurs (C).}
   \includegraphics[width=0.95\textwidth]{Figures/Model/latent-ordinal-distros.pdf}
   \label{fig:distros}
 \end{figure}
+
+
 
 \subsection{Interactive algorithm to find parameters inducing spurious group polarization} 
 
