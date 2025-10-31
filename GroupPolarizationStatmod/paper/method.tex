@@ -3,58 +3,65 @@
 Our method combines several formal and computational tools to identify which
 replications should be retracted and evaluate experimental designs across our
 corpus. The first step in the analysis is to find a reasonable pair of latent
-null-polarization distributions that appear polarized due to clipping.  
+null-polarization distributions that appear polarized due to clipping
+(Section~\ref{subsec:identify}). To do this, we develop a formal model and a numeric
+rootfinding algorithm to power a Shiny web app we used to interactively identify and
+record null-polarization parameters generating such measurement artifacts. 
+
+The second step in the analysis is to evaluate the quality of the experimental designs
+when we properly account for the ordinal measurement procedure
+(Section~\ref{subsec:evaluate}). We use the null-polarization parameters we found in
+the first step to generate simulated experimental data, then estimate the difference
+between the pre- and post-discussion means using ordered probit models to fit each
+distribution—ordered probit models account for the ordinal measurement procedure.  We
+estimate the false positive rate and false detection rate for low, medium, and high
+significance thresholds in terms of Cohen's $d$. Finally, we use the effect sizes thus
+calculated to determine the significance threshold one must use to achieve a 5\% false
+positive rate.
 
 
 \subsection{Identify replications for removal}
+\label{subsec:identify}
 
-The first step is to find which replications of the 57 must be retracted 
-due to non-identifiability. We establish non-identifiability by finding one
-set of latent null-polarization opinion distributions where the mean doesn't change,
-but appear polarized when measured on the ordinal scale used in the experiment.
+The first step is to find which replications of the 57 must be retracted due to
+non-identifiability. We establish non-identifiability by finding one set of latent
+null-polarization opinion distributions where the mean doesn't change, but appear
+polarized when measured on the ordinal scale used in the experiment.  In other words,
+if we find a null-polarization model that explains the outcome as well as a group
+polarization one, the group polarization hypothesis is \emph{non-identifiable} and the
+replication must be rejected—the data cannot confirm or disconfirm the target
+hypothesis.
 
-
-To do
-this we designed a web app that allows the user to try different latent
+To do this we designed a web app that allows the user to try different latent
 distribution parameters (Figure~\ref{fig:data-model-flow}) to seed a
 hillclimbing algorithm that explores latent distribution parameter space
 until it finds null parameters that look like group polarization under the
 experiment's ordinal measurement procedure, or the algorithm stops after a
-certain number of steps (Algorithm~\ref{alg:hillclimbing}). If the web app
-finds 
+certain number of steps (Algorithm~\ref{alg:hillclimbing}). 
 
+% To find examples of plausibly spurious group polarization we guess at what latent
+% mean, combined with a latent pre- and post-deliberation latent standard deviations,
+% could generate it. We calculate the observed group polarization for these latent
+% parameters by transforming the latent pre- and post-deliberation distributions from
+% continuous normal distributions to ordinal ``observations'' by integrating over each
+% ordinal bin, then calculating the observed mean for each experiment \emph{phase},
+% i.e., both the pre- and post-deliberation phases.  If the null model can generate
+% group polarization in this case, then the detection is labelled \emph{plausibly
+% false}, i.e., \emph{plausibly spurious}, and we call the generating latent
+% parameters the \emph{plausible null parameters}. 
 
-—latent mean and pre- and post-discussion 
-variances that  loads experimental design and observation data
-from a user-provided CSV file
-
-ordinal measurements distort to look 
-polarized. 
-
-
-To find examples of plausibly spurious group polarization we guess at what latent
-mean, combined with a latent pre- and post-deliberation latent standard deviations,
-could generate it. We calculate the observed group polarization for these latent
-parameters by transforming the latent pre- and post-deliberation distributions from
-continuous normal distributions to ordinal ``observations'' by integrating over each
-ordinal bin, then calculating the observed mean for each experiment \emph{phase},
-i.e., both the pre- and post-deliberation phases.  If the null model can generate
-group polarization in this case, then the detection is labelled \emph{plausibly
-false}, i.e., \emph{plausibly spurious}, and we call the generating latent
-parameters the \emph{plausible null parameters}. 
-
-To evaluate whether the plausible null parameters we identify could realistically
-fool a significance test, we implemented a generative simulation of each plausibly
-false detection of group polarization and calculated the \emph{family-wise error rate
-(FWER)} and the \emph{false discovery rate (FDR)}. We use the published number of
-participants $N$ for each of the 54 conditions that yielded plausibly false
-detections of group polarization. The FWER is also known as the Type I
-error, or the false positive rate: it is the probability that a detection of an
-effect occurs given that in reality there was a null effect.  The FDR is the
-probability that a published positive detection of an effect is a false positive,
-i.e., a detection of a null effect. High FWER and FDR for an experimental condition
-indicates that its design is weak, since we identify only one of perhaps infinitely
-many latent parameter combinations that can generate spurious group polarization. 
+% To evaluate whether the plausible null parameters we identify could realistically
+% fool a significance test, we implemented a generative simulation of each plausibly
+% false detection of group polarization and calculated the \emph{family-wise error rate
+% (FWER)} and the \emph{false discovery rate (FDR)}. We use the published number of
+% participants $N$ for each of the 54 conditions that yielded plausibly false
+% detections of group polarization. The FWER is also known as the Type I
+% error, or the false positive rate: it is the probability that a detection of an
+% effect occurs given that in reality there was a null effect.  The FDR is the
+% probability that a published positive detection of an effect is a false positive,
+% i.e., a detection of a null effect. High FWER and FDR for an experimental condition
+% indicates that its design is weak, since we identify only one of perhaps infinitely
+% many latent parameter combinations that can generate spurious group polarization. 
 
 We use this setup to demonstrate how \emph{adversarial} style testing of experimental
 designs with counterfactual null models can be used to estimate important
@@ -114,11 +121,19 @@ is indeed a significant effect.
 
 
 
-\subsection{Probability theory of spurious group polarization}
+\subsubsection{Probability theory of spurious group polarization}
 
-We formalize this experimental design in the $N\to\infty$ case where the
-distribution of ordinal measurements is created by integrating continuous latent
-opinion distributions.  Latent opinions in the model are normally distributed with
+% We formalize this experimental design in the $N\to\infty$ case where the
+% distribution of ordinal measurements is created by integrating continuous latent
+% opinion distributions.  
+
+
+Latent opinions are assumed to be normally distributed in general since they are
+aggregations of many neurobiological potentials of
+different polarities and magnitudes. We have two opinion distributions for 
+two different times in the group polarization experiment process: pre-discussion,
+$\tpre$, and post-discussion, $\tpost$.
+The 
 mean $\mu_t$ and variance $\sigma_t$ for time $t$. We are concerned with only two
 times, \emph{pre-} and \emph{post-} deliberation ($t=0$ and $t=T$, respectively).
 For short we can write $\mu_\mathrm{pre}$ and $\sigma_\mathrm{pre}$ for
@@ -130,8 +145,6 @@ distribution in the model,
   \label{eq:opinionDistribution} 
 \end{equation} 
 \noindent 
-Latent opinions are assumed to be normally distributed since they are unbounded 
-aggregations of neurobiological activity. 
 
 The measurement process with $N\to\infty$ participants is simulated by 
 integrating the latent opinion distribution between ordinal bin thresholds, 
@@ -208,7 +221,7 @@ group polarization occurs (C).}
 
 
 
-\subsection{Interactive algorithm to find parameters inducing spurious group polarization} 
+\subsubsection{Interactive algorithm to find parameters inducing spurious group polarization} 
 
 To identify plausibly false detections of group polarization, we searched numerically
 for latent parameters $\nu = (\mu, \sigmapre, and \sigmapost)$ that generate
@@ -312,14 +325,8 @@ experiments.
 \end{figure}
 
 
+\subsection{Evaluate experimental designs}
 
-\subsection{Metascience of the false detection rate in group polarization}
-
-Metascience provides a framework for
-calculating the false discovery rate across experimental conditions,
-aggregated to the level of journal articles and the ten-paper corpus. 
-The false discovery rate is then the Type I error rate relative to the rate of
-positive discoveries, true or false.
 We calculate via simulation and data fitting
 the Type I error rate for the experimental designs used in experimental conditions
 that, under a preliminary large-$N$ model analysis, generated group
@@ -348,6 +355,8 @@ to be absent, i.e., simple consensus is one form of $\neg E$. The presence of
 an effect $E$ is independent of whether an effect was \emph{detected}, 
 represented by $D$ if it was detected and $\neg D$ if not. 
 
+The false discovery rate is then the Type I error rate relative to the rate of
+positive discoveries, true or false.
 The group polarization studies are journal articles that present
 the results of multiple experiments to support some hypothesis. To organize
 the presentation of false detection rates across the ten studies in our
@@ -365,8 +374,7 @@ in the main text and in the compare with more pessimistic, yet realistic, estima
 of these values, as well as even more optimistic estimates. 
 
 
-
-\subsection{Estimating and limiting false detection rates}
+\subsubsection{Estimating and limiting false detection rates}
 
 To calculate the false detection rate we begin by simulating 
 pre- and post-deliberation 
