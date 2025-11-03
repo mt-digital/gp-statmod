@@ -14,56 +14,52 @@ set of latent null-polarization opinion distributions where the mean doesn't cha
 but appear polarized when measured on the ordinal scale used in the experiment.
 
 
-To do
-this we designed a web app that allows the user to try different latent
+To do this we designed a web app that allows the user to try different latent
 distribution parameters (Figure~\ref{fig:data-model-flow}) to seed a
 hillclimbing algorithm that explores latent distribution parameter space
 until it finds null parameters that look like group polarization under the
 experiment's ordinal measurement procedure, or the algorithm stops after a
 certain number of steps (Algorithm~\ref{alg:hillclimbing}). If the web app
-finds 
-
-
-—latent mean and pre- and post-discussion 
-variances that  loads experimental design and observation data
-from a user-provided CSV file
-
-ordinal measurements distort to look 
-polarized. 
-
+finds a constant latent mean and pre- and post-discussion 
+variances to specify a pre- and post-discussion opinion distributions that
+generate spurious group polarization, this is communicated to the user who
+can then mark the experimental condition as such.
 
 To find examples of plausibly spurious group polarization we guess at what latent
-mean, combined with a latent pre- and post-deliberation latent standard deviations,
-could generate it. We calculate the observed group polarization for these latent
-parameters by transforming the latent pre- and post-deliberation distributions from
-continuous normal distributions to ordinal ``observations'' by integrating over each
-ordinal bin, then calculating the observed mean for each experiment \emph{phase},
-i.e., both the pre- and post-deliberation phases.  If the null model can generate
-group polarization in this case, then the detection is labelled \emph{plausibly
+mean, combined with a latent pre- and post-deliberation latent standard
+deviations, could generate it. We calculate the observed group polarization
+for these latent parameters by transforming the latent pre- and
+post-deliberation distributions from continuous normal distributions to
+ordinal ``observations'' by integrating over each ordinal bin, then
+calculating the observed mean for each experiment \emph{phase}, i.e., both
+the pre- and post-deliberation phases.  If the null model can generate group
+polarization in this case, then the detection is labelled \emph{plausibly
 false}, i.e., \emph{plausibly spurious}, and we call the generating latent
 parameters the \emph{plausible null parameters}. 
 
-To evaluate whether the plausible null parameters we identify could realistically
-fool a significance test, we implemented a generative simulation of each plausibly
-false detection of group polarization and calculated the \emph{family-wise error rate
-(FWER)} and the \emph{false discovery rate (FDR)}. We use the published number of
-participants $N$ for each of the 54 conditions that yielded plausibly false
-detections of group polarization. The FWER is also known as the Type I
-error, or the false positive rate: it is the probability that a detection of an
-effect occurs given that in reality there was a null effect.  The FDR is the
-probability that a published positive detection of an effect is a false positive,
-i.e., a detection of a null effect. High FWER and FDR for an experimental condition
-indicates that its design is weak, since we identify only one of perhaps infinitely
-many latent parameter combinations that can generate spurious group polarization. 
+To evaluate whether the plausible null parameters we identify could
+realistically fool a significance test, we implemented a generative
+simulation of each plausibly false detection of group polarization and
+calculated the \emph{family-wise error rate (FWER)} and the \emph{false
+discovery rate (FDR)}. We use the published number of participants $N$ for
+each of the 54 conditions that yielded plausibly false detections of group
+polarization. The FWER is also known as the Type I error, or the false
+positive rate: it is the probability that a detection of an effect occurs
+given that in reality there was a null effect.  The FDR is the probability
+that a published positive detection of an effect is a false positive, i.e., a
+detection of a null effect. High FWER and FDR for an experimental condition
+indicates that its design is weak, since we identify only one of perhaps
+infinitely many latent parameter combinations that can generate spurious
+group polarization. 
 
-We use this setup to demonstrate how \emph{adversarial} style testing of experimental
-designs with counterfactual null models can be used to estimate important
-metascience parameters. In this study we use our FWER calculations to estimate
-the minimum Cohen's $d$ that should be used to determine whether an effect is
-``significant'' or not that will limit the FWER to 5\%. In the Discussion we
-sketch how our model can then be extended to rigorously calculate statistical power,
-i.e., the probability that a significant effect is detected given that there 
-is indeed a significant effect.
+We use this setup to demonstrate how \emph{adversarial} style testing of
+experimental designs with counterfactual null models can be used to estimate
+important metascience parameters. In this study we use our FWER calculations
+to estimate the minimum Cohen's $d$ that should be used to determine whether
+an effect is ``significant'' or not that will limit the FWER to 5\%. In the
+Discussion we sketch how our model can then be extended to rigorously
+calculate statistical power, i.e., the probability that a significant effect
+is detected given that there is indeed a significant effect.
 
 \begin{table}[h]
   \caption{\textbf{Latent psychological variables and distributions.}}
@@ -111,7 +107,6 @@ is indeed a significant effect.
   \bottomrule
   \end{tabular} 
 \end{table}
-
 
 
 \subsection{Probability theory of spurious group polarization}
@@ -207,7 +202,6 @@ group polarization occurs (C).}
 \end{figure}
 
 
-
 \subsection{Interactive algorithm to find parameters inducing spurious group polarization} 
 
 To identify plausibly false detections of group polarization, we searched numerically
@@ -264,35 +258,18 @@ repository\footnote{\url{https://github.com/mt-digital/gp-statmod/blob/main/Grou
   \end{algorithmic}
 \end{algorithm}
 
-
-% \begin{figure}
-%   \caption{\textbf{Shiny web application for user-guided hillclimbing to find
-%   parameters that generate spurious group polarization.} This web application enables users to
-% create new analyses of experimental conditions from published studies. Users 
-% provide initial guesses for the algorithm to use as starting points in 
-% finding variances that generate spurious group polarization. Users inspect 
-% model fits provided by the algorithm, adjusting parameters if necessary, and
-% mark an experimental condition as ``Plausibly spurious'' if a reasonable fit
-% is indeed found.\mt{Maybe add some A, B, C guides to the figure and include
-% in parentheses here to go with the text?}}
-%   \centering
-%     \includegraphics[width=0.75\textwidth]{Figures/Model/WebApp.png}
-%   \label{fig:webapp}
-% \end{figure}
-
-
-Note that so far, we have only identified cases where spurious group polarization plausibly
-occurs in the asymptotic case where $N\to\infty$ ($N$ being the number of participants).
-Experimental conditions yielding plausibly spurious group polarization warrant 
-some suspicion. If there exists set of latent simple consensus 
-parameters $\nu$ that create binned (Equation~\ref{eq:ordinal-frequency})
-opinion distributions that naively seem to be group polarized, then the means
-of at least some samples from these distibutions with empirical numbers of 
-participants would also appear to be shifted consistent with group
-polarization. This process itself does not tell us the false detection rate.
-We use the identified simple consensus parameters to define pre- and post-deliberation
-latent opinion distributions in simulated trials of group polarization 
-experiments.
+Note that so far, we have only identified cases where spurious group
+polarization plausibly occurs in the asymptotic case where $N\to\infty$ ($N$
+being the number of participants).  Experimental conditions yielding
+plausibly spurious group polarization warrant some suspicion. If there exists
+set of latent simple consensus parameters $\nu$ that create binned
+(Equation~\ref{eq:ordinal-frequency}) opinion distributions that naively seem
+to be group polarized, then the means of at least some samples from these
+distibutions with empirical numbers of participants would also appear to be
+shifted consistent with group polarization. This process itself does not tell
+us the false detection rate.  We use the identified simple consensus
+parameters to define pre- and post-deliberation latent opinion distributions
+in simulated trials of group polarization experiments.
 
 \begin{figure}
   \centering
@@ -310,7 +287,6 @@ experiments.
   visualization routines finish the pipeline (D).}
   \label{fig:data-model-flow}
 \end{figure}
-
 
 
 \subsection{Metascience of the false detection rate in group polarization}
@@ -363,7 +339,6 @@ and use optimistic values of
 $b=0.1$~\cite{Ioannidis2005,McElreath2015} and $W=0.8$~\cite{Smaldino2016NatSel}
 in the main text and in the compare with more pessimistic, yet realistic, estimates
 of these values, as well as even more optimistic estimates. 
-
 
 
 \subsection{Estimating and limiting false detection rates}
