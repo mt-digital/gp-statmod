@@ -1,0 +1,46 @@
+\begin{table}[h]
+  \caption{\textbf{Latent psychological variables and distributions.}}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $\omega_{i,t}$ & Latent opinion of individual $i$ at time $t$ & $\mathbb{R}$ \\
+    $\mu_t$ & Mean latent opinion at time $t$ (constant in null-polarization) & $\mathbb{R}$ \\
+    $\sigma_t$ & Variance of observed opnions at time $t$ & $\mathbb{R}$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+  \caption{\textbf{Experimental design and numerical model parameters.}}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $B$ & Number of bins & $5,6,7,\ldots$ \\
+    $\theta_b$ & The $B+1$ threshold values that separate bins & 
+      e.g., $-\infty, -2.5, -1.5,\ldots,2.5, \infty$ \\
+    $b$ & Bin index—there are $B+1$ to mark $B$ bins & $0,1,2,\ldots,B$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+  \caption{\textbf{Simulated observed variables.}}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $\meanobst$ & Mean of all reported opinions (Eq. \ref{eq:meanobs}) & $\mathbb{R}$ \\
+    $g$ & Observed group opinion polarization (Eq. \ref{eq:group-polarization})
+        & $\mathbb{R}$ \\
+    $d$ & Cohen's $d$ used as significance threshold 
+        & $\mathbb{R}$ \\
+    $\alpha_e,\alpha_s,\alpha_{\text{all}}$ & Family-wise/Type I error rate
+    for an experiment, study, or across all experiments
+             & $[0, 1]$ \\
+    FDR & False discovery rate
+        & $[0, 1]$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
