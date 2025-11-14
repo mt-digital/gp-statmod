@@ -31,15 +31,18 @@
   \toprule
     \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
   \midrule  
-    $\meanobst$ & Mean of all reported opinions (Eq. \ref{eq:meanobs}) & $\mathbb{R}$ \\
-    $g$ & Observed group opinion polarization (Eq. \ref{eq:group-polarization})
+    $\meanobst$ & Mean of all reported opinions (Equation \ref{eq:meanobs}) & $\mathbb{R}$ \\
+    $g(\nu)$ & Spurious group opinion polarization for null-polarization params $\nu$
+    (Equation \ref{eq:group-polarization})
         & $\mathbb{R}$ \\
-    $d$ & Cohen's $d$ used as significance threshold 
-        & $\mathbb{R}$ \\
-    $\alpha_e,\alpha_s,\alpha_{\text{all}}$ & Family-wise/Type I error rate
-    for an experiment, study, or across all experiments
+    $d_{ei}$ & Cohen's $d$ for the $i^{\mathrm{th}}$ simulation of experiment $e$ & $\mathbb{R}$ \\
+    $d*$ & Significance value in terms of Cohen's $d$, e.g., $d^* \geq 0.5$ as a
+    "medium" effect\footnote{According to Cohen (1986)\cite{CohenBook1988}.} & $\mathbb{R}$ \\
+    $\alpha_e,\alpha_s,\alpha_{\text{all}}$ & False positive rate
+    for an experiment, $e$; study, $s$; or across \emph{all} experiments.
              & $[0, 1]$ \\
-    FDR & False discovery rate
+    FDR$_e$ & False detection rate: calculated using $\alpha_e$ to get chance experimental
+    detection is false\footnote{See Equation~\ref{eq:fdr}}
         & $[0, 1]$ \\
   \bottomrule
   \end{tabular} 
