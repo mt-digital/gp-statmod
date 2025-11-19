@@ -1,0 +1,112 @@
+---
+title: Code examples to accompany "If the Null Fits, You Must Omit"
+author: Matt Turner · [matt@mat.phd](mailto:matt@mat.phd)
+editor: 
+  markdown: 
+    wrap: 90
+bibliography: this.bib
+---
+
+# Purpose: demonstrate gp-stats codebase
+
+Here are some quick notes on the group polarization codebase in R supporting our article,
+*If the Null Fits, You Must Omit*. The code is permanently [hosted on
+GitHub](https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod).
+
+To follow along, please clone the `gp-statmod` directory.
+
+```         
+$ git clone https://github.com/mt-digital/gp-statmod.git
+```
+
+Change directories to go to the `paper` directory where this document lives:
+
+```         
+cd gp-statmod/GroupPolarizationStatmod/paper
+```
+
+Then you can run the examples in this document, edit them, etc., on your own computer.
+
+## Calculate probability density vector for `Moscovici1969_Americans` condition
+
+See Method section of the paper where we calculate the probabilty density vector for
+different measurements based on the latent opinion probability density function.
+
+Here we show how to calculate the mean observed opinion at pre- and post-discussion to
+show how spurious group polarization occurs under a null polarization hypothesis.
+
+@Moscovici1969 report observing a mean opinion of -0.6 in pre-discussion opinions and mean
+opinion -1.04 post-discussion, measured using an ordinal scale from -3 (strongly disagree)
+to +3 (strongly agree). Let's calculate the probability density vector for the pre- and
+post-discussion distributions then calculate the mean opinion for each one. The latent
+distributions have the same mean, -1.2, but different variances, which results in a
+shifted observed mean due to opinion clipping.
+
+![](images/clipboard-1443885641.png){width="628"}
+
+We call this a *null polarization model* (defined in terms of latent opinions) that
+generates *spurious group polarization.* *Spurious group polarization* is when the
+observed opinion distributions appear to polarize (i.e., *radicalize*, or *become more
+extreme*) that does not represent the true change in latent opinions. The measurement
+procedure *clips* extreme opinions less than the minimum bin value, or greater than the
+maximum, causing the average observed opinion to *spuriously* appear polarized.
+
+Let's use some modeling code from the repository to demonstrate. For this part we need to
+source (*use code from*) the `model.R` file that has the the
+[`binProb`](https://github.com/mt-digital/gp-statmod/blob/final-draft/GroupPolarizationStatmod/model.R#L7)
+function I use below. Also make sure you have set the working directory to the
+`GroupPolarizationStatmod` directory within the `gp-stats` project/repository directory.
+
+For a preliminary step, adapt my code below for your computer. Change the argument to
+`root.dir` to be the location of the `GroupPolarizationStatmod` directory on your own
+computer.
+
+```{r setup}
+
+```
+
+Now in the following chunk, the `source` function will know where to look for the file
+with the `makeProbVec` function we need, `model.R`.
+
+```{r warning=FALSE}
+# This is how I set the working directory
+# Adapt for your own computer
+setwd("~/workspace/gp-statmod/GroupPolarizationStatmod/")
+# Load makeProbVec from file model.R
+source("model.R")
+```
+
+Now read in the pre- and post-discussion means from `Moscovici1969_Americans`
+
+```{r}
+# Experimental means
+mosc1969_ave_pre <- -0.6
+mosc1969_ave_post <- -1.04
+```
+
+Create a hypothesized null model that will spuriously look like polarization, with the
+same pre- and post-discussion means above. These correspond to $\mu$,
+$\sigma_\mathrm{pre}$, and $\sigma_\mathrm{post}$ from the paper that define a null
+polarization model, $\nu = (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})$.
+
+```{r}
+# Hypothesized null model that looks polarized
+mu <- -1.2
+sd_pre <- 4.3
+sd_post <- 1.9
+```
+
+These
+
+```{r}
+# Vector w/ probability density for each bin
+f_pre <- makeProbVec(-3:3, -1.2, 4.3)
+# Print to two significant digits
+sprintf("%.2f", f_pre)
+```
+
+We can plot this simply using just
+
+```{r}
+barplot(f_pre, names.arg = -3:3)
+```

@@ -18,7 +18,7 @@ Null-polarization  We thus model opinions at each time, $t=\mathrm{pre}$ and
 $t=\mathrm{post}$, as random variables drawn from a normal distribution with
 mean $\mu_t$ and standard deviation $\sigma_t$.  we drop the time 
 
-The null-polarization distributions are represented by 
+The null-polarization distributions are represented by $\nu$.
 
 in a simple, general way—i.e., a decrease in opinion variance but a static
 opinion mean—we represent . In the general group polarization hypothesis, the
@@ -65,7 +65,7 @@ model as a 3-tuple, $\nu = (\mu, \sigmapre, \sigmapost)$.
 \vspace{1.5em}
 \end{center}
 
-\subsubsection{Simulated opinion measurements}
+\subsubsection{Simulated group polarization measurements}
 
 We simulate the collection of an \emph{ordinal distribution} of \emph{ordinal
 observations}, as was performed in a prototypical group polarization experiment 
@@ -106,7 +106,7 @@ can define all thresholds compactly as \cite{Liddell2018}
 \theta_j = \begin{cases}
   -\infty         & \text{ if } j=0 \\
   \infty          & \text{ if } j=B \\
-  b_1 + \frac{j + 1}{2} & \text{ otherwise.}
+  b_j + \frac{1}{2} & \text{ otherwise.}
 \end{cases}
 \label{eq:thresholds}
 \end{equation}
@@ -127,12 +127,6 @@ mean opinion of the simulated measurements like so
 \end{equation}
 \noindent
 
-\begin{center}
-\vspace{1.5em}
-[ FIGURE \ref{fig:distros} ABOUT HERE ]
-\vspace{1.5em}
-\end{center}
-
 Group polarization is the difference between the post-deliberation mean
 observed opinion and the pre-deliberation one, 
 which we can write as 
@@ -149,6 +143,59 @@ which we can write as
 \end{center}
 
 
+\subsubsection{Simulated spurious group polarization}
+
+Group polarization measures radicalization in experimental echo chambers in terms of
+the difference between mean group opinions before and after the group discusses some
+survey topic. The following model shows the problem of how the measurement scheme 
+above can make \emph{mere agreement} spuriously look like polarization.
+
+To make things more exact, we define a \emph{null model}, $\nu$, of mere agreement
+defined as a 3-tuple: a constant mean for the pre- and post-discussion latent opinion
+distributions, and a pre-deliberation latent opinion variance that is greater than the
+post-deliberation variance to represent finding agreement,
+\begin{equation}
+  \nu = (\mu,~\sigmapre,~\sigmapost).
+  \label{eq:nu-definition}
+\end{equation}
+\noindent
+Group polarization is \emph{spurious} in this case if measurement clipping causes 
+the observed difference in pre- and post-discussion opinions to be greater than zero,
+i.e., $g > 0$ (Equation \ref{eq:group-polarization}, 
+even if the true latent change is zero.
+
+We will show how this arrangement generates spurious polarization in an
+experimental condition in our corpus, 
+the \emph{Americans} experimental condition in
+\textcite{Moscovici1969}, to which we gave the Experiment ID
+\texttt{Moscovici1969\_Americans}. In that condition, the authors used a seven-bin
+scale ($B=7$) with numerical values from -3 to +3 indicating opinions from ``strongly
+disagree'' to ``strongly agree''. Pre-consensus opinions were reported to have
+mean -0.6 and the post-consensus mean was -1.04 \cite[p. 132, Table 4]{Moscovici1969}. 
+
+And now we will show that a null model with
+$\nu = (\mu = -1.2, \sigmapre = 4.3, and \sigmapost = 1.9)$ generates spurious
+polarization with exactly the pre- and post-discussion means Moscovici and Zavalloni
+report (Figure~\ref{fig:distros}). First, calculate the vector of probability density
+values for each bin, $f[b]$, for the pre- and post-discussion latent opinion
+distributions using Equation \ref{eq:} (calculated with
+[`makeProbVec`](https://github.com/mt-digital/gp-statmod/blob/final-draft/GroupPolarizationStatmod/model.R\#L43) from 
+the [project code repository](https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod):
+\begin{subequations}
+  \begin{equation}
+    f_\mathrm{pre}[b] = 
+  \end{equation}
+  \begin{equation}
+    f_\mathrm{post}[b] = 
+  \end{equation}
+\end{subequations}
+
+
+\begin{center}
+\vspace{1.5em}
+[ FIGURE \ref{fig:distros} ABOUT HERE ]
+\vspace{1.5em}
+\end{center}
 \subsection{Root-finding Algorithm to Find Null-Polarization Models with Artifacts}
 
 

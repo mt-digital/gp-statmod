@@ -16,4 +16,22 @@ group polarization occurs (C).}
 \end{figure}
 
 
+\begin{figure}
+  \centering
+    % \includegraphics[width=0.8\textwidth]{Figures/Model/data-model-flow.png}
+  \includegraphics[width=\textwidth]{Figures/Model/SoftwareMap_Mashup.png}
+  \caption{\textbf{Simulation and analysis pipeline}
+  for finding when measurement artifacts.  
+  Arrows show the flow of input and output data from parameter estimation.
+  First, we used the web app (A) to find null-polarization parameters for 
+  each experimental condition, $\nu_e$,
+  that ordinal measurements distort to look like polarization
+  (B—described in Algorithm~\ref{alg:hillclimbing}).
+  We fit ordered probit models to simulated null-polarization outcomes,
+  seeded by the $\nu$ found in the previous step (C). Analysis and 
+  visualization routines finish the pipeline (D).}
+  \label{fig:data-model-flow}
+\end{figure}
+
+
 
