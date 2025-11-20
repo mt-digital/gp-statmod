@@ -179,14 +179,10 @@ latexifyTTestExperiment <- function(tTestTablePath = "data/output/TtestSummaryTa
                                         Est.FPRate = ExpectedPower)
     
     ttestTable_latex <- 
-        kable(tTestTable, "latex", align = "lccccc", longtable = T, booktabs = T, digits=2) %>%
+        kable(tTestTable, "latex", align = "lccccc", 
+              longtable = T, booktabs = T, digits=2) %>%
         kable_styling(latex_options = c("repeat_header"))
 
     writeLines(ttestTable_latex, latexifiedPath)
 }
 
-
-doAnalyses <- function(studiesAnalysisDfPath = "data/StudiesAnalysis.csv")
-{
-  
-}

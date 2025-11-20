@@ -15,8 +15,8 @@ plot_latent_pdf_integration = function(mu = 0, sd = 2.5, min_bin, max_bin,
                                        bins, bin_colors, # xlim = c(-6.0, 6.0), 
                                        save_path = "test_latent_pdf.pdf", 
                                        max_prob = 1.0) {
+  
   print(save_path)
-
 
   xmin = min_bin - 0.5
   xmax = max_bin + 0.5

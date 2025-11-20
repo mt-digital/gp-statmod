@@ -14,7 +14,7 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
                              step = 0.01, maxIts = 10000, tol = 1e-6)
 {
     # Keep the error function to be minimized through hillclimbing
-    # separate from hillclimbing itself. ### XXXX BUT WHYYYY seems confusing...
+    # separate from hillclimbing itself.
     errfunc <- function(latentSD)
     {
         simulatedObservedMean <- meanObs(
@@ -22,7 +22,6 @@ solveForLatentSD <- function(kVec, latentMean, observedMean, guess,
             makeProbVec(kVec, latentMean, latentSD)
         )
         
-        # return ((observedMean - simulatedObservedMean)^2);
         return (simulatedObservedMean - observedMean);
     }
 

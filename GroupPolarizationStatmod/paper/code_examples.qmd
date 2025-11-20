@@ -1,13 +1,15 @@
 ---
-title: Code examples to accompany "If the Null Fits, You Must Omit"
-author: Matt Turner · [matt@mat.phd](mailto:matt@mat.phd)
+title: Notes and code examples to accompany "If the Null Fits, You Must Omit"
+author: Matt Turner · [https://mat.phd](https://mat.phd)
+date: today
+toc: true
 editor: 
   markdown: 
     wrap: 90
 bibliography: this.bib
 ---
 
-# Purpose: demonstrate gp-stats codebase
+### Purpose: demonstrate gp-stats codebase
 
 Here are some quick notes on the group polarization codebase in R supporting our article,
 *If the Null Fits, You Must Omit*. The code is permanently [hosted on
@@ -27,10 +29,15 @@ cd gp-statmod/GroupPolarizationStatmod/paper
 
 Then you can run the examples in this document, edit them, etc., on your own computer.
 
-## Calculate probability density vector for `Moscovici1969_Americans` condition
+# Simulations
 
-See Method section of the paper where we calculate the probabilty density vector for
-different measurements based on the latent opinion probability density function.
+I developed two models of group polarization to serve complementary purposes.
+
+## Expectation model of group polarization experiments
+
+See Method section of the paper where we explain how to calculate the probability density
+vector representing the probability that a participant gives the opinion represented by
+each measurement bin, $b$.
 
 Here we show how to calculate the mean observed opinion at pre- and post-discussion to
 show how spurious group polarization occurs under a null polarization hypothesis.
@@ -60,10 +67,6 @@ function I use below. Also make sure you have set the working directory to the
 For a preliminary step, adapt my code below for your computer. Change the argument to
 `root.dir` to be the location of the `GroupPolarizationStatmod` directory on your own
 computer.
-
-```{r setup}
-
-```
 
 Now in the following chunk, the `source` function will know where to look for the file
 with the `makeProbVec` function we need, `model.R`.
@@ -96,7 +99,11 @@ sd_pre <- 4.3
 sd_post <- 1.9
 ```
 
-These
+The function `makeProbVec` creates the vector $f[b]$ of probabilities that bin $b_i \in b$
+will be reported by a randomly-selected participant, given the measurement bin values and
+the distribution of latent opinions, assumed normal, defined by the mean and standard
+deviation, $\mu$ and $\sigma$. and bin values. Here bin values are $b=-3,-2,\ldots,3$;
+$\mu=-1.2$; and $\sigma=4.3$.
 
 ```{r}
 # Vector w/ probability density for each bin
@@ -105,8 +112,49 @@ f_pre <- makeProbVec(-3:3, -1.2, 4.3)
 sprintf("%.2f", f_pre)
 ```
 
-We can plot this simply using just
+Let's `barplot` to have a look:
+
+```{r out.width=500}
+barplot(f_pre, 
+        names.arg = -3:3,
+        ylim = c(0, 0.4),
+        ylab = "Pct. Responding",
+        xlab = "Bin Value")
+```
+
+Let's check the simulated average observed opinion, $\bar{o}$, using the expected value of
+the distribution, i.e., we assume $\bar{o} = \langle o \rangle$, so we use the standard
+formula for expected value, which assumes that $f[b]$ is normalized.
+
+$$
+\bar{o} = \sum_{b=b_1}^{b_B} b \cdot f[b].
+$$
+
+In code,
 
 ```{r}
-barplot(f_pre, names.arg = -3:3)
+# Calculate simulated and compare with actual
+sim_obs_pre <- sum((-3:3) * f_pre)
+print(abs(sim_obs_pre - mosc1969_ave_pre))
 ```
+
+This is within one significant digit greater than the reporting scale, meaning it is an
+acceptable fit.
+
+This shows that even just a little spread in the distribution of latent opinions results
+in a seriously distorted mean [@Liddell2018]—one that reproduces the mean reported by
+@Moscovici1969, but actually confirming the null polarization hypothesis!
+
+Let's check the simulated average observed opinion for post-deliberation, repeating the
+previous steps for $t=\mathrm{post}$.
+
+```{r}
+f_post <- makeProbVec(-3:3, mu, sd_post)
+sprintf("%.2f", f_post)
+# Calculate simulated and compare with actual
+sim_obs_post <- sum((-3:3) * f_post)
+print(abs(sim_obs_post - mosc1969_ave_post))
+```
+
+Here we get even closer agreement between the observed post-discussion average opinion in
+@Moscovici1969 and the one we simulated.
