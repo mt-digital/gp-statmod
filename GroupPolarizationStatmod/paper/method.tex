@@ -145,33 +145,31 @@ which we can write as
 
 \subsubsection{Simulated spurious group polarization}
 
-Group polarization measures radicalization in experimental echo chambers in terms of
-the difference between mean group opinions before and after the group discusses some
-survey topic. The following model shows the problem of how the measurement scheme 
-above can make \emph{mere agreement} spuriously look like polarization.
+Group polarization measures radicalization in experimental echo chambers in
+terms of the difference between mean group opinions before and after the
+group discusses some survey topic. The following model shows the problem of
+how the measurement scheme above can make \emph{mere agreement} spuriously
+look like polarization.
 
-To make things more exact, we define a \emph{null model}, $\nu$, of mere agreement
-defined as a 3-tuple: a constant mean for the pre- and post-discussion latent opinion
-distributions, and a pre-deliberation latent opinion variance that is greater than the
-post-deliberation variance to represent finding agreement,
-\begin{equation}
-  \nu = (\mu,~\sigmapre,~\sigmapost).
-  \label{eq:nu-definition}
-\end{equation}
-\noindent
-Group polarization is \emph{spurious} in this case if measurement clipping causes 
-the observed difference in pre- and post-discussion opinions to be greater than zero,
-i.e., $g > 0$ (Equation \ref{eq:group-polarization}, 
+To make things more exact, we define a \emph{null model}, $\nu$, of mere
+agreement defined as a 3-tuple: a constant mean for the pre- and
+post-discussion latent opinion distributions, and a pre-deliberation latent
+opinion variance that is greater than the post-deliberation variance to
+represent finding agreement, \begin{equation} \nu =
+(\mu,~\sigmapre,~\sigmapost).  \label{eq:nu-definition} \end{equation}
+\noindent Group polarization is \emph{spurious} in this case if measurement
+clipping causes the observed difference in pre- and post-discussion opinions
+to be greater than zero, i.e., $g > 0$ (Equation \ref{eq:group-polarization},
 even if the true latent change is zero.
 
 We will show how this arrangement generates spurious polarization in an
-experimental condition in our corpus, 
-the \emph{Americans} experimental condition in
-\textcite{Moscovici1969}, to which we gave the Experiment ID
-\texttt{Moscovici1969\_Americans}. In that condition, the authors used a seven-bin
-scale ($B=7$) with numerical values from -3 to +3 indicating opinions from ``strongly
-disagree'' to ``strongly agree''. Pre-consensus opinions were reported to have
-mean -0.6 and the post-consensus mean was -1.04 \cite[p. 132, Table 4]{Moscovici1969}. 
+experimental condition in our corpus, the \emph{Americans} experimental
+condition in \textcite{Moscovici1969}, to which we gave the Experiment ID
+\texttt{Moscovici1969\_Americans}. In that condition, the authors used a
+seven-bin scale ($B=7$) with numerical values from -3 to +3 indicating
+opinions from ``strongly disagree'' to ``strongly agree''. Pre-consensus
+opinions were reported to have mean -0.6 and the post-consensus mean was
+-1.04 \cite[p. 132, Table 4]{Moscovici1969}. 
 
 And now we will show that a null model with
 $\nu = (\mu = -1.2, \sigmapre = 4.3, and \sigmapost = 1.9)$ generates spurious
