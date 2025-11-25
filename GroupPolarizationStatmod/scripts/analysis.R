@@ -111,8 +111,6 @@ NON_IDENTIFIED =
 #
 sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
 
-  # return (fdr_vs_sig_tbl)
-
   return(
 
     fdr_vs_sig_tbl %>%
@@ -120,12 +118,9 @@ sigval_for_low_fwer = function(fdr_vs_sig_tbl, target_fwer = 0.05) {
       mutate(StudyID = fct_reorder(StudyID, FWER, mean), 
              ExperimentID = fct_reorder(ExperimentID, FWER, mean)) %>%
       filter(FWER <= target_fwer) %>% 
-      # group_by(StudyID, ExperimentID) %>% 
       group_by(ExperimentID) %>% 
       filter(SigVal == min(SigVal))  %>% 
-      mutate(SigVal = as_factor(SigVal), ExperimentID = fct_reorder(ExperimentID, FDR)) # %>%
-      # arrange(desc(SigVal)) 
-
+      mutate(SigVal = as_factor(SigVal), ExperimentID = fct_reorder(ExperimentID, FDR)) 
   )
 }
 
