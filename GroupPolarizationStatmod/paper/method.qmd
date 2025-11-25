@@ -7,6 +7,10 @@ author: Matt Turner · [https://mat.phd](https://mat.phd)
 date: today
 toc: true
 bibliography: this.bib
+format:
+  html:
+    grid:
+      body-width: 880px  
 ---
 
 \newcommand{\mupre}{\mu_\mathrm{pre}}
@@ -27,8 +31,6 @@ bibliography: this.bib
 \newcommand{\tpre}{t_\mathrm{pre}}
 \newcommand{\tpost}{t_\mathrm{post}}
 
-
-
 A group polarization replication is proven undecidable, and therefore not truly
 a replication, if we can find a model of *mere agreement* that appears to be
 polarized under that replication's experimental design. If we cannot find such a
@@ -42,49 +44,72 @@ the group, and the other representing the post-discussion opinions. Our
 but opinion variance decreases to represent agreement (or, equivalently,
 *consensus* [@DeGroot1974]).
 
-
-
 # Latent Opinion Model
 
 Throughout this paper we model a participant $i$'s latent opinion at time $t$ as
-a normally-distributed random variable,
-$$ 
+a normally-distributed random variable, $$ 
 \omega_{i,t} \sim
 \mathcal{N}(\mu_t, \sigma_t),
-$$ {#eq-random-variable-def}
-with mean $\mu_t$ and standard deviation $\sigma_t$. 
-Group polarization in terms of latent opinions is then defined as any pair of pre- and
-post-discussion opinion distributions where the mean increases in magnitude over
-time—formally, $| \mupost | > | \mupre |$. We need to take magnitudes since radicalization may be towards increasingly negative or positive opinion values. 
+$$ {#eq-random-variable-def} with mean $\mu_t$ and standard deviation
+$\sigma_t$. Group polarization in terms of latent opinions is then defined as
+any pair of pre- and post-discussion opinion distributions where the mean
+increases in magnitude over time—formally,
+$| \mu_\mathrm{post}| > | \mu_\mathrm{pre}|$. We need to take magnitudes since
+radicalization may be towards increasingly negative or positive opinion values.
 
 For group polarization experiments, only two times are relevant:
-*pre-discussion*, $t=\mathrm{pre}$, and *post-discussion*, $t=\mathrm{post}$. Since participant groups are assumed to be likeminded, we could also assume they come to agree more over time as well as become more extreme in our group polarization model, or in terms of the latent opinion variance, $\sigmapre > \sigmapost$—but only one study in our ten actually measured opinion variance to check this [@Schkade2010].
+*pre-discussion*, $t=\mathrm{pre}$, and *post-discussion*, $t=\mathrm{post}$.
+Since participant groups are assumed to be likeminded, we could also assume they
+come to agree more over time as well as become more extreme in our group
+polarization model, or in terms of the latent opinion variance,
+$\sigma_\mathrm{pre}> \sigma_\mathrm{post}$—but only one study in our ten
+actually measured opinion variance to check this [@Schkade2010].
 
-A *null-polarization model* is a model that is consistent with the *negation*, or *null*, of the  *group polarization hypothesis*. The group polarization hypothesis is that group discussion causes the average group opinion to increase, assuming the group is aligned on a particular issue, though opinion strength varies. Therefore a null model is one where the latent mean stays
-constant, i.e., $\mu = \mu_\mathrm{pre} = \mu_\mathrm{post}$. 
+A *null-polarization model* is a model that is consistent with the *negation*,
+or *null*, of the *group polarization hypothesis*. The group polarization
+hypothesis is that group discussion causes the average group opinion to
+increase, assuming the group is aligned on a particular issue, though opinion
+strength varies. Therefore a null model is one where the latent mean stays
+constant, i.e., $\mu = \mu_\mathrm{pre} = \mu_\mathrm{post}$.
 
-*Mere agreement* is the type of null-polarization model we use here. Mere agreement is a null-model because the mean latent opinion is set to be constant before and after discussion. We represent *agreement*—or equivalently, *consensus*—as a decrease in the standard deviation that defines the pre- and post-discussion latent opinion distributions. The mere agreement model is the cornerstone of our analysis, since it is empirically plausible and generates *spurious* observations of group polarization under mere agreement models, due to measurement artifacts induced by clipping all latent opinion values outside the measurement range—we call this *spurious polarization* for short. We simulate opinion measurements in two different ways, but both use the mere agreement model of latent opinions to test whether and by how much the measurement procedure distorts null-polarization to look like group polarization.
-
+*Mere agreement* is the type of null-polarization model we use here. Mere
+agreement is a null-model because the mean latent opinion is set to be constant
+before and after discussion. We represent *agreement*—or equivalently,
+*consensus*—as a decrease in the standard deviation that defines the pre- and
+post-discussion latent opinion distributions. The mere agreement model is the
+cornerstone of our analysis, since it is empirically plausible and generates
+*spurious* observations of group polarization under mere agreement models, due
+to measurement artifacts induced by clipping all latent opinion values outside
+the measurement range—we call this *spurious polarization* for short. We
+simulate opinion measurements in two different ways, but both use the mere
+agreement model of latent opinions to test whether and by how much the
+measurement procedure distorts null-polarization to look like group
+polarization.
 
 ::: {style="text-align: center;"}
 \[ TABLE \[tab:latent-variables\](#tab:latent-variables){reference-type="ref"
 reference="tab:latent-variables"} ABOUT HERE \]
 :::
 
-## Two Ways to Model Measurement that Extend the Latent Opinion Model
+# Two Models of Group Polarization Measurement
 
-We simulate measurement in two different ways—i.e., with two different models—for the two parts of our analysis. The first
-is the *expectation model*: an
-efficient way to *simulate measurement of the observed average* opinion of a group, using the *mathematical expectation value* of the distribution of measured opinions as a proxy. In the second
-model, the *stochastic model*, we simulate individual participant responses by first drawing an opinion for each participant from the latent opinion distribution (@eq-. The opinions are binned to the appropriate ordinal value. 
+We simulate measurement in two different ways—i.e., with two different
+models—for different parts of our analysis. The first is the *expectation
+model*: an efficient way to *simulate measurement of the observed average*
+opinion of a group, using the *mathematical expectation value* of the
+distribution of measured opinions as a proxy. In the second model, the
+*stochastic model*, we simulate individual participant responses by first
+drawing an opinion for each participant from the latent opinion distribution
+(@eq-random-variable-def). The opinions are binned to the appropriate ordinal
+value.
 
-We use the expectation model for its
-efficiency in the first step of our analysis: to find a *null-polarization
-model* that also fits the data for each experimental condition studied—if we
-find one that means we must retract this replication since this proves that the
-group polarization is undecidable with the data we have. Once we find any such
-undecidable results, we use the null-polarization model to help us further
-evaluate the experimental design itself.
+We use the expectation model for its efficiency in the first step of our
+analysis: to find a *null-polarization model* that also fits the data for each
+experimental condition studied—if we find one that means we must retract this
+replication since this proves that the group polarization is undecidable with
+the data we have. Once we find any such undecidable results, we use the
+null-polarization model to help us further evaluate the experimental design
+itself.
 
 In the *stochastic model*, we simulate group polarization data for the
 *Evaluation* step of the analysis. We simulate experimental data, with the same
@@ -97,27 +122,78 @@ $\alpha_e$. We close our analysis by demonstrating how our method can be
 inverted to *evaluate* experimental designs in the pre-registration stage to
 avoid preventable replication failures like we identify here.
 
-The measurement models are introduced in detail along with the corresponding stage of the analysis that uses them. First, the *Identification* stage that uses the *expectation* measurement model; second, the *Evaluation* stage that uses the *stochastic* measurement model.
+The measurement models are introduced in detail along with the corresponding
+stage of the analysis that uses them. First, the *Identification* stage that
+uses the *expectation* measurement model; second, the *Evaluation* stage that
+uses the *stochastic* measurement model.
 
-# *Identification* of Invalid Replications
+# Part 1: *Identify* Invalid Replications
 
-In the first stage of our analysis, the *Identification* stage, we check if we can *invalidate* a replication of group polarization achieved in some experiment/experimental condition, which we label $e$. Our invalidation strategy is to find a mere agreement null-polarization model, call it $\nu$, that predicts the exact observations reported in each experimental replication in our corpus. If one is found, then we have found a model consistent with the *negation* of the group polarization hypothesis that explains the data as well as the group polarization hypothesis itself. In other words, the hypothesis is not proved or disproved given the data, but *undecidable*: the data cannot *decide* the hypothesis one way or another because of potential measurement artifacts. Because the experiment failed to produce a valid replication, the results are effectively stripped of evidentiary value and warrant exclusion from the aggregate evidence base.
+In the first stage of our analysis, we try to *identify* a null polarization
+models, $\nu$, that invalidate published detections of group polarization if the
+measurement procedure induces *spurious group polarization* for that null
+polarization model. Null polarization can take many forms—all that is required
+is that the latent mean opinion stays constant before and after discussion. Here
+we use a *mere agreement* null polarization model, where we simulate
+*consensus*, the tendency for sufficiently similar opinions to become more
+similar—but we leave out polarization. In mere agreement, moderate and extreme
+opinions approach change by equal magnitude towards each other. We therefore
+represent consensus as a decrease in the standard deviation of the latent
+opinion distribution from pre- to post-discussion. We simulate the measurement
+of the group's average opinion before and after discussion and measure the
+spurious group polarization, if there is any. We use this procedure in a search
+algorithm we developed to identify which combination of constant latent mean and
+pre- and post-discussion opinion variances generate spurious group polarization,
+if there are any.
 
-But how do we find a $\nu$ that generates spurious group polarization? And how do we even simulate the group polarization experiments and measurements that make mere agreement in latent opinions look like group polarization? We simulate 
-experimental measurements of group polarization by using the mathematical *expectation value* of latent opinions defined by $\nu$ as a proxy for the observed average value of ordinal-valued reported opinions (described in the first subsection below). We then use this measurement model in a numerical root-finding algorithm that identifies a $\nu$ that matches published observations, if possible. If we find such a $\nu$, this means we have a model
-consistent with the null hypothesis that explains published observations. In other words, the replication is invalidated since the group polarization hypothesis is *undecidable* given the data—i.e., it cannot decide whether the hypothesis or its null is correct.
+Our invalidation strategy, then, is to find a mere agreement null polarization
+model, $\nu$, that predicts the exact observations reported in each experimental
+replication in our corpus. If one is found, then we have found a model
+consistent with the *negation* of the group polarization hypothesis that
+explains the data as well as the group polarization hypothesis itself. In other
+words, the hypothesis is not proved or disproved given the data, but
+*undecidable*: the data cannot *decide* the hypothesis one way or another
+because of potential measurement artifacts. Because the experiment failed to
+produce a valid replication, the results are effectively stripped of evidentiary
+value and warrant exclusion from the aggregate evidence base. We apply our
+analysis to every experimental condition across all ten journal articles in our
+corpus, which we label $e$.
 
-So, to review, this subsection introduces how the *Identification* stage of the analysis works. In this stage we identify for which experiments, $e$, does a mere agreement null model look like group polarization under $e$'s measurement procedure. 
+But how do we find a $\nu$ that generates spurious group polarization? And how
+do we even simulate the group polarization experiments and measurements that
+make mere agreement in latent opinions look like group polarization? We simulate
+experimental measurements of group polarization by using the mathematical
+*expectation value* of latent opinions defined by $\nu$ as a proxy for the
+observed average value of ordinal-valued reported opinions (described in the
+first subsection below). We then use this measurement model in a numerical
+root-finding algorithm that identifies a $\nu$ that matches published
+observations, if possible. If we find such a $\nu$, this means we have a model
+consistent with the null hypothesis that explains published observations. In
+other words, the replication is invalidated since the group polarization
+hypothesis is *undecidable* given the data—i.e., it cannot decide whether the
+hypothesis or its null is correct.
 
-## The Expectation Model of Opinion Measurement
+So, to review, this subsection introduces how we identify which experimental
+data can be explained by a mere agreement null model, where the ordinal survey
+measurement procedure induces a clipping artifact that hides changes in extreme
+opinions that fall outside the measurement scale.
 
-We use the *expectation model* of opinion measurement to *Identify* which, if any, mere agreement null-polarization models generate spurious group polarization in a particular experiment, $e$. The trick to this model, and the source of its name, is that we use the theoretical *expected value* of opinion measurements as a proxy for the *observed average* of participant opinions under an experimental design, $e$. 
+## The Expectation Model of Spurious Group Polarization
 
-We simulate the measurement of the mean observed opinion at time $t$ 
-by first calculating integrating the normal probability density function,  $f(\omega)$, over measurement bin boundaries, over each bin's corresponding range of opinion values. For example, consider an ordinal scale  that runs from -3 (strongly disagree) to +3 (strongly agree) (as
-used by @Moscovici1969, for example). the frequency with which the "2" bin is
-chosen is just the total area underneath the probability density curve between
-1.5 and 2.5. 
+We use the *expectation model* of opinion measurement to *Identify* which, if
+any, mere agreement null-polarization models generate spurious group
+polarization in a particular experiment, $e$. The trick to this model, and the
+source of its name, is that we use the theoretical *expected value* of opinion
+measurements as a proxy for the *observed average* of participant opinions under
+an experimental design, $e$.
+
+We simulate the measurement of the mean observed opinion at time $t$ by first
+calculating integrating the normal probability density function, $f(\omega)$,
+over measurement bin boundaries, over each bin's corresponding range of opinion
+values. For example, consider an ordinal scale that runs from -3 (strongly
+disagree) to +3 (strongly agree) (as used by @Moscovici1969, for example). the
+frequency with which the "2" bin is chosen is just the total area underneath the
+probability density curve between 1.5 and 2.5.
 
 All bins have a width of 1 in latent opinion space, except for the two most
 extreme bins at opposite ends of the sentiment spectrum---this works because bin
@@ -126,8 +202,7 @@ $\omega < b_1 + \frac{1}{2} = \theta_1$ get mapped to the ordinal measurement
 value $b_1$---so, $b_1$'s lower threshold is $\theta_0 = -\infty$. Similarly,
 all opinions $\omega > b_B - 0.5 = \theta_B$ are reported as the maximum bin
 value, $b_B$, with an effective upper bound of $\theta_{B+1} = +\infty$. We can
-define all thresholds compactly as [@Liddell2018] 
-$$
+define all thresholds compactly as [@Liddell2018] $$
 \theta_j = \begin{cases}
   -\infty         & \text{ if } j=0 \\
   \infty          & \text{ if } j=B \\
@@ -135,29 +210,41 @@ $$
 \end{cases}
 $$
 
-The probability density that a participant reports the opinion in bin index $i$ at time $t$ is
-$$
+The probability density that a participant reports the opinion in bin index $i$
+at time $t$ is $$
 f_{it}(\mu, \sigma_t) = \int_{\theta_{i - 1}}^{\theta_{i}} f(\omega; \mu, \sigma_t)~d\omega,
-$$
-which we calculated in R to evaluate the integral at the two threshold values $\theta_{i-1}$ and $\theta_i$. Note that the normal probability density function we used is parameterized by mean $\mu$ and standard deviation $\sigma_t$.
-$$
+$$ which we calculated in R to evaluate the integral at the two threshold values
+$\theta_{i-1}$ and $\theta_i$. Note that the normal probability density function
+we used is parameterized by mean $\mu$ and standard deviation $\sigma_t$. $$
 f(\omega; \mu, \sigma_t) = 
     \frac{1}{\sigma_t \sqrt{2 \pi}} e^{-\frac{(\omega - \mu)^2}{2 \sigma_t^2}}.
-$$ 
-
-To simulate the measurement of the *average* observed opinion at time $t$, $\bar{o}_t$, as the expected value of the probability density function of observed ordinal opinions. In other words, we simulate $\bar{o}_t$ by calculating the weighted sum of products between the probability of observing each bin value and the bin value itself:
 $$
+
+To simulate the measurement of the *average* observed opinion at time $t$,
+$\bar{o}_t$, as the expected value of the probability density function of
+observed ordinal opinions. In other words, we simulate $\bar{o}_t$ by
+calculating the weighted sum of products between the probability of observing
+each bin value and the bin value itself: $$
 \bar{o}_t(\nu, e) = \sum_{i=1}^B b_i f_{it}(\nu, e).
-$${#eq-sim-ave-observed}
+$$ {#eq-sim-ave-observed}
 
 Group polarization is the difference between the post-deliberation mean observed
-opinion and the pre-deliberation one. We will calculate the magnitude of spurious group polarization under a mere agreement null model represented by its collected distribution parameters, $\nu = (\mu, \sigmapre, \sigmapost)$, under experimental design, $e$: 
-$$
+opinion and the pre-deliberation one. We will calculate the magnitude of
+spurious group polarization under a mere agreement null model represented by its
+collected distribution parameters,
+$\nu = (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})$, under experimental
+design, $e$: $$
 g(\nu, e) = |\bar{o}_\mathrm{post}(\nu, e)| - |\bar{o}_\mathrm{pre}(\nu, e)|
-$${#eq-spurious-gp}
+$$ {#eq-spurious-gp}
 
-In the *Inspect* stage of our analysis we will determine which group polarization replications are invalidated due to equifinality between the *mere agreement null-polarization hypothesis* on the one hand, and the *group polarization hypothesis*
-on the other. This requires more than just showing there is some $\nu$ that causes spurious polarization for some experiment where $g(\nu, e) > 0$. We have to find a $\nu$ that generates the exact $g(\nu, e)$ reported in the original journal article *and* check that simulated $\bar{o}_\mathrm{pre}$ and $\bar{o}_\mathrm{pre}$ match published values.
+In the *Inspect* stage of our analysis we will determine which group
+polarization replications are invalidated due to equifinality between the *mere
+agreement null-polarization hypothesis* on the one hand, and the *group
+polarization hypothesis* on the other. This requires more than just showing
+there is some $\nu$ that causes spurious polarization for some experiment where
+$g(\nu, e) > 0$. We have to find a $\nu$ that generates the exact $g(\nu, e)$
+reported in the original journal article *and* check that simulated
+$\bar{o}_\mathrm{pre}$ and $\bar{o}_\mathrm{pre}$ match published values.
 
 ::: {text-align="center"}
 \[ TABLE
@@ -171,152 +258,194 @@ reference="tab:experiment-parameters"} ABOUT HERE \]
 reference="tab:simulated-observations"} ABOUT HERE \]
 :::
 
-## Example: the "Americans" condition in Moscovici and Zavalloni (1969)
+## Example: Invalidating the "Americans" condition in Moscovici and Zavalloni (1969)
 
-One of the replications we invalidate here is from Moscovici and Zavalloni (1969),
-the "Americans" condition as they called it—we coded it `Moscovici1969_Americans`. 
-They report that participant opinions polarized after discussing the survey topic, "American economic aid is always used for political pressure." They report survey 
-responses increased in extremity from an average of -0.9 before discussion to
--1.6 after, on a seven-bin scale
-from -3 indicating "strongly disagree" to +3 indicating "strongly agree".
+One of the replications we invalidate here is from Moscovici and Zavalloni
+(1969), the "Americans" condition as they called it—we coded it
+`Moscovici1969_Americans`. They report that participant opinions polarized after
+discussing the survey topic, "American economic aid is always used for political
+pressure." They report survey responses increased in extremity from an average
+of -0.9 before discussion to -1.6 after, on a seven-bin scale from -3 indicating
+"strongly disagree" to +3 indicating "strongly agree".
 
-Moscovici and Zavalloni say their results confirm the basic hypothesis, that \emph{group discussion causes polarization}. But we found a mere agreement null-polarization model that generates spurious group polarization using our model—specifically, $\nu = (\mu = -1.2, \sigma_\mathrm{pre}= 4.3, and \sigma_\mathrm{post}= 1.9)$. This means that the hypothesis is actually undecidable given the data, invalidating Moscovici and Zavalloni's replication.
-When a hypothesis and its null explain data equally well, the data tell us nothing.
+Moscovici and Zavalloni say their results confirm the basic hypothesis, that
+\emph{group discussion causes polarization}. But we found a mere agreement
+null-polarization model that generates spurious group polarization using our
+model—specifically,
+$\nu = (\mu = -1.2, \sigma_\mathrm{pre}= 4.3, and \sigma_\mathrm{post}= 1.9)$.
+This means that the hypothesis is actually undecidable given the data,
+invalidating Moscovici and Zavalloni's replication. When a hypothesis and its
+null explain data equally well, the data tell us nothing.
 
-Now let's use the expectation model to prove that this $\nu$ generates spurious group polarization in this experiment, i.e., $g(\nu, e= \mathrm{Moscovici1969\_Americans}) > 0$. 
-In the process we demonstrate how the expectation model works to simulate the measurement of spurious group polarization (@eq-spurious-gp). 
+Now let's use the expectation model to prove that this $\nu$ generates spurious
+group polarization in this experiment, i.e.,
+$g(\nu, e= \mathrm{Moscovici1969\_Americans}) > 0$. In the process we
+demonstrate how the expectation model works to simulate the measurement of
+spurious group polarization (@eq-spurious-gp).
 
-First, we calculate the probability density vector using the [`makeProbVec`](https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/model.R#L44) function in the file [`GroupPolarizationStatmod/model.R`](https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/model.R) in the [project code repository on GitHub](https://github.com/mt-digital/gp-statmod) for both experiment times: pre- and post-discussion:
-$$
+First, we calculate the probability density vector using the
+[`makeProbVec`](https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/model.R#L44)
+function in the file
+[`GroupPolarizationStatmod/model.R`](https://github.com/mt-digital/gp-statmod/blob/main/GroupPolarizationStatmod/model.R)
+in the [project code repository on
+GitHub](https://github.com/mt-digital/gp-statmod) for both experiment times:
+pre- and post-discussion: $$
 f_\mathrm{pre} = 
 \begin{pmatrix}
   0.38 & 0.09 & 0.09 & 0.09 & 0.08 & 0.07 & 0.19
 \end{pmatrix}
-$$ 
-and
-$$
+$$ and $$
 f_\mathrm{post} = \
 \begin{pmatrix} 
 0.25 & 0.19 & 0.21 & 0.17 & 0.11 & 0.05 & 0.03 
 \end{pmatrix}.
 $$
 
-When we plug in the bin values and copmuted $f_\mathrm{pre}$ values into the simulated average pre-discussion opinion definition (@eq-sim-ave-observed),
-$$
+When we plug in the bin values and copmuted $f_\mathrm{pre}$ values into the
+simulated average pre-discussion opinion definition (@eq-sim-ave-observed), $$
 \bar{o}_\mathrm{pre} = -3 \cdot 0.38~~+-2\cdot 0.09~~+\ldots+3\cdot0.19 = -0.6
-$$
-$$
+$$ $$
 \bar{o}_\mathrm{post} = -3 \cdot 0.25~~+-2\cdot 0.19~~+\ldots+3\cdot0.03 = -1.04
-$$
-So, we find that for the `Moscovici1969_Americans`, our null-polarization model appears polarized, with the exact same average pre- and post-discussion opinions reported by Moscovici and Zavalloni (1969), and the same magnitude of radicalization (CHECK THE PRESENTATION OF ALL THREE ABOVE)
-$$
+$$ So, we find that for the `Moscovici1969_Americans`, our null-polarization
+model appears polarized, with the exact same average pre- and post-discussion
+opinions reported by Moscovici and Zavalloni (1969), and the same magnitude of
+radicalization (CHECK THE PRESENTATION OF ALL THREE ABOVE) $$
 g(\nu, e) = \bar{o}_\mathrm{post} - \bar{o}_\mathrm{pre} = -1.04 - (-0.6) = - 0.4.
 $$
 
 ::: {style="text-align: center;"}
 FIGURE [\[fig:distros\]](#fig:distros){reference-type="ref"
-reference="fig:distros"} ABOUT HERE 
+reference="fig:distros"} ABOUT HERE
 :::
 
-Since the simulated average opinions match the observed ones—note that as a consequence, the spurious polarization magnitude also matches the observed one.
-In other words, we *identified* a null model that explains the data. 
-If both a hypothesis and its null explain data equally well, then the hypothesis is *undecidable* 
+Since the simulated average opinions match the observed ones—note that as a
+consequence, the spurious polarization magnitude also matches the observed one.
+In other words, we *identified* a null model that explains the data. If both a
+hypothesis and its null explain data equally well, then the hypothesis is
+*undecidable* under the available data. This invalidates this experiment's claim
+to be a replication of support for the group polarization hypothesis. We
+replicate this analysis for all 57 experimental conditions that purport to
+support the group polarization hypothesis. To facilitate this analysis, we
+created a web app to manage the data entry, the process of identifying invalid
+replications, and managing the outcome data of which replications were
+invalidated, and what null model parameters generated the spurious polarization.
 
-In this example we started with 
+## System for identifying invalid replications
 
+The next step is to scale up the analysis we did manually in the example above,
+including develop a systematic way to find, and not guess, the set of null model
+parameters that
 
+![**Computational system to interactively simulate opinion change, identify
+invalid replications, and evaluate experimental
+designs.**](Figures/Model/SoftwareMap_Mashup.png){#fig-computational-system
+fig-align="center" width="1011"}
 
-## Root-finding Algorithm to Find Null-Polarization Models with Artifacts
+# Part 2: *Evaluate* Experimental Designs
 
+In the previous step we identified which, if any, null polarization models
+generate spurious group polarization with the expectation model of opinion
+measurement. This is enough to invalidate a replication, but it leaves
+unanswered questions. First, we would like to know how what the chance was that
+a published detection of group polarization was actually a false positive,
+assuming that participant opinions were distributed according to the null model
+identified in the first part of the analysis. This is equivalent to the false
+positive rate of the experimental design, which we denote $\alpha_e$ for
+experiment $e$. Second, we would like to estimate the false discovery rate for
+our corpus, which is a good proxy for the field as a whole, since we selected
+top quality, highly influential work that has been cited thousands of times. The
+false discovery rate in this case tells us the probability that a published
+detection of group polarization is actually a false detection. (@eq-fdr).
 
+## Generative Model of Spurious Group Polarization
 
-# Evaluation of Experimental Designs
+To evaluate an experimental design's ability to properly identify null effects,
+we need to simulate participant responses assuming the mere agreement null model
+that invalidated the replication, if one was found. We simulate data from a
+single group polarization experiment by sampling participants' ordinal opinions
+at pre-/post-discussion from the pre- and post-discussion opinion distributions
+specified by the null model that invalidated the replication in that experiment,
+$\nu_e$. If there are $N_e$ participants in experiment $e$ then our simulated
+data sets contained $2N_e$ rows. We recorded $N_e$ in the web app as metadata
+along with data about average opinions and opinion shifts for each experimental
+condition across the corpus.
 
-- The evaluation stage complements our *Identify* stage by filling in more details about the experimental design.
+It can be helpful to
 
 ## False positive rate
 
-First, how frequently do the $\nu$ that we found generate simulated data
-  that fool a rigorous statistical design that properly accounts for the measurement process? This serves two roles: 
-  1. Confirm that the $\nu$ we found could create simulated datasets that appear polarized under statistical analysis, which is different from using the expected value of an exact latent opinion distribution, integrated with the bin values to simulate the average opinion.
-  2. Evaluate the underlying experimental design independent of the failure to account for how ordinal measurements inevitably clip extreme latent opinions.
-  3. We do this by simulating experiment data using $\nu$ we identified in the previous stage. We simulate 1000 experiments indexed by $i$ for each experiment $e$. 
-  
-To calculate the false detection rate we begin by simulating 
-pre- and post-deliberation 
-opinions by drawing $N_e$ samples from normal latent opinion
-distributions that generated spurious group polarization, i.e., one sample at each experiment stage for each simulated participant. The latent opinion distributions are specified with the mere agreement null model labelled $\nu_e$. 
+To calculate the false detection rate we begin by simulating pre- and
+post-deliberation opinions by drawing $N_e$ samples from normal latent opinion
+distributions that generated spurious group polarization, i.e., one sample at
+each experiment stage for each simulated participant. The latent opinion
+distributions are specified with the mere agreement null model labelled $\nu_e$.
 
-Each trial $i$ of $N_e$ simulated pre- and post-deliberation observations is then inspected to see
-if spurious group polarization occurred in the simulation. Spurious group
-polarization is determined by first inferring the latent parameters of each
-simulated experimental trial by fitting an ordered probit model~\cite{Liddell2018}. The procedure infers the latent distribution parameters that we in fact specified with $\nu$: $\mu_\mathrm{pre}$, $\sigma_\mathrm{pre}$, $\mu_\mathrm{post}$, and $\sigma_\mathrm{post}$. 
+Each trial $i$ of $N_e$ simulated pre- and post-deliberation observations is
+then inspected to see if spurious group polarization occurred in the simulation.
+Spurious group polarization is determined by first inferring the latent
+parameters of each simulated experimental trial by fitting an ordered probit
+model [@Liddell2018]. The procedure infers the latent distribution parameters
+that we in fact specified with $\nu$: $\mu_\mathrm{pre}$, $\sigma_\mathrm{pre}$,
+$\mu_\mathrm{post}$, and $\sigma_\mathrm{post}$.
 
 The inferred parameters are then used to calculate the effect size for that
-trial, Cohen's $d$, defined as~\cite[p. 331]{Liddell2018}
-$$
-  d = \frac{\mupost - \mupre}{\sqrt{\frac{1}{2}(\sigmapost^2 + \sigmapre^2)}}.
-$$ {#eq-cohens}
-It is implied that these values are the inferred values, not the values from $\nu$, when used in the context of calculating Cohen's $d$. Note $d=0$ always for the true $\nu$.
+trial, Cohen's $d$, defined as\~\cite[p. 331]{Liddell2018} $$
+  d = \frac{\mu_\mathrm{post}- \mu_\mathrm{pre}}{\sqrt{\frac{1}{2}(\sigma_\mathrm{post}^2 + \sigma_\mathrm{pre}^2)}}.
+$$ {#eq-cohens} It is implied that these values are the inferred values, not the
+values from $\nu$, when used in the context of calculating Cohen's $d$. Note
+$d=0$ always for the true $\nu$.
 
-The family-wise error rate is the fraction of trials 
-with $d_{ei} > d^*$, written
-$$
+The family-wise error rate is the fraction of trials with $d_{ei} > d^*$,
+written $$
   \alpha_e = \frac{1}{N_T} \sum_i^{N_T} \Theta(d_{ei}; d^*),
-$$ {#eq-study-aggregate}
-where
-$$
+$$ {#eq-study-aggregate} where $$
   \Theta(d_{ei}; d^*) = 
     \begin{cases}
       1 & \text{ if } d_{ei} > d^* \\
       0 & \text{ otherwise.}
     \end{cases}
-$$
-$d^*$ is the *significance threshold*, which must be specified by the experimenter.  There are three common significance levels which we adopt here: $d^* = 0.2$ for "low", $d^*=0.5$ for "medium", and $d^* = 0.8$ for "high". 
+$$ $d^*$ is the *significance threshold*, which must be specified by the
+experimenter. There are three common significance levels which we adopt here:
+$d^* = 0.2$ for "low", $d^*=0.5$ for "medium", and $d^* = 0.8$ for "high".
 
-To calculate the family-wise error rate
-across all experimental conditions of a study, $s$, 
-\begin{equation}
-  \alpha_s = \frac{1}{|s|} \sum_{e \in s} \alpha_e,
-\end{equation}
-\noindent
-where $e \in s$ indicates sum over all experimental conditions $e$ presented in the article associated with study $s$.
-The mean across all results identified as plausibly spurious is 
-\begin{equation}
-  \alpha_\mathrm{all} = \frac{1}{|E|} \sum_{e \in E} \alpha_e.
-\end{equation}
-  
-In the final part of our *Evaluation* analysis we adapt this analysis to re-align the question of statistical rigor: we can be specific now, and instead of wondering, "what significance level is truly rigorous", we can use our techniques to make the choice of $d^*$ to conform to a specific design requirement. Specifically we will calculate what $d^*$ must be in order to limit $\alpha \leq 0.05$ as an example.
-  
+To calculate the family-wise error rate across all experimental conditions of a
+study, $s$, $$
+\alpha_s = \frac{1}{|s|} \sum_{e \in s} \alpha_e,
+$$ where $e \in s$ indicates sum over all experimental conditions $e$ presented
+in the article associated with study $s$. The mean across all results identified
+as plausibly spurious is $$
+ \alpha_\mathrm{all} = \frac{1}{|E|} \sum_{e \in E} \alpha_e.
+$$
+
+In the final part of our *Evaluation* analysis we adapt this analysis to
+re-align the question of statistical rigor: we can be specific now, and instead
+of wondering, "what significance level is truly rigorous", we can use our
+techniques to make the choice of $d^*$ to conform to a specific design
+requirement. Specifically we will calculate what $d^*$ must be in order to limit
+$\alpha \leq 0.05$ as an example.
 
 ## False discovery rate
 
-We finally may calculate the false discovery rate by plugging this $\alpha$
-into Equation~\ref{eq:fdr} and assuming empirically-motivated values for 
-base rate, $b$, and statistical power, $W$, as well as more pessimistic and
-optimistic settings for base rate and power.
+The false discovery rate is the false positive rate, scaled by the rate of true
+negative effects and normalized by the frequency of true positive effects\~
+(@eq-fdr) and assuming empirically-motivated values for base rate, $b$, and
+statistical power, $W$, as well as more pessimistic and optimistic settings for
+base rate and power. Using this notation, the false detection rate is
 
-Using the notation outlined above, the false detection rate is
-\begin{equation}
-  \fdr = \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
-  \label{eq:fdr}
-\end{equation}
+$$
+\mathrm{FDR}= \frac{(1 - b)\alpha}{(1 - b)\alpha + bW}.
+$$ {#eq-fdr}
 
-
-## *Specify* Significance Threshold for Low False Positive Rates
+# Part 3: *Specify* Significance Threshold for Experimental Design
 
 In the final analysis step we calculate what significance threshold, $d^*$,
-would limit the false positive rate to 0.05 or less. 
+would limit the false positive rate to 0.05 or less.
 
-There are many possible
-null models we could choose.
+There are many possible null models we could choose.
 
-what significance threshold would have limited inverting this procedure to find what significance value
-$d^*$ is necessary to achieve a low family-wise error rate $\alpha_e = 0.05$ for
-experimental condition, $e$. 
+what significance threshold would have limited inverting this procedure to find
+what significance value $d^*$ is necessary to achieve a low family-wise error
+rate $\alpha_e = 0.05$ for experimental condition, $e$.
 
-To do this we first calculate $\alpha_e(d^*)$ for a
-sufficiently wide range of $d^*$. We then find the lowest $d^*$ for which
-$\alpha_e(d^*) \leq 0.05$. 
-
- 
+To do this we first calculate $\alpha_e(d^*)$ for a sufficiently wide range of
+$d^*$. We then find the lowest $d^*$ for which $\alpha_e(d^*) \leq 0.05$.
