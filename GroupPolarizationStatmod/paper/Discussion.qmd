@@ -1,0 +1,82 @@
+---
+title: Discussion
+editor: 
+  markdown: 
+    wrap: 80
+author: Matt Turner · [https://mat.phd](https://mat.phd)
+date: today
+toc: true
+bibliography: this.bib
+format:
+  html:
+    grid:
+      body-width: 880px  
+---
+
+\newcommand{\mupre}{\mu_\mathrm{pre}}
+\newcommand{\mupost}{\mu_\mathrm{post}}
+
+\newcommand{\sigmapre}{\sigma_\mathrm{pre}}
+\newcommand{\sigmapost}{\sigma_\mathrm{post}}
+
+\newcommand{\thetafit}{\theta^\mathrm{fit}}
+
+\newcommand{\fdr}{\mathrm{FDR}}
+
+\newcommand{\meanobs}{\bar{o}}
+\newcommand{\meanobsemp}{\bar{\mathbf{o}}}
+\newcommand{\meanobst}{\meanobs_t}
+\newcommand{\meanobsjt}{\meanobs_{j,t}}
+\newcommand{\meanobspre}{\meanobs_\mathrm{pre}}
+\newcommand{\meanobspost}{\meanobs_\mathrm{post}}
+\newcommand{\tpre}{t_\mathrm{pre}}
+\newcommand{\tpost}{t_\mathrm{post}}
+
+# The Full Bayesian Rigor: Deriving Effect Size Posteriors and Justifying the FPR Approximation
+
+In evaluating the False Positive Rate (FPR) of a simulated null model, the primary challenge is moving beyond the raw parameter posterior distributions ($p(\mu_1 | \text{data})$, $p(\sigma_2 | \text{data})$, etc.) to accurately quantify the posterior distribution of the derived effect size, $d$. This section outlines the statistically rigorous method for this derivation and justifies the pragmatic approximation necessary for the evaluation stage of this paper.
+
+## The Correct Derivation of $\boldsymbol{\delta}$
+
+In our model, the effect size $d$ is a function of four estimated parameters ($\mu_1, \mu_2, \sigma_1, \sigma_2$), defined by the authors whose work we replicate as:
+
+$$d = \frac{\mu_1 - \mu_2}{\sqrt{(\sigma_1^2 + \sigma_2^2)/2}}$$
+
+The statistically rigorous method for obtaining the posterior distribution of $d$, denoted $p(d | \text{data})$, is through **marginalization by sampling** across the joint posterior distribution of the primary parameters $p(\mu_1, \mu_2, \sigma_1, \sigma_2 | \text{data})$.
+
+### Necessity of MCMC Samples
+
+The parameters are fundamentally **sequentially dependent** in the MCMC chain, as the estimation of means is conditional on the estimation of variances. This dependency is captured in the joint posterior distribution. 
+
+To maintain statistical rigor, we must avoid calculating $d$ by combining the isolated summary statistics (e.g., the posterior median of $\mu_1$ and the posterior median of $\sigma_1$) because this procedure, known as **plug-in estimation**, ignores the critical correlation between parameters, resulting in an unquantified and likely underestimated uncertainty.
+
+The correct procedure requires using the full MCMC samples:
+
+1.  For each usable iteration $k$ of the Markov Chain (where $K$ is the total number of samples), a plausible set of values is drawn: $(\mu_1^{(k)}, \mu_2^{(k)}, \sigma_1^{(k)}, \sigma_2^{(k)})$.
+2.  The effect size is calculated for that specific set of values:
+    $$d^{(k)} = \frac{\mu_1^{(k)} - \mu_2^{(k)}}{\sqrt{\frac{(\sigma_1^{(k)})^2 + (\sigma_2^{(k)})^2}{2}}}$$
+3.  The set $\{d^{(1)}, d^{(2)}, \ldots, d^{(K)}\}$ then forms the complete posterior distribution $p(d | \text{data})$.
+
+The center of this distribution, the **posterior median ($\tilde{d}$)**, is the most robust point estimate for the effect size, as it minimizes expected absolute error and is less sensitive to potential skewness than the posterior mean.
+
+## Justifying the FPR Approximation
+
+Due to the computational complexity and the unavailability of the original MCMC chains for all $57,000$ fits, a pragmatic simplification was necessary for the subsequent evaluation of the False Positive Rate (FPR).
+
+### The FPR Criterion
+
+A standard method for estimating the FPR (or Type I error rate) in simulation studies is to count the proportion of null trials where the observed effect size meets or exceeds a predefined threshold, $d^*$.
+
+$$\text{FPR} = \frac{\text{Number of Null Fits where } |d| > d^*_{\text{threshold}}}{\text{Total Number of Null Simulations}}$$
+
+In this analysis, $d^*_{\text{threshold}}$ is set to the commonly adopted small effect size threshold of $d^*=0.2$ (and varied for sensitivity analysis), avoiding the reliance on approximated $95\%$ credible intervals, which would require further, less reliable approximations.
+
+### The Compromise: Plug-in and Heuristics
+
+We employed a simplified plug-in value for $d$ using the stored posterior means:
+
+$$d_{\text{plug}} = \frac{\hat{\mu}_1 - \hat{\mu}_2}{\sqrt{(\hat{\sigma}_1^2 + \hat{\sigma}_2^2)/2}}$$
+
+Where $\hat{\theta}$ represents the posterior mean of the parameter $\theta$.
+
+While this approach is a statistical shortcut, the error is mitigated by two factors: the use of the $d^*_{\text{threshold}}$ heuristic, and the large simulated sample size ($N=500$ per group), which ensures that the posteriors for $\mu$ and $\sigma$ are sufficiently narrow. This minimizes the difference between $d_{\text{plug}}$ and the true posterior median $\tilde{d}$, making the shortcut defensible as a pragmatic necessity given the study's scale.
