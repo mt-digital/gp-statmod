@@ -366,11 +366,18 @@ single group polarization experiment by sampling participants' ordinal opinions
 at pre-/post-discussion from the pre- and post-discussion opinion distributions
 specified by the null model that invalidated the replication in that experiment,
 $\nu_e$. If there are $N_e$ participants in experiment $e$ then our simulated
-data sets contained $2N_e$ rows. We recorded $N_e$ in the web app as metadata
-along with data about average opinions and opinion shifts for each experimental
-condition across the corpus.
+data sets contained $2N_e$ rows: two time step rows per participant. We recorded
+$N_e$ used by each experiment in the web app as metadata along with data about
+average opinions and opinion shifts for each experimental condition across the
+corpus.
 
-It can be helpful to
+Group polarization is "detected" if the group polarization effect size meets or
+exceeds a threshold value. We use Cohen's $d$ for the effect size, defined as
+[@Liddell2018, 331] $$
+  d = \frac{\mu_\mathrm{post}- \mu_\mathrm{pre}}{\sqrt{\frac{1}{2}(\sigma_\mathrm{post}^2 + \sigma_\mathrm{pre}^2)}}.
+$$ It is implied that these values are the inferred values, not the values from
+$\nu$, when used in the context of calculating Cohen's $d$. Note $d=0$ always
+for the true $\nu$.
 
 ## False positive rate
 
@@ -379,21 +386,6 @@ post-deliberation opinions by drawing $N_e$ samples from normal latent opinion
 distributions that generated spurious group polarization, i.e., one sample at
 each experiment stage for each simulated participant. The latent opinion
 distributions are specified with the mere agreement null model labelled $\nu_e$.
-
-Each trial $i$ of $N_e$ simulated pre- and post-deliberation observations is
-then inspected to see if spurious group polarization occurred in the simulation.
-Spurious group polarization is determined by first inferring the latent
-parameters of each simulated experimental trial by fitting an ordered probit
-model [@Liddell2018]. The procedure infers the latent distribution parameters
-that we in fact specified with $\nu$: $\mu_\mathrm{pre}$, $\sigma_\mathrm{pre}$,
-$\mu_\mathrm{post}$, and $\sigma_\mathrm{post}$.
-
-The inferred parameters are then used to calculate the effect size for that
-trial, Cohen's $d$, defined as\~\cite[p. 331]{Liddell2018} $$
-  d = \frac{\mu_\mathrm{post}- \mu_\mathrm{pre}}{\sqrt{\frac{1}{2}(\sigma_\mathrm{post}^2 + \sigma_\mathrm{pre}^2)}}.
-$$ {#eq-cohens} It is implied that these values are the inferred values, not the
-values from $\nu$, when used in the context of calculating Cohen's $d$. Note
-$d=0$ always for the true $\nu$.
 
 The family-wise error rate is the fraction of trials with $d_{ei} > d^*$,
 written $$
