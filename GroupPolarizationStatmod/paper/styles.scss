@@ -1,0 +1,89 @@
+/*-- scss:rules --*/
+
+.normal-form-table {
+  td,
+  th {
+    padding: 0.5em 1.25em;
+    text-align: center;           // center-align by default
+    border: none;                 // clear any default table borders
+  }
+
+  /* Row label cells */
+  td:first-child {
+    text-align: right;            // right-align: Low, High, etc.
+    border-right: 1px solid black;
+    padding-right: 1.5em;
+  }
+
+  /* Top-left "Focal" cell stays left-aligned */
+  th:first-child {
+    text-align: left;
+//    border-right: 1px solid black;
+    padding-right: 1.5em;
+  }
+
+  /* Horizontal line above payoff block */
+  tr.top-border td {
+  border-top: 1px solid black;
+  padding-top: 0.75em;
+  }
+  tr.top-border td:first-child {
+    border-top: none;
+  }
+  /* Remove vertical border in header area — second row, first cell */
+  tr:nth-child(2) td:first-child {
+    border-right: none;
+  }
+  
+}
+
+
+/* Tighten top two rows */
+.normal-form-table tr:nth-child(1) th,
+.normal-form-table tr:nth-child(2) td {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+/* Tighten bottom three rows */
+.normal-form-table tr:nth-child(4),
+.normal-form-table tr:nth-child(5),
+.normal-form-table tr:nth-child(6) {
+  td {
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+  }
+}
+
+
+/* Normalize font sizing and alignment */
+.normal-form-table td,
+.normal-form-table th {
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+/* Prevent table from stretching out in standalone */
+.normal-form-table {
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Ensure math is consistent with KaTeX scale in books */
+.normal-form-table td > span.katex {
+  font-size: 1em;
+}
+
+.quarto-float.anchored.table:has(.normal-form-table) {
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+
+.normal-form-table {
+  margin-top: 1.1em; // creates space between caption and table
+}
