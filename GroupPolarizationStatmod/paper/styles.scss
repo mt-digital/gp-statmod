@@ -87,3 +87,11 @@
 .normal-form-table {
   margin-top: 1.1em; // creates space between caption and table
 }
+
+
+thead th {
+  /* The key styling */
+  border-bottom: 3px solid black; /* Adjust thickness, style, and color as needed */
+  padding: 8px; /* For better spacing */
+  text-align: left;
+}

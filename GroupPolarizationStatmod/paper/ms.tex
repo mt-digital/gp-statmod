@@ -1,24 +1,88 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
-%
+% ==============================================================================
+% CLEANED ms.tex (Optimized for XeLaTeX/Fira Fonts)
+% - Consolidated preamble and ms.tex.
+% - Removed all conflicting packages (lmodern, redundant font settings).
+% - Uses Fira Sans/Mono/Math consistently.
+% ==============================================================================
+
 \documentclass[preview]{article}
 
-\usepackage{floatrow}
-\DeclareFloatFont{small}{\small}% "scriptsize" is defined by floatrow, "tiny" not
-\floatsetup[table]{font=small}
+% --- CORE FONT SETUP (Sans-Serif Headings, Serif Body, Professional Math) ---
+\usepackage{fontspec}        
+\usepackage{unicode-math}    
+%
+%% 1. Main Text: Set to Latin Modern Roman (Stable, Professional Serif)
+%\setmainfont{Latin Modern Roman} 
+%
+% 2. Monospaced/Code Text: Fira Mono
+%\setmonofont{Fira Mono} 
+%
+%% 3. Mathematical Notation: Latin Modern Math (Stable, Conventional Serif Math)
+%\setmathfont{Latin Modern Math} 
 
-\usepackage[table]{xcolor}
-\usepackage{multirow}
-\usepackage{makecell}
-\usepackage{array}
+% 4. Heading Font Setup (Fira Sans)
+\newfontfamily{\sansheadings}{Fira Sans} 
+\usepackage{sectsty}
+\sectionfont{\sansheadings \raggedright \Large}
+\subsectionfont{\sansheadings \raggedright \large}
+\subsubsectionfont{\sansheadings \raggedright \normalsize}
+% Ensure your title command uses \sansheadings as defined in the previous step.
+% ...
+ 
+% --- ESSENTIAL PACKAGES (Cleaned and Prioritized) ---
 
-\usepackage{amsmath,amssymb}
+% 2. Core Text Utilities and Geometry
+\usepackage[margin=1.25in,letterpaper]{geometry} % Defines page layout
+\usepackage[]{microtype}    % High-quality font protrusion and spacing
+\usepackage{upquote}        % Straight quotes in verbatim/code
+\usepackage{calc}           % Utility for calculations
+
+% 3. Graphics, Color, and Table Fundamentals
+\usepackage[table,dvipsnames,svgnames,x11names]{xcolor} % Color definitions
+\usepackage{graphicx}       % For including graphics
+\usepackage{booktabs}       % Professional quality tables
+\usepackage{longtable}      % Multi-page tables
+\usepackage{array}          % Enhanced array and column definitions
+\usepackage{multirow}       % Merging rows in tables
+\usepackage{makecell}       % Formatting cells in tables
+
+% 4. Caption Handling (Load basic caption definitions BEFORE floatrow)
+\usepackage{caption}        
+\usepackage{subcaption}     
+\usepackage{floatrow}       % Complex float/caption placement and formatting
+
+% 5. Math Environments and Algorithm Structure
+\usepackage{amsmath}        % Essential math environments (align, gather, etc.)
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{iftex}
-\input{preamble.tex}
+
+% 6. Hyperlinks and References
+\usepackage{hyperref}       % Hyperlinks and PDF metadata (must be loaded relatively late)
+\usepackage{bookmark}       % PDF bookmark control
+\usepackage{xurl}           % Better URL line breaks
+\usepackage{footnotehyper}  % Footnotes integration with hyperref
+
+% 7. Custom Utilities (Needed for your document structure)
+\usepackage{iftex}          
+\usepackage{authblk}        % Author affiliations
+\usepackage{etoolbox}       % Utility commands for patching/macros
+\usepackage{wrapfig}        % Text wrapping around figures
+
+% --- End of ESSENTIAL PACKAGES ---
+
+% --- BIBLIOGRAPHY CONFIGURATION ---
+% Use the biblatex settings you had in preamble.tex
+\usepackage[sorting=none, style=numeric-comp]{biblatex}
+\addbibresource{/Users/mt/workspace/Writing/library.bib}
+%\addbibresource{this.bib}
+
+
+
+% --- FLOATROW / TABLE SETUP (From ms.tex) ---
+\DeclareFloatFont{small}{\small}
+\floatsetup[table]{font=small}
+
+% --- HYPERREF SETUP (From ms.tex) ---
 \hypersetup{
   pdftitle={Group polarization replications may be marred by high false discovery rates},
   colorlinks=true,
@@ -27,103 +91,79 @@
   citecolor={Blue},
   urlcolor={Blue}}
 
-
+% --- CUSTOM COMMANDS (From ms.tex) ---
 \newcommand{\mupre}{\mu_\mathrm{pre}}
 \newcommand{\mupost}{\mu_\mathrm{post}}
-
 \newcommand{\sigmapre}{\sigma_\mathrm{pre}}
 \newcommand{\sigmapost}{\sigma_\mathrm{post}}
-
 \newcommand{\thetafit}{\theta^\mathrm{fit}}
-
 \newcommand{\fdr}{\mathrm{FDR}}
-
 \newcommand{\meanobs}{\bar{o}}
 \newcommand{\meanobsemp}{\bar{\mathbf{o}}}
 \newcommand{\meanobst}{\meanobs_t}
 \newcommand{\meanobsjt}{\meanobs_{j,t}}
-
 \newcommand{\meanobspre}{\meanobs_\mathrm{pre}}
 \newcommand{\meanobspost}{\meanobs_\mathrm{post}}
 \newcommand{\tpre}{t_\mathrm{pre}}
-\newcommand{\tpost}{t_\mathrm{post}}
-
+\newcommand{\tpost}{t_\mathrm{yopost}}
 \definecolor{myorange}{RGB}{240, 96, 0}
 \newcommand{\mt}[1]{{\textcolor{myorange} {({\tiny MT:} #1)}}}
 
-\usepackage{authblk}
-\usepackage{etoolbox}
-\usepackage{wrapfig}
+% --- TITLE AND AUTHOR INFO (From ms.tex) ---
 \makeatletter
-% \title{If the Null Fits, You Must Omit: Ubiquitous False Detections of Group Polarization}
-\title{If the Null Fits, You Must Omit: Measurement Artifacts Undermine Group Polarization Replications}
+\title{\Large If the Null Fits, You Must Omit: Measurement Artifacts Undermine Group Polarization Replications}
 \makeatother
 \author[1,*]{{Matthew A.~Turner}}
 \affil[1]{\small Environmental Social Sciences, Stanford Doerr School of Sustainability, Stanford University}
-
 \author[2,3]{{Paul E.~Smaldino}}
 \affil[2]{\small Cognitive and Information Sciences, University of California, Merced}
 \affil[3]{\small Santa Fe Institute} 
-% \vspace{2em}
 \affil[*]{\small Correspondence: \href{mailto:maturner@stanford.edu}{maturner@stanford.edu}}
-
 \date{\today}
+
+
+% ==============================================================================
+% BEGIN DOCUMENT
+% ==============================================================================
 \begin{document}
 \maketitle
 
-\renewcommand*\contentsname{Table of contents}
+\renewcommand*\contentsname{\small Table of contents}
 {
 \hypersetup{linkcolor=gray}
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{3}
+\footnotesize
 \tableofcontents
 }
 
-
+% Center rule to separate TOC from rest of paper
+\vspace{-2em}
 \begin{center} \noindent\rule{4cm}{0.4pt} \end{center}
+\vspace{-2em}
 
-
+% --- INPUT CHAPTERS ---
 \input{intro.tex}
-
-
 \input{method.tex}
-
-
 \input{analysis.tex}
-
-
 \input{discussion.tex}
-
-
 \input{tables.tex}
-
-
 \input{figures.tex}
 
-
 \clearpage
-
 
 \printbibliography[title=References]
 
-
 \appendix
 
-
 \renewcommand{\thefigure}{A\arabic{figure}}
-
-
 \setcounter{figure}{0}
-
-
 \clearpage
-
 
 %%%%%%%%%% Supplement %%%%%%%%%%
 \pagebreak
 \begin{center}
   \textbf{\Large \textsf{Group polarization replications may be marred by high false discovery rates (Supplementary Material)}}
 \end{center}
-
 
 %%%%%%%%%% Prefix a "S" to all equations, figures, tables and reset the counter %%%%%%%%%%
 \setcounter{equation}{1}
@@ -137,15 +177,14 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thesection}{S\arabic{section}}
 \renewcommand{\thepage}{S\arabic{page}}
-
+\makeatother
 
 \section{Analysis}
 
-
 \begin{figure}
   \caption{Boxplot of Cohen's $d$ for the ordered probit model over 1000
-    simulation trias for each experimental condition (y-axis in A and B). Each
-    trial represents a possible outcome of a group polarization experiment where
+    simulation trials for each experimental condition (y-axis in A and B).
+    Each trial represents a possible outcome of a group polarization experiment where
     the true opinion shift is zero. The mean across trials is closer to 0 than
     in the metric case, but many simulated zero-shift experiments still result in
     an observed shift. This illustrates the weak statistical power of these group
@@ -154,6 +193,5 @@
   \centering
     \includegraphics[width=1.0\textwidth]{Figures/Analysis/ordinal_cohens.pdf}
 \end{figure}
-
 
 \end{document}

@@ -10,7 +10,7 @@ bibliography: this.bib
 format:
   html:
     grid:
-      body-width: 880px  
+      body-width: 725px  
 ---
 
 \newcommand{\mupre}{\mu_\mathrm{pre}}
@@ -334,8 +334,9 @@ invalidated, and what null model parameters generated the spurious polarization.
 ## System for identifying invalid replications
 
 The next step is to scale up the analysis we did manually in the example above,
-including develop a systematic way to find, and not guess, the set of null model
-parameters that
+including develop a systematic way to find, and not guess, the set of mere
+agreement null model parameters that generate spurious group polarization due to
+measurement artifacts. 
 
 ![**Computational system to interactively simulate opinion change, identify
 invalid replications, and evaluate experimental
