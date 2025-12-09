@@ -28,13 +28,11 @@ fdr = function(fwer, b, W) {
 }
 
 
-
 add_default_rows = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
 
   # Figure out the number of sig values used.
   sigvals = unique(fdr_vs_sig_tbl$SigVal)
   n_sigvals = length(sigvals)
-  # print(sigvals)
 
   # Extract power and base rate.
   W = pull(fdr_vs_sig_tbl[1, "Power"])
@@ -46,26 +44,7 @@ add_default_rows = function(fdr_vs_sig_tbl, default_fwer = 0.05) {
   n_non_id = n_distinct(non_id)
   n_default_rows = n_non_id * n_sigvals
 
-  # # Set default_fwer to be half of the least fwer calculated for that article
-  # # by first finding the minimum fwer for the study.
-  # study_ids = non_id$StudyID
-
-  # default_fwers_tbl = 
-  #   fdr_vs_sig_tbl %>% 
-  #   filter(StudyID %in% study_ids) %>%
-  #   group_by(StudyID) %>%
-  #   summarize(default_fwer = min(FWER))
-
-  # # Then create a vector that fits with default_rows.
-  # default_fwers_vec = map(default_fwers_tbl$default_fwer, 
-  #                         \(fwer) rep(fwer / 2.0, n_sigvals))
-  # print(default_fwers_vec)
-
-  # default_fdr_vec = fdr(default_fwers_vec, b, W)
-
   default_fdr = fdr(default_fwer, b, W)
-
-  print(default_fdr)
 
   default_rows = tibble(StudyID = rep(non_id$StudyID, n_sigvals),
                         ExperimentID = rep(non_id$ExperimentID, n_sigvals),
@@ -130,7 +109,7 @@ calc_fdr_vs_significance = function(
   significance_vals = c(0.2, 0.5, 0.8)
 ) {
 
-  probit_fits_data = load_probit_data()
+  probit_fits_data = load_probit_data(probit_fits_dir)
   n_experiments = length(unique(probit_fits_data$ExperimentID))
 
   # Initialize return tibble.

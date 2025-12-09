@@ -6,7 +6,13 @@ toc: true
 editor: 
   markdown: 
     wrap: 90
-bibliography: this.bib
+bibliography: "paper/this.bib"
+
+execute:
+  # echo: false     # hide code
+  warning: false  # hide warnings
+  message: false  # hide messages
+  # error: false
 ---
 
 ### Purpose: demonstrate gp-stats codebase
@@ -49,12 +55,13 @@ post-discussion distributions then calculate the mean opinion for each one. The 
 distributions have the same mean, -1.2, but different variances, which results in a
 shifted observed mean due to opinion clipping.
 
-![](images/clipboard-1443885641.png){width="628"}
+![**Mean group opinions pre- and post-discussion from Moscovici & Zavalloni
+(1969).**](images/clipboard-1443885641.png){width="575"}
 
 We call this a *null polarization model* (defined in terms of latent opinions) that
 generates *spurious group polarization.* *Spurious group polarization* is when the
 observed opinion distributions appear to polarize (i.e., *radicalize*, or *become more
-extreme*) that does not represent the true change in latent opinions. The measurement
+extreme*) that does notrepresent the true change in latent opinions. The measurement
 procedure *clips* extreme opinions less than the minimum bin value, or greater than the
 maximum, causing the average observed opinion to *spuriously* appear polarized.
 
@@ -74,7 +81,7 @@ with the `makeProbVec` function we need, `model.R`.
 ```{r warning=FALSE}
 # This is how I set the working directory
 # Adapt for your own computer
-setwd("~/workspace/gp-statmod/GroupPolarizationStatmod/")
+# setwd("~/workspace/gp-statmod/GroupPolarizationStatmod/")
 # Load makeProbVec from file model.R
 source("model.R")
 ```
@@ -158,3 +165,60 @@ print(abs(sim_obs_post - mosc1969_ave_post))
 
 Here we get even closer agreement between the observed post-discussion average opinion in
 @Moscovici1969 and the one we simulated.
+
+# The Generative Model and Bayesian Inference for False Detections
+
+The analysis of the generative model has two major components:
+
+1.  **Calculate false positive/detection rates for the simulated null polarization
+    model**, *mere agreement*—where polarization experiment participant opinions agree
+    more following discussion than before. Recall this is modeled as a decrease in the
+    standard deviation of latent opinions, but a constant mean latent opinion.
+2.  **Find an effect–detection threshold**, $d^*(\alpha)$, such that, under the null
+    model, the probability of observing an estimated effect size exceeding
+    \$d\^\*(\\alpha)\$ is \$\alpha\$: $$
+     \Pr\!\left( \hat{d} \ge
+     d^{*}(\alpha) \mid \mathcal{M}_{0} \right) = \alpha.
+     $$ 
+     This yields a null-model–calibrated false–positive rate for detecting a group
+    polarization effect.
+
+## Simulate each experimental design's false positive rate
+
+Here's how to calculate the Type I or family-wise error rate for all the experiments
+(though I misnamed the function back in the day, so it calls all of the error rates
+"family-wise" because I had understood them to be synonyms).
+
+```{r}
+source("src/fwer.R")
+
+probit_fits_dir <- "data/probit_fits"
+# Set a "moderate" significance, according to Cohen's definitions 
+significance_val <- 0.5
+fwer_tbl <- calculate_fwer(probit_fits_dir, significance_val);
+
+print(head(fwer_tbl))
+```
+
+This is used inside the `calc_fdr_vs_significance` function that adds another column to
+this dataframe, the false discovery rate (FDR) for a set of significance values. Here it
+is being called with the default metascience parameters with a base rate of $b=0.1$ and a
+statistical power of $W=0.8$. We consider three effect sizes in this paper according to
+the : "small", "medium", and "large" effect sizes traditionally assumed practically
+meaningful across social sciences [@CohenBook1988]. I put this function in the `scripts` directory because to run the full analyses presented in the paper it's only necessary to run `calc_fdr_vs_significance` since it creates a column for the false positive rate and the estimated false detection rate calculated for each experimental design we studied.
+
+This is reported for a variety of effect-detection thresholds, $\delta^*$, which the function name implies are "significance" values. When I first wrote this function
+which are really effect-detection thresholds—so the code slightly misuses the term "significance", which typically refers only to a p-value based effect-detection threshold in the *null-hypothesis significance testing* approach. I updated the prose in the article to reflect this distinction, but left the code as-is. I again call the function with the defaults for illustration.
+
+```{r}
+source("scripts/analysis.R")
+
+fdr_over_thresholds <- calc_fdr_vs_significance(
+  probit_fits_dir, 
+)
+```
+
+
+## Find effect-detection thresholds to achieve $\alpha = 0.05$
+
+In the second step of our generative model analysis I calculate 
