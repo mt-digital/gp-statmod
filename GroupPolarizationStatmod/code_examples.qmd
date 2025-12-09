@@ -188,7 +188,7 @@ experimental data from a mere agreement null-polarization model. Then we can cal
 
 ## Simulate Experimental Data
 
-
+I simulate experimental group polarization data for a given time, $t$, with latent group opinion mean and standard deviation, $\mu_t$ and $\sigma_t$, and with a survey response scale defined by $B$ bin values, $b_i$, with $i=1,\ldots,B$. 
 
 
 ## Simulate each experimental design's false positive rate
