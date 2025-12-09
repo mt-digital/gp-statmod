@@ -56,7 +56,7 @@ plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
 
 
 
-plot_fdr = function(save_path = "paper/Figures/Analysis/fdr_vs_experiment.pdf", 
+plot_fdr <- function(save_path = "paper/Figures/Analysis/fdr_vs_experiment.pdf", 
                     aggregate = FALSE, use_non_identified = FALSE,
                     default_fwer = 0.05,
                     base_rate = 0.1, power = 0.8, 
@@ -143,7 +143,7 @@ plot_fdr_aggregated = function(tbl, focal_sig_val,
 plot_fdr_nonaggregated = function(tbl, focal_sig_val, save_path) {
   
   # Filter to keep just "medium" effect sizes and sort factors.
-  tbl_foc = 
+  tbl_foc <- 
     filter(tbl, SigVal == focal_sig_val) %>% 
     mutate(StudyID = fct_reorder(StudyID, FWER, mean), 
            ExperimentID = fct_reorder(ExperimentID, FWER, max))
@@ -181,20 +181,20 @@ plot_sigval_for_low_fwer = function(target_fwer = 0.05,
   
   # Going to create ggplot, p.
   # First load and pre-process calculation of FWER ≤ target_fwer by experiment.
-  pre_tbl = calc_fdr_vs_significance(significance_vals = significance_vals)
-  pre_tbl_focal = filter(pre_tbl, SigVal == focal_sig_val) %>%
+  pre_tbl <- calc_fdr_vs_significance(significance_vals = significance_vals)
+  pre_tbl_focal <- filter(pre_tbl, SigVal == focal_sig_val) %>%
     mutate(StudyID = fct_reorder(StudyID, FWER, mean),
            ExperimentID = fct_reorder(ExperimentID, FWER, max))
 
   print(pre_tbl_focal)
-  study_id_fct = levels(pre_tbl_focal$StudyID)
+  study_id_fct <- levels(pre_tbl_focal$StudyID)
 
-  tbl = sigval_for_low_fwer(pre_tbl) %>%
+  tbl <- sigval_for_low_fwer(pre_tbl) %>%
     mutate(ExperimentID = as.factor(paste(StudyID, ExperimentID, sep = "_")),
            SigVal = as.numeric(as.character(SigVal))) 
   
   # Then plot the result.
-  p = ggplot(tbl, aes(x = SigVal, y = ExperimentID, fill = StudyID, color = StudyID)) +
+  p <- ggplot(tbl, aes(x = SigVal, y = ExperimentID, fill = StudyID, color = StudyID)) +
       geom_vline(xintercept = c(0.2, 0.5, 0.8), linetype = "dashed", 
                  linewidth = 0.25, color = "darkgrey") + 
       geom_bar(aes(fill = StudyID, color = StudyID), 

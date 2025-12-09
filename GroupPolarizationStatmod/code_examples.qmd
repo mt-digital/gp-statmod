@@ -15,7 +15,7 @@ execute:
   # error: false
 ---
 
-### Purpose: demonstrate gp-stats codebase
+## Purpose: demonstrate gp-stats codebase
 
 Here are some quick notes on the group polarization codebase in R supporting our article,
 *If the Null Fits, You Must Omit*. The code is permanently [hosted on
@@ -27,10 +27,10 @@ To follow along, please clone the `gp-statmod` directory.
 $ git clone https://github.com/mt-digital/gp-statmod.git
 ```
 
-Change directories to go to the `paper` directory where this document lives:
+Change directories to go to the `gp-statmod/GroupPolarizationStatmod` directory where this document lives:
 
 ```         
-cd gp-statmod/GroupPolarizationStatmod/paper
+cd gp-statmod/GroupPolarizationStatmod
 ```
 
 Then you can run the examples in this document, edit them, etc., on your own computer.
@@ -56,7 +56,7 @@ distributions have the same mean, -1.2, but different variances, which results i
 shifted observed mean due to opinion clipping.
 
 ![**Mean group opinions pre- and post-discussion from Moscovici & Zavalloni
-(1969).**](images/clipboard-1443885641.png){width="575"}
+(1969).**](code_examples_images/clipboard-1443885641.png){width="575"}
 
 We call this a *null polarization model* (defined in terms of latent opinions) that
 generates *spurious group polarization.* *Spurious group polarization* is when the
@@ -182,6 +182,14 @@ The analysis of the generative model has two major components:
      $$ 
      This yields a null-model–calibrated false–positive rate for detecting a group
     polarization effect.
+    
+The first step in our _generative_ model of false detections is to _generate_ simulated 
+experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold.  simulated null-model data our simulated null-models.
+
+## Simulate Experimental Data
+
+
+
 
 ## Simulate each experimental design's false positive rate
 
@@ -197,7 +205,7 @@ probit_fits_dir <- "data/probit_fits"
 significance_val <- 0.5
 fwer_tbl <- calculate_fwer(probit_fits_dir, significance_val);
 
-print(head(fwer_tbl))
+print(head(fwer_tbl, n = 10))
 ```
 
 This is used inside the `calc_fdr_vs_significance` function that adds another column to
@@ -207,18 +215,39 @@ statistical power of $W=0.8$. We consider three effect sizes in this paper accor
 the : "small", "medium", and "large" effect sizes traditionally assumed practically
 meaningful across social sciences [@CohenBook1988]. I put this function in the `scripts` directory because to run the full analyses presented in the paper it's only necessary to run `calc_fdr_vs_significance` since it creates a column for the false positive rate and the estimated false detection rate calculated for each experimental design we studied.
 
-This is reported for a variety of effect-detection thresholds, $\delta^*$, which the function name implies are "significance" values. When I first wrote this function
-which are really effect-detection thresholds—so the code slightly misuses the term "significance", which typically refers only to a p-value based effect-detection threshold in the *null-hypothesis significance testing* approach. I updated the prose in the article to reflect this distinction, but left the code as-is. I again call the function with the defaults for illustration.
+The `calc_fdr_vs_significance` function calculates the false-positive rate ($\alpha$) and false detection rate ($\mathrm{FDR}$) reported for a variety of effect-detection thresholds, $d^*$, as we call them in the paper. When I first wrote the code, though, I was thinking about detection thresholds as synonymous with "significance values". So that's why the function name, `calc_fdr_vs_significance`, includes the word `significance`, which is a stand-in for the maximally descriptive "effect-detection thresholds" terminology. This seemed fine to keep things simple and not change the name everywhere in the code. But it was right to change it for the paper, since *significance* is only understood in a p-value based  *null-hypothesis significance testing* approach, where a hypothesis is confirmed if the p-value is less than some particular threshold. I updated the prose in the article to reflect this distinction, but left the code as-is. 
+
+I again call the function with the defaults specified, for illustration. Remember the `significance_vals` map to _effect-detection thresholds_ ($d^*$) in the paper.
 
 ```{r}
 source("scripts/analysis.R")
 
 fdr_over_thresholds <- calc_fdr_vs_significance(
-  probit_fits_dir, 
+  probit_fits_dir = probit_fits_dir,  # defined in above code block
+  base_rate = 0.1, power = 0.8, significance_vals = c(0.2, 0.5, 0.8)
 )
+
+print(head(fdr_over_thresholds, n=10))
+```
+To see `SigVal = 0.8` (ie $d^* = 0.8$), check the `tail` of the table:
+```{r}
+print(tail(fdr_over_thresholds, n = 10))
 ```
 
 
 ## Find effect-detection thresholds to achieve $\alpha = 0.05$
 
 In the second step of our generative model analysis I calculate 
+
+
+
+# Analyses
+
+## _Identify_ Invalid Replications: All But 5% Were Invalidated
+
+## _Evaluate_ Experimental Designs: ~70% Chance a Polarization Detection was Erroneous
+
+## _Specify_ Effect-Detection Thresholds: Spec Experiments—Don't Just Design Them—and Avoid Informed Guesswork
+
+
+# References
