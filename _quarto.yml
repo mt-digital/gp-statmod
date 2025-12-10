@@ -1,0 +1,19 @@
+project:
+  type: website
+
+website:
+  title: "Group Polarization Statistics Modeling to Support Turner & Smaldino's (2025) 
+  preprint \"Null Fits? Must Omit\""
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+

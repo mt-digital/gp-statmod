@@ -1,0 +1,52 @@
+\begin{table}[h]
+  \caption{\textbf{Latent psychological variables and distributions.}}
+  \label{tab:latent-variables}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $\omega_{i,t}$ & Latent opinion of individual $i$ at time $t$ & $\mathbb{R}$ \\
+    $\mu_t$ & Mean latent opinion at time $t$ (constant in null-polarization) & $\mathbb{R}$ \\
+    $\sigma_t$ & Variance of observed opnions at time $t$ & $\mathbb{R}$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+  \caption{\textbf{Experimental design and numerical model parameters.}}
+  \label{tab:experiment-parameters}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $B$ & Number of bins & $5,6,7,\ldots$ \\
+    $\theta_b$ & The $B+1$ threshold values that separate bins & 
+      e.g., $-\infty, -2.5, -1.5,\ldots,2.5, \infty$ \\
+    $b$ & Bin index—there are $B+1$ to mark $B$ bins & $0,1,2,\ldots,B$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+  \caption{\textbf{Simulated observed variables.}}
+  \label{tab:simulated-observations}
+  \begin{tabular}{cll} 
+  \toprule
+    \textbf{Variable} & \textbf{Description} & \textbf{Values} \\
+  \midrule  
+    $\meanobst$ & Mean of all reported opinions (Equation \ref{eq:meanobs}) & $\mathbb{R}$ \\
+    $g(\nu)$ & Spurious group opinion polarization for null-polarization params $\nu$
+    (Equation \ref{eq:group-polarization})
+        & $\mathbb{R}$ \\
+    $d_{ei}$ & Cohen's $d$ for the $i^{\mathrm{th}}$ simulation of experiment $e$ & $\mathbb{R}$ \\
+    $d*$ & Significance value in terms of Cohen's $d$, e.g., $d^* \geq 0.5$ as a
+    "medium" effect\footnote{According to Cohen (1986)\cite{CohenBook1988}.} & $\mathbb{R}$ \\
+    $\alpha_e,\alpha_s,\alpha_{\text{all}}$ & False positive rate
+    for an experiment, $e$; study, $s$; or across \emph{all} experiments.
+             & $[0, 1]$ \\
+    FDR$_e$ & False detection rate: calculated using $\alpha_e$ to get chance experimental
+    detection is false\footnote{See Equation~\ref{eq:fdr}}
+        & $[0, 1]$ \\
+  \bottomrule
+  \end{tabular} 
+\end{table}

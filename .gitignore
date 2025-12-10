@@ -8,3 +8,7 @@
 GroupPolarizationStatmod/data/diagnostic
 *.html
 GroupPolarizationStatmod/code_examples_files/
+*.Rhistory
+
+/.quarto/
+_site
