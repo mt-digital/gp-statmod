@@ -58,7 +58,7 @@ distributions have the same mean, -1.2, but different variances, which results i
 shifted observed mean due to opinion clipping.
 
 ![**Mean group opinions pre- and post-discussion from Moscovici & Zavalloni
-(1969).**](code_examples_images/clipboard-1443885641.png){width="575"}
+(1969).**](images/clipboard-1443885641.png){width="575"}
 
 We call this a *null polarization model* (defined in terms of latent opinions) that
 generates *spurious group polarization.* *Spurious group polarization* is when the
