@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Turner · Email Me! · https://mat.phd">
+<meta name="dcterms.date" content="2025-12-09">
+
+<title>Notes and code examples to accompany “If the Null Fits, You Must Omit” – Notes and code examples to accompany "If the Null Fits, You Must Omit"</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#simulations" id="toc-simulations" class="nav-link" data-scroll-target="#simulations">Simulations</a>
+  <ul class="collapse">
+  <li><a href="#expectation-model-of-group-polarization-experiments" id="toc-expectation-model-of-group-polarization-experiments" class="nav-link" data-scroll-target="#expectation-model-of-group-polarization-experiments">Expectation model of group polarization experiments</a></li>
+  </ul></li>
+  <li><a href="#the-generative-model-and-bayesian-inference-for-false-detections" id="toc-the-generative-model-and-bayesian-inference-for-false-detections" class="nav-link" data-scroll-target="#the-generative-model-and-bayesian-inference-for-false-detections">The Generative Model and Bayesian Inference for False Detections</a>
+  <ul class="collapse">
+  <li><a href="#simulate-experimental-data" id="toc-simulate-experimental-data" class="nav-link" data-scroll-target="#simulate-experimental-data">Simulate Experimental Data</a></li>
+  <li><a href="#simulate-each-experimental-designs-false-positive-rate" id="toc-simulate-each-experimental-designs-false-positive-rate" class="nav-link" data-scroll-target="#simulate-each-experimental-designs-false-positive-rate">Simulate each experimental design’s false positive rate</a></li>
+  <li><a href="#find-effect-detection-thresholds-to-achieve-alpha-0.05" id="toc-find-effect-detection-thresholds-to-achieve-alpha-0.05" class="nav-link" data-scroll-target="#find-effect-detection-thresholds-to-achieve-alpha-0.05">Find effect-detection thresholds to achieve <span class="math inline">\(\alpha = 0.05\)</span></a></li>
+  </ul></li>
+  <li><a href="#analyses" id="toc-analyses" class="nav-link" data-scroll-target="#analyses">Analyses</a>
+  <ul class="collapse">
+  <li><a href="#identify-invalid-replications-all-but-5-were-invalidated" id="toc-identify-invalid-replications-all-but-5-were-invalidated" class="nav-link" data-scroll-target="#identify-invalid-replications-all-but-5-were-invalidated"><em>Identify</em> Invalid Replications: All But 5% Were Invalidated</a></li>
+  <li><a href="#evaluate-experimental-designs-70-chance-a-polarization-detection-was-erroneous" id="toc-evaluate-experimental-designs-70-chance-a-polarization-detection-was-erroneous" class="nav-link" data-scroll-target="#evaluate-experimental-designs-70-chance-a-polarization-detection-was-erroneous"><em>Evaluate</em> Experimental Designs: ~70% Chance a Polarization Detection was Erroneous</a></li>
+  <li><a href="#specify-effect-detection-thresholds-spec-experimentsdont-just-design-themand-avoid-informed-guesswork" id="toc-specify-effect-detection-thresholds-spec-experimentsdont-just-design-themand-avoid-informed-guesswork" class="nav-link" data-scroll-target="#specify-effect-detection-thresholds-spec-experimentsdont-just-design-themand-avoid-informed-guesswork"><em>Specify</em> Effect-Detection Thresholds: Spec Experiments—Don’t Just Design Them—and Avoid Informed Guesswork</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Notes and code examples to accompany “If the Null Fits, You Must Omit”</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matt Turner · <a href="mailto:matt@mat.phd">Email Me!</a> · <a href="https://mat.phd">https://mat.phd</a> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 9, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Here are some quick notes on the group polarization codebase in R supporting our article, <em>If the Null Fits, You Must Omit</em>. The code is <a href="https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod">hosted on GitHub</a>.</p>
+<p>To follow along, please clone the <code>gp-statmod</code> directory.</p>
+<pre><code>$ git clone https://github.com/mt-digital/gp-statmod.git</code></pre>
+<p>Change directories to go to the <code>gp-statmod/docs</code> directory where this document lives:</p>
+<pre><code>cd gp-statmod/docs</code></pre>
+<p>Then you can run the examples in this document, edit them, etc., on your own computer.</p>
+<p>This tutorial is still valuable if you’re just reading it on the <a href="https://mt-digital.github.io/gp-statmod">code documentation associated with the journal article</a>.</p>
+</section>
+<section id="simulations" class="level1">
+<h1>Simulations</h1>
+<p>I developed two models of experimental observations in group polarization experiments to serve complementary purposes. First is the <em>expectation</em> model where we model the observation of the mean</p>
+<section id="expectation-model-of-group-polarization-experiments" class="level2">
+<h2 class="anchored" data-anchor-id="expectation-model-of-group-polarization-experiments">Expectation model of group polarization experiments</h2>
+<p>See Method section of the paper where we explain how to calculate the probability density vector representing the probability that a participant gives the opinion represented by each measurement bin, <span class="math inline">\(b\)</span>.</p>
+<p>Here we show how to calculate the mean observed opinion at pre- and post-discussion to show how spurious group polarization occurs under a null polarization hypothesis.</p>
+<p><span class="citation" data-cites="Moscovici1969">Moscovici and Zavalloni (<a href="#ref-Moscovici1969" role="doc-biblioref">1969</a>)</span> report observing a mean opinion of -0.6 in pre-discussion opinions and mean opinion -1.04 post-discussion, measured using an ordinal scale from -3 (strongly disagree) to +3 (strongly agree). Let’s calculate the probability density vector for the pre- and post-discussion distributions then calculate the mean opinion for each one. The latent distributions have the same mean, -1.2, but different variances, which results in a shifted observed mean due to opinion clipping.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1443885641.png" class="img-fluid figure-img" width="575"></p>
+<figcaption><strong>Mean group opinions pre- and post-discussion from Moscovici &amp; Zavalloni (1969).</strong></figcaption>
+</figure>
+</div>
+<p>We call this a <em>null polarization model</em> (defined in terms of latent opinions) that generates <em>spurious group polarization.</em> <em>Spurious group polarization</em> is when the observed opinion distributions appear to polarize (i.e., <em>radicalize</em>, or <em>become more extreme</em>) that does notrepresent the true change in latent opinions. The measurement procedure <em>clips</em> extreme opinions less than the minimum bin value, or greater than the maximum, causing the average observed opinion to <em>spuriously</em> appear polarized.</p>
+<p>Let’s use some modeling code from the repository to demonstrate. For this part we need to source (<em>use code from</em>) the <code>model.R</code> file that has the the <a href="https://github.com/mt-digital/gp-statmod/blob/final-draft/GroupPolarizationStatmod/model.R#L7"><code>binProb</code></a> function I use below. Also make sure you have set the working directory to the <code>GroupPolarizationStatmod</code> directory within the <code>gp-stats</code> project/repository directory.</p>
+<p>For a preliminary step, adapt my code below for your computer. Change the argument to <code>root.dir</code> to be the location of the <code>GroupPolarizationStatmod</code> directory on your own computer.</p>
+<p>Now in the following chunk, the <code>source</code> function will know where to look for the file with the <code>makeProbVec</code> function we need, <code>model.R</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is how I set the working directory</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Adapt for your own computer</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd("~/workspace/gp-statmod/GroupPolarizationStatmod/")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load makeProbVec from file model.R</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"model.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now read in the pre- and post-discussion means from <code>Moscovici1969_Americans</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Experimental means</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mosc1969_ave_pre <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.6</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>mosc1969_ave_post <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">1.04</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Create a hypothesized null model that will spuriously look like polarization, with the same pre- and post-discussion means above. These correspond to <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma_\mathrm{pre}\)</span>, and <span class="math inline">\(\sigma_\mathrm{post}\)</span> from the paper that define a null polarization model, <span class="math inline">\(\nu = (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hypothesized null model that looks polarized</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">1.2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sd_pre <span class="ot">&lt;-</span> <span class="fl">4.3</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>sd_post <span class="ot">&lt;-</span> <span class="fl">1.9</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The function <code>makeProbVec</code> creates the vector <span class="math inline">\(f[b]\)</span> of probabilities that bin <span class="math inline">\(b_i \in b\)</span> will be reported by a randomly-selected participant, given the measurement bin values and the distribution of latent opinions, assumed normal, defined by the mean and standard deviation, <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. and bin values. Here bin values are <span class="math inline">\(b=-3,-2,\ldots,3\)</span>; <span class="math inline">\(\mu=-1.2\)</span>; and <span class="math inline">\(\sigma=4.3\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vector w/ probability density for each bin</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>f_pre <span class="ot">&lt;-</span> <span class="fu">makeProbVec</span>(<span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">3</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">4.3</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Print to two significant digits</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.2f"</span>, f_pre)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.38" "0.09" "0.09" "0.09" "0.08" "0.07" "0.19"</code></pre>
+</div>
+</div>
+<p>Let’s <code>barplot</code> to have a look:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(f_pre, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">names.arg =</span> <span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.4</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Pct. Responding"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Bin Value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="500"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s check the simulated average observed opinion, <span class="math inline">\(\bar{o}\)</span>, using the expected value of the distribution, i.e., we assume <span class="math inline">\(\bar{o} = \langle o \rangle\)</span>, so we use the standard formula for expected value, which assumes that <span class="math inline">\(f[b]\)</span> is normalized.</p>
+<p><span class="math display">\[
+\bar{o} = \sum_{b=b_1}^{b_B} b \cdot f[b].
+\]</span></p>
+<p>In code,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate simulated and compare with actual</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sim_obs_pre <span class="ot">&lt;-</span> <span class="fu">sum</span>((<span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">*</span> f_pre)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">abs</span>(sim_obs_pre <span class="sc">-</span> mosc1969_ave_pre))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01195818</code></pre>
+</div>
+</div>
+<p>This is within one significant digit greater than the reporting scale, meaning it is an acceptable fit.</p>
+<p>This shows that even just a little spread in the distribution of latent opinions results in a seriously distorted mean <span class="citation" data-cites="Liddell2018">(<a href="#ref-Liddell2018" role="doc-biblioref">Liddell and Kruschke 2018</a>)</span>—one that reproduces the mean reported by <span class="citation" data-cites="Moscovici1969">Moscovici and Zavalloni (<a href="#ref-Moscovici1969" role="doc-biblioref">1969</a>)</span>, but actually confirming the null polarization hypothesis!</p>
+<p>Let’s check the simulated average observed opinion for post-deliberation, repeating the previous steps for <span class="math inline">\(t=\mathrm{post}\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>f_post <span class="ot">&lt;-</span> <span class="fu">makeProbVec</span>(<span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">3</span>, mu, sd_post)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.2f"</span>, f_post)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.25" "0.19" "0.21" "0.17" "0.11" "0.05" "0.03"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate simulated and compare with actual</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sim_obs_post <span class="ot">&lt;-</span> <span class="fu">sum</span>((<span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">*</span> f_post)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">abs</span>(sim_obs_post <span class="sc">-</span> mosc1969_ave_post))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00094857</code></pre>
+</div>
+</div>
+<p>Here we get even closer agreement between the observed post-discussion average opinion in <span class="citation" data-cites="Moscovici1969">Moscovici and Zavalloni (<a href="#ref-Moscovici1969" role="doc-biblioref">1969</a>)</span> and the one we simulated.</p>
+</section>
+</section>
+<section id="the-generative-model-and-bayesian-inference-for-false-detections" class="level1">
+<h1>The Generative Model and Bayesian Inference for False Detections</h1>
+<p>The analysis of the generative model has two major components:</p>
+<ol type="1">
+<li><strong>Calculate false positive/detection rates for the simulated null polarization model</strong>, <em>mere agreement</em>—where polarization experiment participant opinions agree more following discussion than before. Recall this is modeled as a decrease in the standard deviation of latent opinions, but a constant mean latent opinion.</li>
+<li><strong>Find an effect–detection threshold</strong>, <span class="math inline">\(d^*(\alpha)\)</span>, such that, under the null model, the probability of observing an estimated effect size exceeding $d^*(\alpha)$ is $$: <span class="math display">\[
+\Pr\!\left( \hat{d} \ge
+d^{*}(\alpha) \mid \mathcal{M}_{0} \right) = \alpha.
+\]</span> This yields a null-model–calibrated false–positive rate for detecting a group polarization effect.</li>
+</ol>
+<p>The first step in our <em>generative</em> model of false detections is to <em>generate</em> simulated experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold. simulated null-model data our simulated null-models.</p>
+<section id="simulate-experimental-data" class="level2">
+<h2 class="anchored" data-anchor-id="simulate-experimental-data">Simulate Experimental Data</h2>
+<p>I simulate experimental group polarization data for a given time, <span class="math inline">\(t\)</span>, with latent group opinion mean and standard deviation, <span class="math inline">\(\mu_t\)</span> and <span class="math inline">\(\sigma_t\)</span>, and with a survey response scale defined by <span class="math inline">\(B\)</span> bin values, <span class="math inline">\(b_i\)</span>, with <span class="math inline">\(i=1,\ldots,B\)</span>.</p>
+</section>
+<section id="simulate-each-experimental-designs-false-positive-rate" class="level2">
+<h2 class="anchored" data-anchor-id="simulate-each-experimental-designs-false-positive-rate">Simulate each experimental design’s false positive rate</h2>
+<p>Here’s how to calculate the Type I or family-wise error rate for all the experiments (though I misnamed the function back in the day, so it calls all of the error rates “family-wise” because I had understood them to be synonyms).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"src/fwer.R"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>probit_fits_dir <span class="ot">&lt;-</span> <span class="st">"data/probit_fits"</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a "moderate" significance, according to Cohen's definitions </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>significance_val <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>fwer_tbl <span class="ot">&lt;-</span> <span class="fu">calculate_fwer</span>(probit_fits_dir, significance_val);</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(fwer_tbl, <span class="at">n =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   StudyID       ExperimentID         FWER
+   &lt;chr&gt;         &lt;chr&gt;               &lt;dbl&gt;
+ 1 Schkade2010   Boulder-CivilUnions 0.598
+ 2 Burnstein1975 Experimental        0.406
+ 3 Burnstein1973 B                   0.351
+ 4 Abrams1990    Uncategorized3      0.349
+ 5 Friedkin1999  Tetrads-Sports      0.342
+ 6 Moscovici1969 Americans           0.335
+ 7 Abrams1990    Uncategorized4      0.333
+ 8 Burnstein1973 A                   0.319
+ 9 Abrams1990    Uncategorized1      0.319
+10 Abrams1990    Categorized2        0.305</code></pre>
+</div>
+</div>
+<p>This is used inside the <code>calc_fdr_vs_significance</code> function that adds another column to this dataframe, the false discovery rate (FDR) for a set of significance values. Here it is being called with the default metascience parameters with a base rate of <span class="math inline">\(b=0.1\)</span> and a statistical power of <span class="math inline">\(W=0.8\)</span>. We consider three effect-detection thresholds in the paper: “small”, “medium”, and “large” effect sizes traditionally assumed practically meaningful across social sciences <span class="citation" data-cites="CohenBook1988">(<a href="#ref-CohenBook1988" role="doc-biblioref">Cohen 1988</a>)</span>.</p>
+<p>The <code>calc_fdr_vs_significance</code> function calculates the false-positive rate (<span class="math inline">\(\alpha\)</span>) and false detection rate (<span class="math inline">\(\mathrm{FDR}\)</span>) reported for a variety of effect-detection thresholds, <span class="math inline">\(d^*\)</span>, as we call them in the paper. When I first wrote the code, though, I was thinking about detection thresholds as synonymous with “significance values”. So that’s why the function name, <code>calc_fdr_vs_significance</code>, includes the word <code>significance</code>, which is a stand-in for the maximally descriptive “effect-detection thresholds” terminology. This seemed fine to keep things simple and not change the name everywhere in the code. But it was right to change it for the paper, since <em>significance</em> is only understood in a p-value based <em>null-hypothesis significance testing</em> approach, where a hypothesis is confirmed if the p-value is less than some particular threshold. I updated the prose in the article to reflect this distinction, but left the code as-is.</p>
+<p>I put this function in the <code>scripts</code> directory because to run the full analyses presented in the paper it’s only necessary to run <code>calc_fdr_vs_significance</code> since it creates a column for the false positive rate and the estimated false detection rate calculated for each experimental design we studied.</p>
+<p>Below I call the function with the defaults specified, for illustration. Remember the <code>significance_vals</code> map to <em>effect-detection thresholds</em> (<span class="math inline">\(d^*\)</span>) in the paper.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"scripts/analysis.R"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This </span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fdr_over_thresholds <span class="ot">&lt;-</span> <span class="fu">calc_fdr_vs_significance</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">probit_fits_dir =</span> probit_fits_dir,  <span class="co"># defined in above code block</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_rate =</span> <span class="fl">0.1</span>, <span class="at">power =</span> <span class="fl">0.8</span>, <span class="at">significance_vals =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(fdr_over_thresholds, <span class="at">n=</span><span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+   StudyID       ExperimentID         FWER   FDR SigVal Power BaseRate
+   &lt;chr&gt;         &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Schkade2010   Boulder-CivilUnions 0.69  0.886    0.2   0.8      0.1
+ 2 Burnstein1975 Experimental        0.518 0.854    0.2   0.8      0.1
+ 3 Abrams1990    Uncategorized3      0.471 0.841    0.2   0.8      0.1
+ 4 Abrams1990    Uncategorized4      0.459 0.838    0.2   0.8      0.1
+ 5 Burnstein1973 B                   0.438 0.831    0.2   0.8      0.1
+ 6 Abrams1990    Uncategorized1      0.434 0.830    0.2   0.8      0.1
+ 7 Krizan2007    NoOutgroupScenario2 0.423 0.826    0.2   0.8      0.1
+ 8 Friedkin1999  Tetrads-Sports      0.417 0.824    0.2   0.8      0.1
+ 9 Abrams1990    Uncategorized5      0.414 0.823    0.2   0.8      0.1
+10 Krizan2007    NoOutgroupScenario1 0.41  0.822    0.2   0.8      0.1</code></pre>
+</div>
+</div>
+<p>To see <code>SigVal = 0.8</code> (ie <span class="math inline">\(d^* = 0.8\)</span>), check the <code>tail</code> of the table:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">tail</span>(fdr_over_thresholds, <span class="at">n =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+   StudyID       ExperimentID             FWER   FDR SigVal Power BaseRate
+   &lt;chr&gt;         &lt;chr&gt;                   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Hogg1990      Risky-Neutral          0.072  0.448    0.8   0.8      0.1
+ 2 Hogg1990      Neutral-Cautious       0.0680 0.433    0.8   0.8      0.1
+ 3 Myers1975     Feminists-Experimental 0.0630 0.415    0.8   0.8      0.1
+ 4 Friedkin1999  Dyads-Surgery          0.0540 0.378    0.8   0.8      0.1
+ 5 Schkade2010   COSprings-CivilUnions  0.038  0.299    0.8   0.8      0.1
+ 6 Friedkin1999  Triads-School          0.0360 0.288    0.8   0.8      0.1
+ 7 Friedkin1999  Triads-Sports          0.0340 0.277    0.8   0.8      0.1
+ 8 Burnstein1973 F                      0.0330 0.271    0.8   0.8      0.1
+ 9 Friedkin1999  Tetrads-Surgery        0.0290 0.246    0.8   0.8      0.1
+10 Friedkin1999  Tetrads-School         0.027  0.233    0.8   0.8      0.1</code></pre>
+</div>
+</div>
+</section>
+<section id="find-effect-detection-thresholds-to-achieve-alpha-0.05" class="level2">
+<h2 class="anchored" data-anchor-id="find-effect-detection-thresholds-to-achieve-alpha-0.05">Find effect-detection thresholds to achieve <span class="math inline">\(\alpha = 0.05\)</span></h2>
+<p>In the second step of our generative model analysis I calculate</p>
+</section>
+</section>
+<section id="analyses" class="level1">
+<h1>Analyses</h1>
+<section id="identify-invalid-replications-all-but-5-were-invalidated" class="level2">
+<h2 class="anchored" data-anchor-id="identify-invalid-replications-all-but-5-were-invalidated"><em>Identify</em> Invalid Replications: All But 5% Were Invalidated</h2>
+</section>
+<section id="evaluate-experimental-designs-70-chance-a-polarization-detection-was-erroneous" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-experimental-designs-70-chance-a-polarization-detection-was-erroneous"><em>Evaluate</em> Experimental Designs: ~70% Chance a Polarization Detection was Erroneous</h2>
+</section>
+<section id="specify-effect-detection-thresholds-spec-experimentsdont-just-design-themand-avoid-informed-guesswork" class="level2">
+<h2 class="anchored" data-anchor-id="specify-effect-detection-thresholds-spec-experimentsdont-just-design-themand-avoid-informed-guesswork"><em>Specify</em> Effect-Detection Thresholds: Spec Experiments—Don’t Just Design Them—and Avoid Informed Guesswork</h2>
+</section>
+</section>
+<section id="references" class="level1">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-CohenBook1988" class="csl-entry" role="listitem">
+Cohen, Jacob. 1988. <em><span class="nocase">Statistical Power Analysis for the Behavioral Sciences</span></em>. 2nd ed. New York: Lawrence Erlbaum.
+</div>
+<div id="ref-Liddell2018" class="csl-entry" role="listitem">
+Liddell, Torrin M., and John K. Kruschke. 2018. <span>“<span class="nocase">Analyzing ordinal data with metric models: What could possibly go wrong?</span>”</span> <em>Journal of Experimental Social Psychology</em> 79: 328–48. <a href="https://doi.org/10.1016/j.jesp.2018.08.009">https://doi.org/10.1016/j.jesp.2018.08.009</a>.
+</div>
+<div id="ref-Moscovici1969" class="csl-entry" role="listitem">
+Moscovici, Serge, and Marisa Zavalloni. 1969. <span>“<span class="nocase">The group as a polarizer of attitudes</span>.”</span> <em>Journal of Personality and Social Psychology</em> 12 (2): 125–35.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/mt-digital\.github\.io\/gp-statmod\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
