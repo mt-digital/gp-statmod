@@ -1,12 +1,13 @@
 ---
 title: Notes and code examples to accompany "If the Null Fits, You Must Omit"
-author: Matt Turner · [https://mat.phd](https://mat.phd)
+author: Matt Turner · [Email Me!](mailto:matt@mat.phd) · [https://mat.phd](https://mat.phd) 
 date: today
 toc: true
+toc-expand: 2
 editor: 
   markdown: 
     wrap: 90
-bibliography: "paper/this.bib"
+bibliography: "this.bib"
 
 execute:
   # echo: false     # hide code
@@ -15,11 +16,11 @@ execute:
   # error: false
 ---
 
-## Purpose: demonstrate gp-stats codebase
+## Overview
 
 Here are some quick notes on the group polarization codebase in R supporting our article,
-*If the Null Fits, You Must Omit*. The code is permanently [hosted on
-GitHub](https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod).
+*If the Null Fits, You Must Omit*. The code is [hosted on
+GitHub](https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod). 
 
 To follow along, please clone the `gp-statmod` directory.
 
@@ -39,7 +40,8 @@ This tutorial is still valuable if you're just reading it on the [code documenta
 
 # Simulations
 
-I developed two models of group polarization to serve complementary purposes.
+I developed two models of experimental observations in group polarization experiments
+to serve complementary purposes. First is the _expectation_ model where we model the observation of the mean 
 
 ## Expectation model of group polarization experiments
 

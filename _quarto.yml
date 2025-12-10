@@ -2,12 +2,12 @@ project:
   type: website
 
 website:
-  title: "Group Polarization Statistics Modeling to Support Turner & Smaldino's (2025) 
-  preprint \"Null Fits? Must Omit\""
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
+  title: |
+    Notes and code examples to accompany "If the Null Fits, You Must Omit"
+  # navbar:
+  #   left:
+  #     - href: index.qmd
+  #       text: Home
 
 format:
   html:
