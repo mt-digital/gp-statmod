@@ -16,6 +16,12 @@ execute:
   # error: false
 ---
 
+
+<!-- Define the tex command for the null model -->
+\newcommand{\nullmodel}{\mathcal{M}_0}
+
+
+<!-- Begin main document -->
 ## Overview
 
 Here are some quick notes on the group polarization codebase in R supporting our article,
@@ -24,13 +30,13 @@ GitHub](https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizat
 
 To follow along, please clone the `gp-statmod` directory.
 
-```         
+```
 $ git clone https://github.com/mt-digital/gp-statmod.git
 ```
 
 Change directories to go to the `gp-statmod/docs` directory where this document lives:
 
-```         
+```
 cd gp-statmod/docs
 ```
 
@@ -38,10 +44,16 @@ Then you can run the examples in this document, edit them, etc., on your own com
 
 This tutorial is still valuable if you're just reading it on the [code documentation associated with the journal article](https://mt-digital.github.io/gp-statmod).
 
+You will learn how the code works that simulates measurements of opinion change
+in group polarization experiments that test if and by how much group discussion polarizes opinions. I used this modeling system to simulate 57 different group polarization experimental conditions across a corpus of ten journal articles published over several decades, and across social science subdisciplines for my paper with Paul Smaldino, "Null Fits? You Must Omit! How Measurement Artifacts Undermine Many Group Polarization Replications". 
+
 # Simulations
 
 I developed two models of experimental observations in group polarization experiments
-to serve complementary purposes. First is the _expectation_ model where we model the observation of the mean 
+to serve complementary purposes. These models provide two ways to simulate observations of _mere agreement_, which serves as our null-polarization model, $\nullmodel$, 
+
+First is the _expectation_ model where we model the observation of the average group opinion as the _expectation value_ of the distribution of ordinal opinions. We calculate the ordinal distribution of opinions by writing the endpoints of each measurement bins as limits of integration in a series of $B$ integrals, where $B$ is the number of measurement bins. For example, an example of an ordinal measurement scale might be a Likert-style series of disagree-agree levels, associated with numerical values:
+-3 indicates 
 
 ## Expectation model of group polarization experiments
 
