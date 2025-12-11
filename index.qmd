@@ -19,38 +19,42 @@ execute:
 <!-- Define the tex command for the null model -->
 \newcommand{\nullmodel}{\mathcal{M}_0}
 
-\DeclareMathOperator*{\argmin}{argmin}
-\DeclareMathOperator*{\argmax}{argmax} % Optional: also define argmax
-
-
 
 <!-- Begin main document -->
-## Overview
+# Introduction
 
-Here are some quick notes on the group polarization codebase in R supporting our article,
-*If the Null Fits, You Must Omit*. The code is [hosted on
-GitHub](https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod). 
+This document supports my article with Paul Smaldino, *Null Fits? Must Omit!* It follows the structure of the article's _Method_ and _Analysis_ sections, providing a tutorial explanation, first, of the code used to model group polarization experiments and opinion measurement; and, second, how the code works to summarize, analyze, and visualize simulation results. 
 
-To follow along, please clone the `gp-statmod` directory.
+Our article describes how we analyzed simulations of group polarization experiments to show that ~95% of experimental replications of the group polarization effect are invalid due to non-identifiability from measurement artifacts across ten journal articles that comprised our curated corpus. There were a total of 57 independent experimental conditions across these studies. 
 
+We furter estimated at least a 70% chance that any published replication of group polarization is, in fact, a false detection. 
+
+We also show how this simulation system can be used constructively to specify what effect size should be used as a detection threshold to limit FPR to 0.05. For more details of the motivation, theory, and results of our analysis, please see our paper.
+
+
+**You can read this documentation online, hosted by GitHub:** https://mt-digital.github.io/gp-statmod
+
+**Or, you can read this document and run the code examples yourself.** To follow along and run code on your own, please clone the `gp-statmod` directory:
+
+```{bash}
+#| eval: false
+git clone https://github.com/mt-digital/gp-statmod.git
 ```
-$ git clone https://github.com/mt-digital/gp-statmod.git
-```
 
-Change directories to go to the `gp-statmod/docs` directory where this document lives:
+Change directories to go to the `gp-statmod` directory where this document lives:
 
-```
-cd gp-statmod/docs
+```{sh}
+#| eval: false
+cd gp-statmod
 ```
 
 Then you can run the examples in this document, edit them, etc., on your own computer.
 
-This tutorial is still valuable if you're just reading it on the [code documentation associated with the journal article](https://mt-digital.github.io/gp-statmod).
-
-You will learn how the code works that simulates measurements of opinion change
+Either way, you will learn how the code works that simulates measurements of opinion change
 in group polarization experiments that test if and by how much group discussion polarizes opinions. I used this modeling system to simulate 57 different group polarization experimental conditions across a corpus of ten journal articles published over several decades, and across social science subdisciplines for my paper with Paul Smaldino, "Null Fits? You Must Omit! How Measurement Artifacts Undermine Many Group Polarization Replications". 
 
-# Simulations
+
+# Method
 
 I developed two models of experimental observations in group polarization experiments
 to serve complementary purposes. These models provide two ways to simulate observations of _mere agreement_, which serves as our null-polarization model, $\nullmodel$, 
@@ -116,7 +120,7 @@ mosc1969_ave_post <- -1.04
 Create a hypothesized null model that will spuriously look like polarization, with the
 same pre- and post-discussion means above. These correspond to $\mu$,
 $\sigma_\mathrm{pre}$, and $\sigma_\mathrm{post}$ from the paper that define a null
-polarization model, $\nu = (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})$.
+polarization model, $\nullmodel = (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})$.
 
 ```{r}
 # Hypothesized null model that looks polarized
@@ -222,6 +226,8 @@ Here's how to calculate the Type I or family-wise error rate for all the experim
 (though I misnamed the function back in the day, so it calls all of the error rates
 "family-wise" because I had understood them to be synonyms).
 
+
+
 ```{r}
 source("src/fwer.R")
 
@@ -265,9 +271,19 @@ print(tail(fdr_over_thresholds, n = 10))
 ## Find effect-detection thresholds to achieve $\alpha = 0.05$
 
 In the second step of our generative model analysis I calculate the solution to
-the problem in @eq-threshold-spec, finding the effect-detection threshold, $d^*$, that achieves a target false positive rate, $\alpha^* = 0.05$. 
+the problem in @eq-threshold-spec, finding the effect-detection threshold, $d^*$, that achieves a target false positive rate, $\alpha^* = 0.05$. We need an updated dataset of Type I error rates calculated with a finer-grained set of candidate effect-detection thresholds, which we just call $d$ if they're candidates, than the simple three, 0.2, 0.5, and 0.8, used in the previous section. 
 
-# Analyses
+
+```{r}
+# The fwer is equivalently Type I error—written before I understood the difference,
+# not worth changing the name for this long-running project before it's done.
+det_thresh_tbl <- sigval_for_low_fwer(fdr_over_thresholds, target_fwer = 0.05)
+
+print(det_thresh_tbl)
+```
+
+
+# Analysis
 
 ## _Identify_ Invalid Replications: All But 5% Were Invalidated
 
