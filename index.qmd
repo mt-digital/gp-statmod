@@ -16,9 +16,12 @@ execute:
   # error: false
 ---
 
-
 <!-- Define the tex command for the null model -->
 \newcommand{\nullmodel}{\mathcal{M}_0}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax} % Optional: also define argmax
+
 
 
 <!-- Begin main document -->
@@ -189,22 +192,28 @@ The analysis of the generative model has two major components:
 1.  **Calculate false positive/detection rates for the simulated null polarization
     model**, *mere agreement*—where polarization experiment participant opinions agree
     more following discussion than before. Recall this is modeled as a decrease in the
-    standard deviation of latent opinions, but a constant mean latent opinion.
+    standard deviation of latent opinions, but a constant mean latent opinion. Here, then, we calculate the false positive rate, $\alpha_e$ as a function of the effect-detection threshold, $d^*$, i.e., 
+    $$
+      \alpha_e(d^*) = \Pr\!\left( \hat{d} \ge d^{*} \mid \mathcal{M}_{0} \right).
+    $$
+    In the study, we calculate the right-hand side as the frequency of the 1000 trials where $\hat{d} \ge d^*$ for simulations of experiment, $e$. 
 2.  **Find an effect–detection threshold**, $d^*(\alpha)$, such that, under the null
     model, the probability of observing an estimated effect size exceeding
-    \$d\^\*(\\alpha)\$ is \$\alpha\$: $$
-     \Pr\!\left( \hat{d} \ge
-     d^{*}(\alpha) \mid \mathcal{M}_{0} \right) = \alpha.
+    \$d\^\*(\\alpha)\$ is some target false positive rate, $\alpha^* = 0.05$, for example: 
+    $$
+     d^* = \min~d,~~\text{subject to}~\Pr\!\left( \hat{d} \ge d \mid \mathcal{M}_{0} \right)  \le\alpha^*.
      $$ 
      This yields a null-model–calibrated false–positive rate for detecting a group
     polarization effect.
     
 The first step in our _generative_ model of false detections is to _generate_ simulated 
-experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold.  simulated null-model data our simulated null-models.
+experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold.
 
 ## Simulate Experimental Data
 
 I simulate experimental group polarization data for a given time, $t$, with latent group opinion mean and standard deviation, $\mu_t$ and $\sigma_t$, and with a survey response scale defined by $B$ bin values, $b_i$, with $i=1,\ldots,B$. 
+
+<!-------- CONTINUE HERE 12/11! ------>
 
 
 ## Simulate each experimental design's false positive rate
