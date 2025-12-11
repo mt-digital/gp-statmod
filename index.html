@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matt Turner · Email Me! · https://mat.phd">
-<meta name="dcterms.date" content="2025-12-09">
+<meta name="dcterms.date" content="2025-12-11">
 
 <title>Notes and code examples to accompany “If the Null Fits, You Must Omit” – Notes and code examples to accompany "If the Null Fits, You Must Omit"</title>
 <style>
@@ -210,7 +210,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 9, 2025</p>
+      <p class="date">December 11, 2025</p>
     </div>
   </div>
   
@@ -222,6 +222,9 @@ window.Quarto = {
 </header>
 
 
+<!-- Define the tex command for the null model -->
+<p>% Optional: also define argmax</p>
+<!-- Begin main document -->
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>Here are some quick notes on the group polarization codebase in R supporting our article, <em>If the Null Fits, You Must Omit</em>. The code is <a href="https://github.com/mt-digital/gp-statmod/tree/final-draft/GroupPolarizationStatmod">hosted on GitHub</a>.</p>
@@ -231,10 +234,12 @@ window.Quarto = {
 <pre><code>cd gp-statmod/docs</code></pre>
 <p>Then you can run the examples in this document, edit them, etc., on your own computer.</p>
 <p>This tutorial is still valuable if you’re just reading it on the <a href="https://mt-digital.github.io/gp-statmod">code documentation associated with the journal article</a>.</p>
+<p>You will learn how the code works that simulates measurements of opinion change in group polarization experiments that test if and by how much group discussion polarizes opinions. I used this modeling system to simulate 57 different group polarization experimental conditions across a corpus of ten journal articles published over several decades, and across social science subdisciplines for my paper with Paul Smaldino, “Null Fits? You Must Omit! How Measurement Artifacts Undermine Many Group Polarization Replications”.</p>
 </section>
 <section id="simulations" class="level1">
 <h1>Simulations</h1>
-<p>I developed two models of experimental observations in group polarization experiments to serve complementary purposes. First is the <em>expectation</em> model where we model the observation of the mean</p>
+<p>I developed two models of experimental observations in group polarization experiments to serve complementary purposes. These models provide two ways to simulate observations of <em>mere agreement</em>, which serves as our null-polarization model, <span class="math inline">\(\mathcal{M}_0\)</span>,</p>
+<p>First is the <em>expectation</em> model where we model the observation of the average group opinion as the <em>expectation value</em> of the distribution of ordinal opinions. We calculate the ordinal distribution of opinions by writing the endpoints of each measurement bins as limits of integration in a series of <span class="math inline">\(B\)</span> integrals, where <span class="math inline">\(B\)</span> is the number of measurement bins. For example, an example of an ordinal measurement scale might be a Likert-style series of disagree-agree levels, associated with numerical values: -3 indicates</p>
 <section id="expectation-model-of-group-polarization-experiments" class="level2">
 <h2 class="anchored" data-anchor-id="expectation-model-of-group-polarization-experiments">Expectation model of group polarization experiments</h2>
 <p>See Method section of the paper where we explain how to calculate the probability density vector representing the probability that a participant gives the opinion represented by each measurement bin, <span class="math inline">\(b\)</span>.</p>
@@ -331,16 +336,18 @@ window.Quarto = {
 <h1>The Generative Model and Bayesian Inference for False Detections</h1>
 <p>The analysis of the generative model has two major components:</p>
 <ol type="1">
-<li><strong>Calculate false positive/detection rates for the simulated null polarization model</strong>, <em>mere agreement</em>—where polarization experiment participant opinions agree more following discussion than before. Recall this is modeled as a decrease in the standard deviation of latent opinions, but a constant mean latent opinion.</li>
-<li><strong>Find an effect–detection threshold</strong>, <span class="math inline">\(d^*(\alpha)\)</span>, such that, under the null model, the probability of observing an estimated effect size exceeding $d^*(\alpha)$ is $$: <span class="math display">\[
-\Pr\!\left( \hat{d} \ge
-d^{*}(\alpha) \mid \mathcal{M}_{0} \right) = \alpha.
-\]</span> This yields a null-model–calibrated false–positive rate for detecting a group polarization effect.</li>
+<li><strong>Calculate false positive/detection rates for the simulated null polarization model</strong>, <em>mere agreement</em>—where polarization experiment participant opinions agree more following discussion than before. Recall this is modeled as a decrease in the standard deviation of latent opinions, but a constant mean latent opinion. Here, then, we calculate the false positive rate, <span class="math inline">\(\alpha_e\)</span> as a function of the effect-detection threshold, <span class="math inline">\(d^*\)</span>, i.e., <span id="eq-false-positive-rate"><span class="math display">\[
+  \alpha_e(d^*) = \Pr\!\left( \hat{d} \ge d^{*} \mid \mathcal{M}_{0} \right).
+\tag{1}\]</span></span> In the study, we calculate the right-hand side as the frequency of the 1000 trials where <span class="math inline">\(\hat{d} \ge d^*\)</span> for simulations of experiment, <span class="math inline">\(e\)</span>.</li>
+<li><strong>Find an effect–detection threshold</strong>, <span class="math inline">\(d^*(\alpha)\)</span>, such that, under the null model, the probability of observing an estimated effect size exceeding $d^*(\alpha)$ is some target false positive rate, <span class="math inline">\(\alpha^* = 0.05\)</span>, for example: <span id="eq-threshold-spec"><span class="math display">\[
+d^* = \min~d,~~\text{subject to}~\Pr\!\left( \hat{d} \ge d \mid \mathcal{M}_{0} \right)  \le\alpha^*.
+  \tag{2}\]</span></span> This yields a null-model–calibrated false–positive rate for detecting a group polarization effect.</li>
 </ol>
-<p>The first step in our <em>generative</em> model of false detections is to <em>generate</em> simulated experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold. simulated null-model data our simulated null-models.</p>
+<p>The first step in our <em>generative</em> model of false detections is to <em>generate</em> simulated experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold.</p>
 <section id="simulate-experimental-data" class="level2">
 <h2 class="anchored" data-anchor-id="simulate-experimental-data">Simulate Experimental Data</h2>
 <p>I simulate experimental group polarization data for a given time, <span class="math inline">\(t\)</span>, with latent group opinion mean and standard deviation, <span class="math inline">\(\mu_t\)</span> and <span class="math inline">\(\sigma_t\)</span>, and with a survey response scale defined by <span class="math inline">\(B\)</span> bin values, <span class="math inline">\(b_i\)</span>, with <span class="math inline">\(i=1,\ldots,B\)</span>.</p>
+<!-------- CONTINUE HERE 12/11! ------>
 </section>
 <section id="simulate-each-experimental-designs-false-positive-rate" class="level2">
 <h2 class="anchored" data-anchor-id="simulate-each-experimental-designs-false-positive-rate">Simulate each experimental design’s false positive rate</h2>
@@ -422,7 +429,7 @@ d^{*}(\alpha) \mid \mathcal{M}_{0} \right) = \alpha.
 </section>
 <section id="find-effect-detection-thresholds-to-achieve-alpha-0.05" class="level2">
 <h2 class="anchored" data-anchor-id="find-effect-detection-thresholds-to-achieve-alpha-0.05">Find effect-detection thresholds to achieve <span class="math inline">\(\alpha = 0.05\)</span></h2>
-<p>In the second step of our generative model analysis I calculate</p>
+<p>In the second step of our generative model analysis I calculate the solution to the problem in <a href="#eq-threshold-spec" class="quarto-xref">Equation&nbsp;2</a>, finding the effect-detection threshold, <span class="math inline">\(d^*\)</span>, that achieves a target false positive rate, <span class="math inline">\(\alpha^* = 0.05\)</span>.</p>
 </section>
 </section>
 <section id="analyses" class="level1">

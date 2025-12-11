@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "Notes and code examples to accompany “If the Null Fits, You Must Omit”",
     "section": "",
-    "text": "Here are some quick notes on the group polarization codebase in R supporting our article, If the Null Fits, You Must Omit. The code is hosted on GitHub.\nTo follow along, please clone the gp-statmod directory.\n$ git clone https://github.com/mt-digital/gp-statmod.git\nChange directories to go to the gp-statmod/docs directory where this document lives:\ncd gp-statmod/docs\nThen you can run the examples in this document, edit them, etc., on your own computer.\nThis tutorial is still valuable if you’re just reading it on the code documentation associated with the journal article."
+    "text": "% Optional: also define argmax"
   },
   {
     "objectID": "index.html#overview",
     "href": "index.html#overview",
     "title": "Notes and code examples to accompany “If the Null Fits, You Must Omit”",
-    "section": "",
-    "text": "Here are some quick notes on the group polarization codebase in R supporting our article, If the Null Fits, You Must Omit. The code is hosted on GitHub.\nTo follow along, please clone the gp-statmod directory.\n$ git clone https://github.com/mt-digital/gp-statmod.git\nChange directories to go to the gp-statmod/docs directory where this document lives:\ncd gp-statmod/docs\nThen you can run the examples in this document, edit them, etc., on your own computer.\nThis tutorial is still valuable if you’re just reading it on the code documentation associated with the journal article."
+    "section": "Overview",
+    "text": "Overview\nHere are some quick notes on the group polarization codebase in R supporting our article, If the Null Fits, You Must Omit. The code is hosted on GitHub.\nTo follow along, please clone the gp-statmod directory.\n$ git clone https://github.com/mt-digital/gp-statmod.git\nChange directories to go to the gp-statmod/docs directory where this document lives:\ncd gp-statmod/docs\nThen you can run the examples in this document, edit them, etc., on your own computer.\nThis tutorial is still valuable if you’re just reading it on the code documentation associated with the journal article.\nYou will learn how the code works that simulates measurements of opinion change in group polarization experiments that test if and by how much group discussion polarizes opinions. I used this modeling system to simulate 57 different group polarization experimental conditions across a corpus of ten journal articles published over several decades, and across social science subdisciplines for my paper with Paul Smaldino, “Null Fits? You Must Omit! How Measurement Artifacts Undermine Many Group Polarization Replications”."
   },
   {
     "objectID": "index.html#expectation-model-of-group-polarization-experiments",
@@ -39,7 +39,7 @@
     "href": "index.html#find-effect-detection-thresholds-to-achieve-alpha-0.05",
     "title": "Notes and code examples to accompany “If the Null Fits, You Must Omit”",
     "section": "Find effect-detection thresholds to achieve \\(\\alpha = 0.05\\)",
-    "text": "Find effect-detection thresholds to achieve \\(\\alpha = 0.05\\)\nIn the second step of our generative model analysis I calculate"
+    "text": "Find effect-detection thresholds to achieve \\(\\alpha = 0.05\\)\nIn the second step of our generative model analysis I calculate the solution to the problem in Equation 2, finding the effect-detection threshold, \\(d^*\\), that achieves a target false positive rate, \\(\\alpha^* = 0.05\\)."
   },
   {
     "objectID": "index.html#identify-invalid-replications-all-but-5-were-invalidated",
