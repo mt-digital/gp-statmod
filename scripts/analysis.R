@@ -12,6 +12,7 @@
 # Date: 2024-11-05
 #
 
+library(forcats)
 library(purrr)
 
 source("src/fwer.R")
