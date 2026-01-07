@@ -56,7 +56,7 @@ plot_ordinal_cohens <- function(ordinal_data_dir = "data/probit_fits",
 
 
 
-plot_fdr <- function(save_path = "paper/Figures/Analysis/fdr_vs_experiment.pdf", 
+plot_fdr <- function(save_path = "images/fdr_vs_experiment.pdf", 
                     aggregate = FALSE, use_non_identified = FALSE,
                     default_fwer = 0.05,
                     base_rate = 0.1, power = 0.8, 
@@ -219,13 +219,13 @@ plot_sigval_for_low_fwer = function(target_fwer = 0.05,
 ## MAKE MAIN PUBLICATION PLOTS ##
 # plot_ordinal_cohens()
 
-plot_fdr()
-
-plot_fdr(aggregate = TRUE, save_path = "paper/Figures/Analysis/fdr_vs_study.pdf")
-
-plot_fdr(aggregate = TRUE,
-         save_path = "paper/Figures/Analysis/fdr_vs_study_w_nonid.pdf",
-         use_non_identified = TRUE)
-
-plot_sigval_for_low_fwer()
-
+# plot_fdr()
+# 
+# plot_fdr(aggregate = TRUE, save_path = "paper/Figures/Analysis/fdr_vs_study.pdf")
+# 
+# plot_fdr(aggregate = TRUE,
+#          save_path = "paper/Figures/Analysis/fdr_vs_study_w_nonid.pdf",
+#          use_non_identified = TRUE)
+# 
+# plot_sigval_for_low_fwer()
+# 

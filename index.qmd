@@ -17,24 +17,36 @@ execute:
 ---
 
 <!-- Define the tex command for the null model -->
+
 \newcommand{\nullmodel}{\mathcal{M}_0}
 
-
 <!-- Begin main document -->
+
 # Introduction
 
-This document supports my article with Paul Smaldino, *Null Fits? Must Omit!* It follows the structure of the article's _Method_ and _Analysis_ sections, providing a tutorial explanation, first, of the code used to model group polarization experiments and opinion measurement; and, second, how the code works to summarize, analyze, and visualize simulation results. 
+This document supports my article, *Null Fits? Must Omit!* It follows the structure of the
+article's *Method* and *Analysis* sections, providing a tutorial explanation, first, of
+the code used to model group polarization experiments and opinion measurement; and,
+second, how the code works to summarize, analyze, and visualize simulation results.
 
-Our article describes how we analyzed simulations of group polarization experiments to show that ~95% of experimental replications of the group polarization effect are invalid due to non-identifiability from measurement artifacts across ten journal articles that comprised our curated corpus. There were a total of 57 independent experimental conditions across these studies. 
+Our article describes how we analyzed simulations of group polarization experiments to
+show that \~95% of experimental replications of the group polarization effect are invalid
+due to non-identifiability from measurement artifacts across ten journal articles that
+comprised our curated corpus. There were a total of 57 independent experimental conditions
+across these studies.
 
-We furter estimated at least a 70% chance that any published replication of group polarization is, in fact, a false detection. 
+We furter estimated at least a 70% chance that any published replication of group
+polarization is, in fact, a false detection.
 
-We also show how this simulation system can be used constructively to specify what effect size should be used as a detection threshold to limit FPR to 0.05. For more details of the motivation, theory, and results of our analysis, please see our paper.
+We also show how this simulation system can be used constructively to specify what effect
+size should be used as a detection threshold to limit FPR to 0.05. For more details of the
+motivation, theory, and results of our analysis, please see our paper.
 
+**You can read this documentation online, hosted by GitHub:**
+https://mt-digital.github.io/gp-statmod
 
-**You can read this documentation online, hosted by GitHub:** https://mt-digital.github.io/gp-statmod
-
-**Or, you can read this document and run the code examples yourself.** To follow along and run code on your own, please clone the `gp-statmod` directory:
+**Or, you can read this document and run the code examples yourself.** To follow along and
+run code on your own, please clone the `gp-statmod` directory:
 
 ```{bash}
 #| eval: false
@@ -50,17 +62,26 @@ cd gp-statmod
 
 Then you can run the examples in this document, edit them, etc., on your own computer.
 
-Either way, you will learn how the code works that simulates measurements of opinion change
-in group polarization experiments that test if and by how much group discussion polarizes opinions. I used this modeling system to simulate 57 different group polarization experimental conditions across a corpus of ten journal articles published over several decades, and across social science subdisciplines for my paper with Paul Smaldino, "Null Fits? You Must Omit! How Measurement Artifacts Undermine Many Group Polarization Replications". 
-
+Either way, you will learn how the code works that simulates measurements of opinion
+change in group polarization experiments that test if and by how much group discussion
+polarizes opinions. I used this modeling system to simulate 57 different group
+polarization experimental conditions across a corpus of ten journal articles published
+over several decades, and across social science subdisciplines for my paper with Paul
+Smaldino, "Null Fits? You Must Omit! How Measurement Artifacts Undermine Many Group
+Polarization Replications".
 
 # Method
 
-I developed two models of experimental observations in group polarization experiments
-to serve complementary purposes. These models provide two ways to simulate observations of _mere agreement_, which serves as our null-polarization model, $\nullmodel$, 
+I developed two models of experimental observations in group polarization experiments to
+serve complementary purposes. These models provide two ways to simulate observations of
+*mere agreement*, which serves as our null-polarization model, $\mathcal{M}_0$,
 
-First is the _expectation_ model where we model the observation of the average group opinion as the _expectation value_ of the distribution of ordinal opinions. We calculate the ordinal distribution of opinions by writing the endpoints of each measurement bins as limits of integration in a series of $B$ integrals, where $B$ is the number of measurement bins. For example, an example of an ordinal measurement scale might be a Likert-style series of disagree-agree levels, associated with numerical values:
--3 indicates 
+First is the *expectation* model where we model the observation of the average group
+opinion as the *expectation value* of the distribution of ordinal opinions. We calculate
+the ordinal distribution of opinions by writing the endpoints of each measurement bins as
+limits of integration in a series of $B$ integrals, where $B$ is the number of measurement
+bins. For example, an example of an ordinal measurement scale might be a Likert-style
+series of disagree-agree levels, associated with numerical values: -3 indicates
 
 ## Expectation model of group polarization experiments
 
@@ -120,7 +141,7 @@ mosc1969_ave_post <- -1.04
 Create a hypothesized null model that will spuriously look like polarization, with the
 same pre- and post-discussion means above. These correspond to $\mu$,
 $\sigma_\mathrm{pre}$, and $\sigma_\mathrm{post}$ from the paper that define a null
-polarization model, $\nullmodel = (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})$.
+polarization model, $\mathcal{M}_0= (\mu, \sigma_\mathrm{pre}, \sigma_\mathrm{post})$.
 
 ```{r}
 # Hypothesized null model that looks polarized
@@ -196,37 +217,39 @@ The analysis of the generative model has two major components:
 1.  **Calculate false positive/detection rates for the simulated null polarization
     model**, *mere agreement*—where polarization experiment participant opinions agree
     more following discussion than before. Recall this is modeled as a decrease in the
-    standard deviation of latent opinions, but a constant mean latent opinion. Here, then, we calculate the false positive rate, $\alpha_e$ as a function of the effect-detection threshold, $d^*$, i.e., 
-    $$
+    standard deviation of latent opinions, but a constant mean latent opinion. Here, then,
+    we calculate the false positive rate, $\alpha_e$ as a function of the effect-detection
+    threshold, $d^*$, i.e., $$
       \alpha_e(d^*) = \Pr\!\left( \hat{d} \ge d^{*} \mid \mathcal{M}_{0} \right).
-    $$ {#eq-false-positive-rate}
-    In the study, we calculate the right-hand side as the frequency of the 1000 trials where $\hat{d} \ge d^*$ for simulations of experiment, $e$. 
+    $$ {#eq-false-positive-rate} In the study, we calculate the right-hand side as the
+    frequency of the 1000 trials where $\hat{d} \ge d^*$ for simulations of experiment,
+    $e$.
 2.  **Find an effect–detection threshold**, $d^*(\alpha)$, such that, under the null
     model, the probability of observing an estimated effect size exceeding
-    \$d\^\*(\\alpha)\$ is some target false positive rate, $\alpha^* = 0.05$, for example: 
+    \$d\^\*(\\alpha)\$ is some target false positive rate, $\alpha^* = 0.05$, for example:
     $$
      d^* = \min~d,~~\text{subject to}~\Pr\!\left( \hat{d} \ge d \mid \mathcal{M}_{0} \right)  \le\alpha^*.
-     $$ {#eq-threshold-spec}
-     This yields a null-model–calibrated false–positive rate for detecting a group
-    polarization effect.
-    
-The first step in our _generative_ model of false detections is to _generate_ simulated 
-experimental data from a mere agreement null-polarization model. Then we can calculate how frequently an effect size was inferred that exceeded the effect-detection threshold.
+     $$ {#eq-threshold-spec} This yields a null-model–calibrated false–positive rate for
+    detecting a group polarization effect.
+
+The first step in our *generative* model of false detections is to *generate* simulated
+experimental data from a mere agreement null-polarization model. Then we can calculate how
+frequently an effect size was inferred that exceeded the effect-detection threshold.
 
 ## Simulate Experimental Data
 
-I simulate experimental group polarization data for a given time, $t$, with latent group opinion mean and standard deviation, $\mu_t$ and $\sigma_t$, and with a survey response scale defined by $B$ bin values, $b_i$, with $i=1,\ldots,B$. 
+I simulate experimental group polarization data for a given time, $t$, with latent group
+opinion mean and standard deviation, $\mu_t$ and $\sigma_t$, and with a survey response
+scale defined by $B$ bin values, $b_i$, with $i=1,\ldots,B$.
 
 <!-------- CONTINUE HERE 12/11! ------>
-
 
 ## Simulate each experimental design's false positive rate
 
 Here's how to calculate the Type I or family-wise error rate for all the experiments
 (though I misnamed the function back in the day, so it calls all of the error rates
-"family-wise" because I had understood them to be synonyms).
-
-
+"family-wise" because I had understood them to be synonyms). We also calculate the false
+discovery rate at the same time.
 
 ```{r}
 source("src/fwer.R")
@@ -242,19 +265,33 @@ print(head(fwer_tbl, n = 10))
 This is used inside the `calc_fdr_vs_significance` function that adds another column to
 this dataframe, the false discovery rate (FDR) for a set of significance values. Here it
 is being called with the default metascience parameters with a base rate of $b=0.1$ and a
-statistical power of $W=0.8$. We consider three effect-detection thresholds in the paper: "small", "medium", and "large" effect sizes traditionally assumed practically
-meaningful across social sciences [@CohenBook1988]. 
+statistical power of $W=0.8$. We consider three effect-detection thresholds in the paper:
+"small", "medium", and "large" effect sizes traditionally assumed practically meaningful
+across social sciences [@CohenBook1988].
 
-The `calc_fdr_vs_significance` function calculates the false-positive rate ($\alpha$) and false detection rate ($\mathrm{FDR}$) reported for a variety of effect-detection thresholds, $d^*$, as we call them in the paper. When I first wrote the code, though, I was thinking about detection thresholds as synonymous with "significance values". So that's why the function name, `calc_fdr_vs_significance`, includes the word `significance`, which is a stand-in for the maximally descriptive "effect-detection thresholds" terminology. This seemed fine to keep things simple and not change the name everywhere in the code. But it was right to change it for the paper, since *significance* is only understood in a p-value based  *null-hypothesis significance testing* approach, where a hypothesis is confirmed if the p-value is less than some particular threshold. I updated the prose in the article to reflect this distinction, but left the code as-is. 
+The `calc_fdr_vs_significance` function calculates the false-positive rate ($\alpha$) and
+false detection rate ($\mathrm{FDR}$) reported for a variety of effect-detection
+thresholds, $d^*$, as we call them in the paper. When I first wrote the code, though, I
+was thinking about detection thresholds as synonymous with "significance values". So
+that's why the function name, `calc_fdr_vs_significance`, includes the word
+`significance`, which is a stand-in for the maximally descriptive "effect-detection
+thresholds" terminology. This seemed fine to keep things simple and not change the name
+everywhere in the code. But it was right to change it for the paper, since *significance*
+is only understood in a p-value based *null-hypothesis significance testing* approach,
+where a hypothesis is confirmed if the p-value is less than some particular threshold. I
+updated the prose in the article to reflect this distinction, but left the code as-is.
 
-I put this function in the `scripts` directory because to run the full analyses presented in the paper it's only necessary to run `calc_fdr_vs_significance` since it creates a column for the false positive rate and the estimated false detection rate calculated for each experimental design we studied.
+I put this function in the `scripts` directory because to run the full analyses presented
+in the paper it's only necessary to run `calc_fdr_vs_significance` since it creates a
+column for the false positive rate and the estimated false detection rate calculated for
+each experimental design we studied.
 
-Below I call the function with the defaults specified, for illustration. Remember the `significance_vals` map to _effect-detection thresholds_ ($d^*$) in the paper.
+Below I call the function with the defaults specified, for illustration. Remember the
+`significance_vals` map to *effect-detection thresholds* ($d^*$) in the paper.
 
 ```{r}
 source("scripts/analysis.R")
 
-# This 
 fdr_over_thresholds <- calc_fdr_vs_significance(
   probit_fits_dir = probit_fits_dir,  # defined in above code block
   base_rate = 0.1, power = 0.8, significance_vals = c(0.2, 0.5, 0.8)
@@ -262,17 +299,81 @@ fdr_over_thresholds <- calc_fdr_vs_significance(
 
 print(head(fdr_over_thresholds, n=10))
 ```
+
 To see `SigVal = 0.8` (ie $d^* = 0.8$), check the `tail` of the table:
+
 ```{r}
 print(tail(fdr_over_thresholds, n = 10))
 ```
 
+## False Replication Rate (FRR)
+
+The false replication rate is the probability a published replication is, in fact,
+invalid. The
+[`plot_fdr`](https://github.com/mt-digital/gp-statmod/blob/main/scripts/plot/analysis.R#L59)
+function is defined with the following signature
+
+```{r}
+#| eval: false
+plot_fdr <- function(save_path = "paper/Figures/Analysis/fdr_vs_experiment.pdf", 
+                    aggregate = FALSE, use_non_identified = FALSE,
+                    default_fwer = 0.05,
+                    base_rate = 0.1, power = 0.8, 
+                    significance_vals = c(0.2, 0.5, 0.8),
+                    focal_sig_val = 0.5)
+```
+
+The reason it is `plot_fdr` and not `plot_frr` is because of a naming change from "false
+discovery rate" to "false replication rate", which fits better for our study in my
+opinion.
+
+The plot with the default settings, shown in the paper, was generated with the default
+settings like so, which will save a PDF of the figure to the default `save_path` listed
+above:
+
+```         
+```
+
+```{r warning=FALSE}
+
+```
+
+```{r warning=FALSE}
+# This is how I set the working directory
+# Adapt for your own computer
+# setwd("~/workspace/gp-statmod/GroupPolarizationStatmod/")
+# Load makeProbVec from file model.R
+source("scripts/plot/analysis.R")
+```
+
+```{r}
+# This is how I set the working directory
+# setwd("~/workspace/gp-statmod/GroupPolarizationStatmod/")
+# Load makeProbVec from file model.R
+source("scripts/plot/analysis.R")
+plot_fdr()
+```
+
+The `plot_fdr` function uses the
+[`calc_fdr_significance`](https://github.com/mt-digital/gp-statmod/blob/b9c26c9cae9fcc9b11a30b6318a0296d4494eb3e/scripts/analysis.R#L108)
+function that creates a data table with the false replication rate and false positive
+rate/Type I error rate, or family-wise error rate, depending on whether the errors are
+aggregated or not.
+
+Here is the plot produced by the `plot_fdr()` call:
+
+![False positive and false replication rates for the default parameters, \$b=0.1\$ and
+\$b=0.8\$, included in the article.](images/fdr_vs_experiment.png){fig-align="center"
+width="800"}
 
 ## Find effect-detection thresholds to achieve $\alpha = 0.05$
 
-In the second step of our generative model analysis I calculate the solution to
-the problem in @eq-threshold-spec, finding the effect-detection threshold, $d^*$, that achieves a target false positive rate, $\alpha^* = 0.05$. We need an updated dataset of Type I error rates calculated with a finer-grained set of candidate effect-detection thresholds, which we just call $d$ if they're candidates, than the simple three, 0.2, 0.5, and 0.8, used in the previous section. 
-
+In the second step of our generative model analysis I calculate the solution to the
+problem in @eq-threshold-spec, finding the effect-detection threshold, $d^*$, that
+achieves a target false positive rate, $\alpha^* = 0.05$. We need an updated dataset of
+Type I error rates calculated with a finer-grained set of candidate effect-detection
+thresholds, which we just call $d$ if they're candidates, than the simple three, 0.2, 0.5,
+and 0.8, used in the previous section.
 
 ```{r}
 # The fwer is equivalently Type I error—written before I understood the difference,
@@ -282,15 +383,12 @@ det_thresh_tbl <- sigval_for_low_fwer(fdr_over_thresholds, target_fwer = 0.05)
 print(det_thresh_tbl)
 ```
 
-
 # Analysis
 
-## _Identify_ Invalid Replications: All But 5% Were Invalidated
+## *Identify* Invalid Replications: All But 5% Were Invalidated
 
-## _Evaluate_ Experimental Designs: ~70% Chance a Polarization Detection was Erroneous
+## *Evaluate* Experimental Designs: \~70% Chance a Polarization Detection was Erroneous
 
-## _Specify_ Effect-Detection Thresholds: Spec Experiments—Don't Just Design Them—and Avoid Informed Guesswork
-
-
+## *Specify* Effect-Detection Thresholds: Spec Experiments—Don't Just Design Them—and Avoid Informed Guesswork
 
 # References
